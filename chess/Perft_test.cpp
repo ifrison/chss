@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 TEST(Perft, A) {
-	const auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	constexpr auto nodesVisited = std::array<std::int64_t, 7>{20, 400, 8902, 197281, 4865609, 119060324, 3195901860};
 	for (int depth = 0; depth < 4; ++depth) {
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth + 1), nodesVisited[depth]);
@@ -13,7 +13,7 @@ TEST(Perft, A) {
 }
 
 TEST(Perft, B) {
-	const auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 	constexpr auto nodesVisited = std::array<std::int64_t, 6>{48, 2039, 97862, 4085603, 193690690, 8031647685};
 	for (int depth = 0; depth < 3; ++depth) {
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth + 1), nodesVisited[depth]);
@@ -21,7 +21,7 @@ TEST(Perft, B) {
 }
 
 TEST(Perft, C) {
-	const auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1");
+	constexpr auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1");
 	constexpr auto nodesVisited = std::array<std::int64_t, 6>{24, 496, 9483, 182838, 3605103, 71179139};
 	for (int depth = 0; depth < 4; ++depth) {
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth + 1), nodesVisited[depth]);
@@ -29,12 +29,12 @@ TEST(Perft, C) {
 }
 
 TEST(Perft, X) {
-	const auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	EXPECT_EQ(chss::MoveGeneration::Perft(state, 6), 119060324);
 }
 
 TEST(Perft, Y) {
-	const auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 	EXPECT_EQ(chss::MoveGeneration::Perft(state, 5), 193690690);
 }
 
@@ -63,7 +63,7 @@ TEST(Perft, Z) {
 }
 
 TEST(Perft, Test001) {
-	const auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 20),
 		std::pair<int, std::int64_t>(2, 400),
@@ -79,7 +79,7 @@ TEST(Perft, Test001) {
 }
 
 TEST(Perft, Test002) {
-	const auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 48),
 		std::pair<int, std::int64_t>(2, 2039),
@@ -94,7 +94,7 @@ TEST(Perft, Test002) {
 }
 
 TEST(Perft, Test002_e5d7) {
-	const auto state = chss::fen::Parse("r3k2r/p1pNqpb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 2");
+	constexpr auto state = chss::fen::Parse("r3k2r/p1pNqpb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 2");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 45),
 		//	std::pair<int, std::int64_t>(2, 2124),
@@ -108,7 +108,7 @@ TEST(Perft, Test002_e5d7) {
 }
 
 TEST(Perft, Test002_c3b1) {
-	const auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R b KQkq - 0 2");
+	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R b KQkq - 0 2");
 	constexpr auto depthAndNodesVisited =
 		std::array{std::pair<int, std::int64_t>(1, 42), std::pair<int, std::int64_t>(2, 2038)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
@@ -119,7 +119,7 @@ TEST(Perft, Test002_c3b1) {
 }
 
 TEST(Perft, Test002_c3b1_a6b5) {
-	const auto state = chss::fen::Parse("r3k2r/p1ppqpb1/1n2pnp1/1b1PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R w KQkq - 0 3");
+	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/1n2pnp1/1b1PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R w KQkq - 0 3");
 	constexpr auto depthAndNodesVisited = std::array{std::pair<int, std::int64_t>(1, 48)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 6)
@@ -129,7 +129,7 @@ TEST(Perft, Test002_c3b1_a6b5) {
 }
 
 TEST(Perft, Test003) {
-	const auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 15),
 		std::pair<int, std::int64_t>(2, 66),
@@ -145,7 +145,7 @@ TEST(Perft, Test003) {
 }
 
 TEST(Perft, Test004) {
-	const auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K3 w Q - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K3 w Q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 16),
 		std::pair<int, std::int64_t>(2, 71),
@@ -161,7 +161,7 @@ TEST(Perft, Test004) {
 }
 
 TEST(Perft, Test005) {
-	const auto state = chss::fen::Parse("4k2r/8/8/8/8/8/8/4K3 w k - 0 1");
+	constexpr auto state = chss::fen::Parse("4k2r/8/8/8/8/8/8/4K3 w k - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 75),
@@ -177,7 +177,7 @@ TEST(Perft, Test005) {
 }
 
 TEST(Perft, Test006) {
-	const auto state = chss::fen::Parse("r3k3/8/8/8/8/8/8/4K3 w q - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k3/8/8/8/8/8/8/4K3 w q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 80),
@@ -193,7 +193,7 @@ TEST(Perft, Test006) {
 }
 
 TEST(Perft, Test007) {
-	const auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 26),
 		std::pair<int, std::int64_t>(2, 112),
@@ -209,7 +209,7 @@ TEST(Perft, Test007) {
 }
 
 TEST(Perft, Test008) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/4K3 w kq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/4K3 w kq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 130),
@@ -225,7 +225,7 @@ TEST(Perft, Test008) {
 }
 
 TEST(Perft, Test009) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/8/6k1/4K2R w K - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/6k1/4K2R w K - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 12),
 		std::pair<int, std::int64_t>(2, 38),
@@ -241,7 +241,7 @@ TEST(Perft, Test009) {
 }
 
 TEST(Perft, Test010) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/8/1k6/R3K3 w Q - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/1k6/R3K3 w Q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 15),
 		std::pair<int, std::int64_t>(2, 65),
@@ -257,7 +257,7 @@ TEST(Perft, Test010) {
 }
 
 TEST(Perft, Test011) {
-	const auto state = chss::fen::Parse("4k2r/6K1/8/8/8/8/8/8 w k - 0 1");
+	constexpr auto state = chss::fen::Parse("4k2r/6K1/8/8/8/8/8/8 w k - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 32),
@@ -273,7 +273,7 @@ TEST(Perft, Test011) {
 }
 
 TEST(Perft, Test012) {
-	const auto state = chss::fen::Parse("r3k3/1K6/8/8/8/8/8/8 w q - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k3/1K6/8/8/8/8/8/8 w q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 49),
@@ -289,7 +289,7 @@ TEST(Perft, Test012) {
 }
 
 TEST(Perft, Test013) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 26),
 		std::pair<int, std::int64_t>(2, 568),
@@ -305,7 +305,7 @@ TEST(Perft, Test013) {
 }
 
 TEST(Perft, Test014) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/1R2K2R w Kkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/1R2K2R w Kkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 567),
@@ -321,7 +321,7 @@ TEST(Perft, Test014) {
 }
 
 TEST(Perft, Test015) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/2R1K2R w Kkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/2R1K2R w Kkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 548),
@@ -337,7 +337,7 @@ TEST(Perft, Test015) {
 }
 
 TEST(Perft, Test016) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K1R1 w Qkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K1R1 w Qkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 547),
@@ -353,7 +353,7 @@ TEST(Perft, Test016) {
 }
 
 TEST(Perft, Test017) {
-	const auto state = chss::fen::Parse("1r2k2r/8/8/8/8/8/8/R3K2R w KQk - 0 1");
+	constexpr auto state = chss::fen::Parse("1r2k2r/8/8/8/8/8/8/R3K2R w KQk - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 26),
 		std::pair<int, std::int64_t>(2, 583),
@@ -369,7 +369,7 @@ TEST(Perft, Test017) {
 }
 
 TEST(Perft, Test018) {
-	const auto state = chss::fen::Parse("2r1k2r/8/8/8/8/8/8/R3K2R w KQk - 0 1");
+	constexpr auto state = chss::fen::Parse("2r1k2r/8/8/8/8/8/8/R3K2R w KQk - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 560),
@@ -385,7 +385,7 @@ TEST(Perft, Test018) {
 }
 
 TEST(Perft, Test019) {
-	const auto state = chss::fen::Parse("r3k1r1/8/8/8/8/8/8/R3K2R w KQq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k1r1/8/8/8/8/8/8/R3K2R w KQq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 560),
@@ -401,7 +401,7 @@ TEST(Perft, Test019) {
 }
 
 TEST(Perft, Test020) {
-	const auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/4K2R b K - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/4K2R b K - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 75),
@@ -417,7 +417,7 @@ TEST(Perft, Test020) {
 }
 
 TEST(Perft, Test021) {
-	const auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K3 b Q - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K3 b Q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 80),
@@ -433,7 +433,7 @@ TEST(Perft, Test021) {
 }
 
 TEST(Perft, Test022) {
-	const auto state = chss::fen::Parse("4k2r/8/8/8/8/8/8/4K3 b k - 0 1");
+	constexpr auto state = chss::fen::Parse("4k2r/8/8/8/8/8/8/4K3 b k - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 15),
 		std::pair<int, std::int64_t>(2, 66),
@@ -449,7 +449,7 @@ TEST(Perft, Test022) {
 }
 
 TEST(Perft, Test023) {
-	const auto state = chss::fen::Parse("r3k3/8/8/8/8/8/8/4K3 b q - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k3/8/8/8/8/8/8/4K3 b q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 16),
 		std::pair<int, std::int64_t>(2, 71),
@@ -465,7 +465,7 @@ TEST(Perft, Test023) {
 }
 
 TEST(Perft, Test024) {
-	const auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K2R b KQ - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/R3K2R b KQ - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 130),
@@ -481,7 +481,7 @@ TEST(Perft, Test024) {
 }
 
 TEST(Perft, Test025) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 26),
 		std::pair<int, std::int64_t>(2, 112),
@@ -497,7 +497,7 @@ TEST(Perft, Test025) {
 }
 
 TEST(Perft, Test026) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/8/6k1/4K2R b K - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/6k1/4K2R b K - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 32),
@@ -513,7 +513,7 @@ TEST(Perft, Test026) {
 }
 
 TEST(Perft, Test027) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/8/1k6/R3K3 b Q - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/1k6/R3K3 b Q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 49),
@@ -529,7 +529,7 @@ TEST(Perft, Test027) {
 }
 
 TEST(Perft, Test028) {
-	const auto state = chss::fen::Parse("4k2r/6K1/8/8/8/8/8/8 b k - 0 1");
+	constexpr auto state = chss::fen::Parse("4k2r/6K1/8/8/8/8/8/8 b k - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 12),
 		std::pair<int, std::int64_t>(2, 38),
@@ -545,7 +545,7 @@ TEST(Perft, Test028) {
 }
 
 TEST(Perft, Test029) {
-	const auto state = chss::fen::Parse("r3k3/1K6/8/8/8/8/8/8 b q - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k3/1K6/8/8/8/8/8/8 b q - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 15),
 		std::pair<int, std::int64_t>(2, 65),
@@ -561,7 +561,7 @@ TEST(Perft, Test029) {
 }
 
 TEST(Perft, Test030) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 26),
 		std::pair<int, std::int64_t>(2, 568),
@@ -577,7 +577,7 @@ TEST(Perft, Test030) {
 }
 
 TEST(Perft, Test031) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/1R2K2R b Kkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/1R2K2R b Kkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 26),
 		std::pair<int, std::int64_t>(2, 583),
@@ -593,7 +593,7 @@ TEST(Perft, Test031) {
 }
 
 TEST(Perft, Test032) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/2R1K2R b Kkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/2R1K2R b Kkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 560),
@@ -609,7 +609,7 @@ TEST(Perft, Test032) {
 }
 
 TEST(Perft, Test033) {
-	const auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K1R1 b Qkq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k2r/8/8/8/8/8/8/R3K1R1 b Qkq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 560),
@@ -625,7 +625,7 @@ TEST(Perft, Test033) {
 }
 
 TEST(Perft, Test034) {
-	const auto state = chss::fen::Parse("1r2k2r/8/8/8/8/8/8/R3K2R b KQk - 0 1");
+	constexpr auto state = chss::fen::Parse("1r2k2r/8/8/8/8/8/8/R3K2R b KQk - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 567),
@@ -641,7 +641,7 @@ TEST(Perft, Test034) {
 }
 
 TEST(Perft, Test035) {
-	const auto state = chss::fen::Parse("2r1k2r/8/8/8/8/8/8/R3K2R b KQk - 0 1");
+	constexpr auto state = chss::fen::Parse("2r1k2r/8/8/8/8/8/8/R3K2R b KQk - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 548),
@@ -657,7 +657,7 @@ TEST(Perft, Test035) {
 }
 
 TEST(Perft, Test036) {
-	const auto state = chss::fen::Parse("r3k1r1/8/8/8/8/8/8/R3K2R b KQq - 0 1");
+	constexpr auto state = chss::fen::Parse("r3k1r1/8/8/8/8/8/8/R3K2R b KQq - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 25),
 		std::pair<int, std::int64_t>(2, 547),
@@ -673,7 +673,7 @@ TEST(Perft, Test036) {
 }
 
 TEST(Perft, Test037) {
-	const auto state = chss::fen::Parse("8/1n4N1/2k5/8/8/5K2/1N4n1/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/1n4N1/2k5/8/8/5K2/1N4n1/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 14),
 		std::pair<int, std::int64_t>(2, 195),
@@ -689,7 +689,7 @@ TEST(Perft, Test037) {
 }
 
 TEST(Perft, Test038) {
-	const auto state = chss::fen::Parse("8/1k6/8/5N2/8/4n3/8/2K5 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/1k6/8/5N2/8/4n3/8/2K5 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 11),
 		std::pair<int, std::int64_t>(2, 156),
@@ -705,7 +705,7 @@ TEST(Perft, Test038) {
 }
 
 TEST(Perft, Test039) {
-	const auto state = chss::fen::Parse("8/8/4k3/3Nn3/3nN3/4K3/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/4k3/3Nn3/3nN3/4K3/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 19),
 		std::pair<int, std::int64_t>(2, 289),
@@ -721,7 +721,7 @@ TEST(Perft, Test039) {
 }
 
 TEST(Perft, Test040) {
-	const auto state = chss::fen::Parse("K7/8/2n5/1n6/8/8/8/k6N w - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/8/2n5/1n6/8/8/8/k6N w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 51),
@@ -737,7 +737,7 @@ TEST(Perft, Test040) {
 }
 
 TEST(Perft, Test041) {
-	const auto state = chss::fen::Parse("k7/8/2N5/1N6/8/8/8/K6n w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/2N5/1N6/8/8/8/K6n w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 17),
 		std::pair<int, std::int64_t>(2, 54),
@@ -753,7 +753,7 @@ TEST(Perft, Test041) {
 }
 
 TEST(Perft, Test042) {
-	const auto state = chss::fen::Parse("8/1n4N1/2k5/8/8/5K2/1N4n1/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/1n4N1/2k5/8/8/5K2/1N4n1/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 15),
 		std::pair<int, std::int64_t>(2, 193),
@@ -769,7 +769,7 @@ TEST(Perft, Test042) {
 }
 
 TEST(Perft, Test043) {
-	const auto state = chss::fen::Parse("8/1k6/8/5N2/8/4n3/8/2K5 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/1k6/8/5N2/8/4n3/8/2K5 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 16),
 		std::pair<int, std::int64_t>(2, 180),
@@ -785,7 +785,7 @@ TEST(Perft, Test043) {
 }
 
 TEST(Perft, Test044) {
-	const auto state = chss::fen::Parse("8/8/3K4/3Nn3/3nN3/4k3/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/3K4/3Nn3/3nN3/4k3/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 68),
@@ -801,7 +801,7 @@ TEST(Perft, Test044) {
 }
 
 TEST(Perft, Test045) {
-	const auto state = chss::fen::Parse("K7/8/2n5/1n6/8/8/8/k6N b - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/8/2n5/1n6/8/8/8/k6N b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 17),
 		std::pair<int, std::int64_t>(2, 54),
@@ -817,7 +817,7 @@ TEST(Perft, Test045) {
 }
 
 TEST(Perft, Test046) {
-	const auto state = chss::fen::Parse("k7/8/2N5/1N6/8/8/8/K6n b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/2N5/1N6/8/8/8/K6n b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 51),
@@ -833,7 +833,7 @@ TEST(Perft, Test046) {
 }
 
 TEST(Perft, Test047) {
-	const auto state = chss::fen::Parse("B6b/8/8/8/2K5/4k3/8/b6B w - - 0 1");
+	constexpr auto state = chss::fen::Parse("B6b/8/8/8/2K5/4k3/8/b6B w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 17),
 		std::pair<int, std::int64_t>(2, 278),
@@ -849,7 +849,7 @@ TEST(Perft, Test047) {
 }
 
 TEST(Perft, Test048) {
-	const auto state = chss::fen::Parse("8/8/1B6/7b/7k/8/2B1b3/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/1B6/7b/7k/8/2B1b3/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 21),
 		std::pair<int, std::int64_t>(2, 316),
@@ -865,7 +865,7 @@ TEST(Perft, Test048) {
 }
 
 TEST(Perft, Test049) {
-	const auto state = chss::fen::Parse("k7/B7/1B6/1B6/8/8/8/K6b w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/B7/1B6/1B6/8/8/8/K6b w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 21),
 		std::pair<int, std::int64_t>(2, 144),
@@ -881,7 +881,7 @@ TEST(Perft, Test049) {
 }
 
 TEST(Perft, Test050) {
-	const auto state = chss::fen::Parse("K7/b7/1b6/1b6/8/8/8/k6B w - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/b7/1b6/1b6/8/8/8/k6B w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 7),
 		std::pair<int, std::int64_t>(2, 143),
@@ -897,7 +897,7 @@ TEST(Perft, Test050) {
 }
 
 TEST(Perft, Test051) {
-	const auto state = chss::fen::Parse("B6b/8/8/8/2K5/5k2/8/b6B b - - 0 1");
+	constexpr auto state = chss::fen::Parse("B6b/8/8/8/2K5/5k2/8/b6B b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 6),
 		std::pair<int, std::int64_t>(2, 106),
@@ -913,7 +913,7 @@ TEST(Perft, Test051) {
 }
 
 TEST(Perft, Test052) {
-	const auto state = chss::fen::Parse("8/8/1B6/7b/7k/8/2B1b3/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/1B6/7b/7k/8/2B1b3/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 17),
 		std::pair<int, std::int64_t>(2, 309),
@@ -929,7 +929,7 @@ TEST(Perft, Test052) {
 }
 
 TEST(Perft, Test053) {
-	const auto state = chss::fen::Parse("k7/B7/1B6/1B6/8/8/8/K6b b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/B7/1B6/1B6/8/8/8/K6b b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 7),
 		std::pair<int, std::int64_t>(2, 143),
@@ -945,7 +945,7 @@ TEST(Perft, Test053) {
 }
 
 TEST(Perft, Test054) {
-	const auto state = chss::fen::Parse("K7/b7/1b6/1b6/8/8/8/k6B b - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/b7/1b6/1b6/8/8/8/k6B b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 21),
 		std::pair<int, std::int64_t>(2, 144),
@@ -961,7 +961,7 @@ TEST(Perft, Test054) {
 }
 
 TEST(Perft, Test055) {
-	const auto state = chss::fen::Parse("7k/RR6/8/8/8/8/rr6/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/RR6/8/8/8/8/rr6/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 19),
 		std::pair<int, std::int64_t>(2, 275),
@@ -977,7 +977,7 @@ TEST(Perft, Test055) {
 }
 
 TEST(Perft, Test056) {
-	const auto state = chss::fen::Parse("R6r/8/8/2K5/5k2/8/8/r6R w - - 0 1");
+	constexpr auto state = chss::fen::Parse("R6r/8/8/2K5/5k2/8/8/r6R w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 36),
 		std::pair<int, std::int64_t>(2, 1027),
@@ -993,7 +993,7 @@ TEST(Perft, Test056) {
 }
 
 TEST(Perft, Test057) {
-	const auto state = chss::fen::Parse("7k/RR6/8/8/8/8/rr6/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/RR6/8/8/8/8/rr6/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 19),
 		std::pair<int, std::int64_t>(2, 275),
@@ -1009,7 +1009,7 @@ TEST(Perft, Test057) {
 }
 
 TEST(Perft, Test058) {
-	const auto state = chss::fen::Parse("R6r/8/8/2K5/5k2/8/8/r6R b - - 0 1");
+	constexpr auto state = chss::fen::Parse("R6r/8/8/2K5/5k2/8/8/r6R b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 36),
 		std::pair<int, std::int64_t>(2, 1027),
@@ -1025,7 +1025,7 @@ TEST(Perft, Test058) {
 }
 
 TEST(Perft, Test059) {
-	const auto state = chss::fen::Parse("6kq/8/8/8/8/8/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("6kq/8/8/8/8/8/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 2),
 		std::pair<int, std::int64_t>(2, 36),
@@ -1041,7 +1041,7 @@ TEST(Perft, Test059) {
 }
 
 TEST(Perft, Test060) {
-	const auto state = chss::fen::Parse("6KQ/8/8/8/8/8/8/7k b - - 0 1");
+	constexpr auto state = chss::fen::Parse("6KQ/8/8/8/8/8/8/7k b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 2),
 		std::pair<int, std::int64_t>(2, 36),
@@ -1057,7 +1057,7 @@ TEST(Perft, Test060) {
 }
 
 TEST(Perft, Test061) {
-	const auto state = chss::fen::Parse("K7/8/8/3Q4/4q3/8/8/7k w - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/8/8/3Q4/4q3/8/8/7k w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 6),
 		std::pair<int, std::int64_t>(2, 35),
@@ -1073,7 +1073,7 @@ TEST(Perft, Test061) {
 }
 
 TEST(Perft, Test062) {
-	const auto state = chss::fen::Parse("6qk/8/8/8/8/8/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("6qk/8/8/8/8/8/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 22),
 		std::pair<int, std::int64_t>(2, 43),
@@ -1089,7 +1089,7 @@ TEST(Perft, Test062) {
 }
 
 TEST(Perft, Test063) {
-	const auto state = chss::fen::Parse("6KQ/8/8/8/8/8/8/7k b - - 0 1");
+	constexpr auto state = chss::fen::Parse("6KQ/8/8/8/8/8/8/7k b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 2),
 		std::pair<int, std::int64_t>(2, 36),
@@ -1105,7 +1105,7 @@ TEST(Perft, Test063) {
 }
 
 TEST(Perft, Test064) {
-	const auto state = chss::fen::Parse("K7/8/8/3Q4/4q3/8/8/7k b - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/8/8/3Q4/4q3/8/8/7k b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 6),
 		std::pair<int, std::int64_t>(2, 35),
@@ -1121,7 +1121,7 @@ TEST(Perft, Test064) {
 }
 
 TEST(Perft, Test065) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/K7/P7/k7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/K7/P7/k7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 7),
@@ -1137,7 +1137,7 @@ TEST(Perft, Test065) {
 }
 
 TEST(Perft, Test066) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/7K/7P/7k w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/7K/7P/7k w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 7),
@@ -1153,7 +1153,7 @@ TEST(Perft, Test066) {
 }
 
 TEST(Perft, Test067) {
-	const auto state = chss::fen::Parse("K7/p7/k7/8/8/8/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/p7/k7/8/8/8/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 1),
 		std::pair<int, std::int64_t>(2, 3),
@@ -1169,7 +1169,7 @@ TEST(Perft, Test067) {
 }
 
 TEST(Perft, Test068) {
-	const auto state = chss::fen::Parse("7K/7p/7k/8/8/8/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7K/7p/7k/8/8/8/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 1),
 		std::pair<int, std::int64_t>(2, 3),
@@ -1185,7 +1185,7 @@ TEST(Perft, Test068) {
 }
 
 TEST(Perft, Test069) {
-	const auto state = chss::fen::Parse("8/2k1p3/3pP3/3P2K1/8/8/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/2k1p3/3pP3/3P2K1/8/8/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 7),
 		std::pair<int, std::int64_t>(2, 35),
@@ -1201,7 +1201,7 @@ TEST(Perft, Test069) {
 }
 
 TEST(Perft, Test070) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/K7/P7/k7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/K7/P7/k7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 1),
 		std::pair<int, std::int64_t>(2, 3),
@@ -1217,7 +1217,7 @@ TEST(Perft, Test070) {
 }
 
 TEST(Perft, Test071) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/7K/7P/7k b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/7K/7P/7k b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 1),
 		std::pair<int, std::int64_t>(2, 3),
@@ -1233,7 +1233,7 @@ TEST(Perft, Test071) {
 }
 
 TEST(Perft, Test072) {
-	const auto state = chss::fen::Parse("K7/p7/k7/8/8/8/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("K7/p7/k7/8/8/8/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 7),
@@ -1249,7 +1249,7 @@ TEST(Perft, Test072) {
 }
 
 TEST(Perft, Test073) {
-	const auto state = chss::fen::Parse("7K/7p/7k/8/8/8/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7K/7p/7k/8/8/8/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 7),
@@ -1265,7 +1265,7 @@ TEST(Perft, Test073) {
 }
 
 TEST(Perft, Test074) {
-	const auto state = chss::fen::Parse("8/2k1p3/3pP3/3P2K1/8/8/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/2k1p3/3pP3/3P2K1/8/8/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 35),
@@ -1281,7 +1281,7 @@ TEST(Perft, Test074) {
 }
 
 TEST(Perft, Test075) {
-	const auto state = chss::fen::Parse("8/8/8/8/8/4k3/4P3/4K3 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/4k3/4P3/4K3 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 2),
 		std::pair<int, std::int64_t>(2, 8),
@@ -1297,7 +1297,7 @@ TEST(Perft, Test075) {
 }
 
 TEST(Perft, Test076) {
-	const auto state = chss::fen::Parse("4k3/4p3/4K3/8/8/8/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("4k3/4p3/4K3/8/8/8/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 2),
 		std::pair<int, std::int64_t>(2, 8),
@@ -1313,7 +1313,7 @@ TEST(Perft, Test076) {
 }
 
 TEST(Perft, Test077) {
-	const auto state = chss::fen::Parse("8/8/7k/7p/7P/7K/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/7k/7p/7P/7K/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 9),
@@ -1329,7 +1329,7 @@ TEST(Perft, Test077) {
 }
 
 TEST(Perft, Test078) {
-	const auto state = chss::fen::Parse("8/8/k7/p7/P7/K7/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/k7/p7/P7/K7/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 9),
@@ -1345,7 +1345,7 @@ TEST(Perft, Test078) {
 }
 
 TEST(Perft, Test079) {
-	const auto state = chss::fen::Parse("8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 25),
@@ -1361,7 +1361,7 @@ TEST(Perft, Test079) {
 }
 
 TEST(Perft, Test080) {
-	const auto state = chss::fen::Parse("8/3k4/3p4/8/3P4/3K4/8/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/3k4/3p4/8/3P4/3K4/8/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 8),
 		std::pair<int, std::int64_t>(2, 61),
@@ -1377,7 +1377,7 @@ TEST(Perft, Test080) {
 }
 
 TEST(Perft, Test081) {
-	const auto state = chss::fen::Parse("8/8/3k4/3p4/8/3P4/3K4/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/3k4/3p4/8/3P4/3K4/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 8),
 		std::pair<int, std::int64_t>(2, 61),
@@ -1393,7 +1393,7 @@ TEST(Perft, Test081) {
 }
 
 TEST(Perft, Test082) {
-	const auto state = chss::fen::Parse("k7/8/3p4/8/3P4/8/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/3p4/8/3P4/8/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 15),
@@ -1409,7 +1409,7 @@ TEST(Perft, Test082) {
 }
 
 TEST(Perft, Test083) {
-	const auto state = chss::fen::Parse("8/8/7k/7p/7P/7K/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/7k/7p/7P/7K/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 9),
@@ -1425,7 +1425,7 @@ TEST(Perft, Test083) {
 }
 
 TEST(Perft, Test084) {
-	const auto state = chss::fen::Parse("8/8/k7/p7/P7/K7/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/k7/p7/P7/K7/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 9),
@@ -1441,7 +1441,7 @@ TEST(Perft, Test084) {
 }
 
 TEST(Perft, Test085) {
-	const auto state = chss::fen::Parse("8/8/3k4/3p4/3P4/3K4/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/3k4/3p4/3P4/3K4/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 25),
@@ -1457,7 +1457,7 @@ TEST(Perft, Test085) {
 }
 
 TEST(Perft, Test086) {
-	const auto state = chss::fen::Parse("8/3k4/3p4/8/3P4/3K4/8/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/3k4/3p4/8/3P4/3K4/8/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 8),
 		std::pair<int, std::int64_t>(2, 61),
@@ -1473,7 +1473,7 @@ TEST(Perft, Test086) {
 }
 
 TEST(Perft, Test087) {
-	const auto state = chss::fen::Parse("8/8/3k4/3p4/8/3P4/3K4/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/8/3k4/3p4/8/3P4/3K4/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 8),
 		std::pair<int, std::int64_t>(2, 61),
@@ -1489,7 +1489,7 @@ TEST(Perft, Test087) {
 }
 
 TEST(Perft, Test088) {
-	const auto state = chss::fen::Parse("k7/8/3p4/8/3P4/8/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/3p4/8/3P4/8/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 15),
@@ -1505,7 +1505,7 @@ TEST(Perft, Test088) {
 }
 
 TEST(Perft, Test089) {
-	const auto state = chss::fen::Parse("7k/3p4/8/8/3P4/8/8/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/3p4/8/8/3P4/8/8/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 19),
@@ -1521,7 +1521,7 @@ TEST(Perft, Test089) {
 }
 
 TEST(Perft, Test090) {
-	const auto state = chss::fen::Parse("7k/8/8/3p4/8/8/3P4/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/8/3p4/8/8/3P4/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 19),
@@ -1537,7 +1537,7 @@ TEST(Perft, Test090) {
 }
 
 TEST(Perft, Test091) {
-	const auto state = chss::fen::Parse("k7/8/8/7p/6P1/8/8/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/8/7p/6P1/8/8/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1553,7 +1553,7 @@ TEST(Perft, Test091) {
 }
 
 TEST(Perft, Test092) {
-	const auto state = chss::fen::Parse("k7/8/7p/8/8/6P1/8/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/7p/8/8/6P1/8/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1569,7 +1569,7 @@ TEST(Perft, Test092) {
 }
 
 TEST(Perft, Test093) {
-	const auto state = chss::fen::Parse("k7/8/8/6p1/7P/8/8/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/8/6p1/7P/8/8/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1585,7 +1585,7 @@ TEST(Perft, Test093) {
 }
 
 TEST(Perft, Test094) {
-	const auto state = chss::fen::Parse("k7/8/6p1/8/8/7P/8/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/6p1/8/8/7P/8/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1601,7 +1601,7 @@ TEST(Perft, Test094) {
 }
 
 TEST(Perft, Test095) {
-	const auto state = chss::fen::Parse("k7/8/8/3p4/4p3/8/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/8/3p4/4p3/8/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 3),
 		std::pair<int, std::int64_t>(2, 15),
@@ -1617,7 +1617,7 @@ TEST(Perft, Test095) {
 }
 
 TEST(Perft, Test096) {
-	const auto state = chss::fen::Parse("k7/8/3p4/8/8/4P3/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/3p4/8/8/4P3/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1633,7 +1633,7 @@ TEST(Perft, Test096) {
 }
 
 TEST(Perft, Test097) {
-	const auto state = chss::fen::Parse("7k/3p4/8/8/3P4/8/8/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/3p4/8/8/3P4/8/8/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 19),
@@ -1649,7 +1649,7 @@ TEST(Perft, Test097) {
 }
 
 TEST(Perft, Test098) {
-	const auto state = chss::fen::Parse("7k/8/8/3p4/8/8/3P4/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/8/3p4/8/8/3P4/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 19),
@@ -1665,7 +1665,7 @@ TEST(Perft, Test098) {
 }
 
 TEST(Perft, Test099) {
-	const auto state = chss::fen::Parse("k7/8/8/7p/6P1/8/8/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/8/7p/6P1/8/8/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1681,7 +1681,7 @@ TEST(Perft, Test099) {
 }
 
 TEST(Perft, Test100) {
-	const auto state = chss::fen::Parse("k7/8/7p/8/8/6P1/8/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/7p/8/8/6P1/8/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1697,7 +1697,7 @@ TEST(Perft, Test100) {
 }
 
 TEST(Perft, Test101) {
-	const auto state = chss::fen::Parse("k7/8/8/6p1/7P/8/8/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/8/6p1/7P/8/8/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1713,7 +1713,7 @@ TEST(Perft, Test101) {
 }
 
 TEST(Perft, Test102) {
-	const auto state = chss::fen::Parse("k7/8/6p1/8/8/7P/8/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/6p1/8/8/7P/8/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1729,7 +1729,7 @@ TEST(Perft, Test102) {
 }
 
 TEST(Perft, Test103) {
-	const auto state = chss::fen::Parse("k7/8/8/3p4/4p3/8/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/8/3p4/4p3/8/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 15),
@@ -1745,7 +1745,7 @@ TEST(Perft, Test103) {
 }
 
 TEST(Perft, Test104) {
-	const auto state = chss::fen::Parse("k7/8/3p4/8/8/4P3/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/8/3p4/8/8/4P3/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1761,7 +1761,7 @@ TEST(Perft, Test104) {
 }
 
 TEST(Perft, Test105) {
-	const auto state = chss::fen::Parse("7k/8/8/p7/1P6/8/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/8/p7/1P6/8/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1777,7 +1777,7 @@ TEST(Perft, Test105) {
 }
 
 TEST(Perft, Test106) {
-	const auto state = chss::fen::Parse("7k/8/p7/8/8/1P6/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/p7/8/8/1P6/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1793,7 +1793,7 @@ TEST(Perft, Test106) {
 }
 
 TEST(Perft, Test107) {
-	const auto state = chss::fen::Parse("7k/8/8/1p6/P7/8/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/8/1p6/P7/8/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1809,7 +1809,7 @@ TEST(Perft, Test107) {
 }
 
 TEST(Perft, Test108) {
-	const auto state = chss::fen::Parse("7k/8/1p6/8/8/P7/8/7K w - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/1p6/8/8/P7/8/7K w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1825,7 +1825,7 @@ TEST(Perft, Test108) {
 }
 
 TEST(Perft, Test109) {
-	const auto state = chss::fen::Parse("k7/7p/8/8/8/8/6P1/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/7p/8/8/8/8/6P1/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 25),
@@ -1841,7 +1841,7 @@ TEST(Perft, Test109) {
 }
 
 TEST(Perft, Test110) {
-	const auto state = chss::fen::Parse("k7/6p1/8/8/8/8/7P/K7 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/6p1/8/8/8/8/7P/K7 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 25),
@@ -1857,7 +1857,7 @@ TEST(Perft, Test110) {
 }
 
 TEST(Perft, Test111) {
-	const auto state = chss::fen::Parse("3k4/3pp3/8/8/8/8/3PP3/3K4 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("3k4/3pp3/8/8/8/8/3PP3/3K4 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 7),
 		std::pair<int, std::int64_t>(2, 49),
@@ -1873,7 +1873,7 @@ TEST(Perft, Test111) {
 }
 
 TEST(Perft, Test112) {
-	const auto state = chss::fen::Parse("7k/8/8/p7/1P6/8/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/8/p7/1P6/8/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1889,7 +1889,7 @@ TEST(Perft, Test112) {
 }
 
 TEST(Perft, Test113) {
-	const auto state = chss::fen::Parse("7k/8/p7/8/8/1P6/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/p7/8/8/1P6/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1905,7 +1905,7 @@ TEST(Perft, Test113) {
 }
 
 TEST(Perft, Test114) {
-	const auto state = chss::fen::Parse("7k/8/8/1p6/P7/8/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/8/1p6/P7/8/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 22),
@@ -1921,7 +1921,7 @@ TEST(Perft, Test114) {
 }
 
 TEST(Perft, Test115) {
-	const auto state = chss::fen::Parse("7k/8/1p6/8/8/P7/8/7K b - - 0 1");
+	constexpr auto state = chss::fen::Parse("7k/8/1p6/8/8/P7/8/7K b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 4),
 		std::pair<int, std::int64_t>(2, 16),
@@ -1937,7 +1937,7 @@ TEST(Perft, Test115) {
 }
 
 TEST(Perft, Test116) {
-	const auto state = chss::fen::Parse("k7/7p/8/8/8/8/6P1/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/7p/8/8/8/8/6P1/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 25),
@@ -1953,7 +1953,7 @@ TEST(Perft, Test116) {
 }
 
 TEST(Perft, Test117) {
-	const auto state = chss::fen::Parse("k7/6p1/8/8/8/8/7P/K7 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("k7/6p1/8/8/8/8/7P/K7 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 5),
 		std::pair<int, std::int64_t>(2, 25),
@@ -1969,7 +1969,7 @@ TEST(Perft, Test117) {
 }
 
 TEST(Perft, Test118) {
-	const auto state = chss::fen::Parse("3k4/3pp3/8/8/8/8/3PP3/3K4 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("3k4/3pp3/8/8/8/8/3PP3/3K4 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 7),
 		std::pair<int, std::int64_t>(2, 49),
@@ -1985,7 +1985,7 @@ TEST(Perft, Test118) {
 }
 
 TEST(Perft, Test119) {
-	const auto state = chss::fen::Parse("8/Pk6/8/8/8/8/6Kp/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/Pk6/8/8/8/8/6Kp/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 11),
 		std::pair<int, std::int64_t>(2, 97),
@@ -2001,7 +2001,7 @@ TEST(Perft, Test119) {
 }
 
 TEST(Perft, Test120) {
-	const auto state = chss::fen::Parse("n1n5/1Pk5/8/8/8/8/5Kp1/5N1N w - - 0 1");
+	constexpr auto state = chss::fen::Parse("n1n5/1Pk5/8/8/8/8/5Kp1/5N1N w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 24),
 		std::pair<int, std::int64_t>(2, 421),
@@ -2017,7 +2017,7 @@ TEST(Perft, Test120) {
 }
 
 TEST(Perft, Test121) {
-	const auto state = chss::fen::Parse("8/PPPk4/8/8/8/8/4Kppp/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/PPPk4/8/8/8/8/4Kppp/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 18),
 		std::pair<int, std::int64_t>(2, 270),
@@ -2033,7 +2033,7 @@ TEST(Perft, Test121) {
 }
 
 TEST(Perft, Test122) {
-	const auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N w - - 0 1");
+	constexpr auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 24),
 		std::pair<int, std::int64_t>(2, 496),
@@ -2049,7 +2049,7 @@ TEST(Perft, Test122) {
 }
 
 TEST(Perft, Test123) {
-	const auto state = chss::fen::Parse("8/Pk6/8/8/8/8/6Kp/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/Pk6/8/8/8/8/6Kp/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 11),
 		std::pair<int, std::int64_t>(2, 97),
@@ -2065,7 +2065,7 @@ TEST(Perft, Test123) {
 }
 
 TEST(Perft, Test124) {
-	const auto state = chss::fen::Parse("n1n5/1Pk5/8/8/8/8/5Kp1/5N1N b - - 0 1");
+	constexpr auto state = chss::fen::Parse("n1n5/1Pk5/8/8/8/8/5Kp1/5N1N b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 24),
 		std::pair<int, std::int64_t>(2, 421),
@@ -2081,7 +2081,7 @@ TEST(Perft, Test124) {
 }
 
 TEST(Perft, Test125) {
-	const auto state = chss::fen::Parse("8/PPPk4/8/8/8/8/4Kppp/8 b - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/PPPk4/8/8/8/8/4Kppp/8 b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 18),
 		std::pair<int, std::int64_t>(2, 270),
@@ -2097,7 +2097,7 @@ TEST(Perft, Test125) {
 }
 
 TEST(Perft, Test126) {
-	const auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1");
+	constexpr auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 24),
 		std::pair<int, std::int64_t>(2, 496),
@@ -2113,7 +2113,7 @@ TEST(Perft, Test126) {
 }
 
 TEST(Perft, Test127) {
-	const auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
+	constexpr auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 14),
 		std::pair<int, std::int64_t>(2, 191),
@@ -2129,7 +2129,7 @@ TEST(Perft, Test127) {
 }
 
 TEST(Perft, Test127_e2e4) {
-	const auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b - e3 0 2");
+	constexpr auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b - e3 0 2");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 16),
 		std::pair<int, std::int64_t>(2, 177),
@@ -2142,7 +2142,7 @@ TEST(Perft, Test127_e2e4) {
 }
 
 TEST(Perft, Test127_g2g4) {
-	const auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R3pPk/8/4P3/8 b - g3 0 2");
+	constexpr auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R3pPk/8/4P3/8 b - g3 0 2");
 	constexpr auto depthAndNodesVisited = std::array{
 		std::pair<int, std::int64_t>(1, 17),
 		std::pair<int, std::int64_t>(2, 226),
@@ -2155,7 +2155,7 @@ TEST(Perft, Test127_g2g4) {
 }
 
 TEST(Perft, Test128) {
-	const auto state = chss::fen::Parse("rnbqkb1r/ppppp1pp/7n/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3");
+	constexpr auto state = chss::fen::Parse("rnbqkb1r/ppppp1pp/7n/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3");
 	constexpr auto depthAndNodesVisited = std::array{std::pair<int, std::int64_t>(5, 11139762)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 6)
