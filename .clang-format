@@ -1,0 +1,127 @@
+---
+Language: Cpp
+# BasedOnStyle:  LLVM
+AccessModifierOffset: -4
+AlignAfterOpenBracket: AlwaysBreak
+AlignEscapedNewlines: DontAlign
+AlignOperands: false
+AlignTrailingComments: false
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Attach
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+ColumnLimit: 120
+CommentPragmas: "^ IWYU pragma:"
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+DisableFormat: false
+EmptyLineBeforeAccessModifier: LogicalBlock
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros: [foreach, Q_FOREACH, BOOST_FOREACH]
+IncludeBlocks: Regroup
+IncludeCategories:
+  # Includes blocks are ordered by module distance (closest first)
+
+  # Candy packages
+  - Regex: '^(<|")ccsm_.+\.h("|>)$'
+    Priority: 25
+
+  # Fiction
+  - Regex: '^(<|")(core|ff|anr|json|crashreport|databroker|events|gui|input|ports|keyvalue|king-fonts|log|network|timelines|xml|testutil)/.*\.h(>|")'
+    Priority: 35
+
+  # Other external packages
+  - Regex: '^(<|")(usdk|api|plataforma|plataforma-mocks|universe|jsonrpc|cormorant-jsonrpc|kingconstants-events|juego-api|applesignin|slayer|breadcrumbs)/.*\.h(>|")'
+    Priority: 40
+
+  # King headers
+  - Regex: '^(<|")(king)/.*\.h(>|")'
+    Priority: 50
+
+  # gtests and gmock
+  - Regex: '^(<|")(gtest|gmock)/(gtest|gmock)\.h(>|")'
+    Priority: 70
+
+  # Extra testing headers after that
+  - Regex: '^(<|")(gtest|gmock)/(gtest|gmock)-.*\.h(>|")'
+    Priority: 70
+
+  # Other 3rd party libraries
+  - Regex: '^(<|")(fmt)/.*\.h(>|")'
+    Priority: 70
+
+  # Standard Library headers
+  # Should correspond to the list of files at https://en.cppreference.com/w/cpp/header
+  - Regex: '^(<|")(algorithm|any|array|atomic|barrier|bit|bitset|cassert|cassert|ccomplex|cctype|cctype|cerrno|cerrno|cfenv|cfenv|cfloat|cfloat|charconv|chrono|cinttypes|cinttypes|ciso646|climits|climits|clocale|clocale|cmath|cmath|codecvt|compare|complex|concepts|condition_variable|coroutine|csetjmp|csetjmp|csignal|csignal|cstdalign|cstdarg|cstdarg|cstdbool|cstddef|cstddef|cstdint|cstdint|cstdio|cstdio|cstdlib|cstdlib|cstring|cstring|ctgmath|ctime|ctime|cuchar|cuchar|cwchar|cwchar|cwctype|cwctype|deque|exception|execution|filesystem|format|forward_list|fstream|functional|future|initializer_list|iomanip|ios|iosfwd|iostream|istream|iterator|latch|limits|list|locale|map|memory|memory_resource|mutex|new|numbers|numeric|optional|ostream|queue|random|ranges|ratio|regex|scoped_allocator|semaphore|set|shared_mutex|source_location|span|sstream|stack|stdexcept|stop_token|streambuf|string|string_view|strstream|syncstream|system_error|thread|tuple|type_traits|typeindex|typeinfo|unordered_map|unordered_set|utility|valarray|variant|vector|version)(>|")'
+    Priority: 80
+
+  # Assorted files from the same directory
+  - Regex: '^(<|")[^/]+\.h(>|")$'
+    Priority: 10
+
+  # Assorted local files from the same package
+  - Regex: '^".+\.h"$'
+    Priority: 15
+
+  # Assorted external files
+  - Regex: '^<.+\.h>$'
+    Priority: 30
+IndentCaseLabels: false
+IndentWidth: 4
+IndentWrappedFunctionNames: false
+KeepEmptyLinesAtTheStartOfBlocks: true
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+ObjCBlockIndentWidth: 2
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+PackConstructorInitializers: Never
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 10000
+PointerAlignment: Left
+SortIncludes: CaseInsensitive
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+SpacesInCStyleCastParentheses: false
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: -1
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: c++17
+TabWidth: 4
+UseTab: Always
+---
+

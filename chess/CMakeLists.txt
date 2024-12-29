@@ -1,0 +1,37 @@
+add_executable(chess)
+target_sources(chess PRIVATE
+        DebugUtils.cpp
+        Fen.cpp
+        PieceMovements.cpp
+        Movements.cpp
+        Perft.cpp
+        chess.cpp
+)
+target_link_libraries(chess
+        cpp_utils
+        file_utils
+        matrix
+        stdgenerator)
+
+add_executable(chess_tests)
+target_sources(chess_tests PRIVATE
+        Board_test.cpp
+        DebugUtils.cpp
+        DebugUtils_test.cpp
+        Fen.cpp
+        Fen_test.cpp
+        PieceMovements.cpp
+        PieceMovements_test.cpp
+        Movements.cpp
+        Movements_test.cpp
+        Perft.cpp
+        Perft_test.cpp
+)
+target_link_libraries(chess_tests
+        cpp_utils
+        file_utils
+        matrix
+        stdgenerator
+        GTest::gtest_main
+        GTest::gmock)
+gtest_discover_tests(chess_tests)
