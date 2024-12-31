@@ -455,61 +455,84 @@ namespace chss::MoveGeneration {
 		}
 		assert(false);
 	}();
-	for (const auto position : ForEach(board.GetSize())) {
-		const auto pieceOpt = board.At(position);
-		if (!pieceOpt.has_value() || pieceOpt.value().color != enemyColor) {
-			continue;
-		}
-		const auto [type, color] = pieceOpt.value();
-		switch (type) {
-		case Type::Pawn: {
-			for (const auto to : PseudoLegalMovesPawn(board, position)) {
-				if (to == kingPosition) {
+	constexpr auto kBishopOffsets = std::array<matrix::Direction2D, 8>{
+		matrix::Direction2D{.deltaY = -1, .deltaX = -1},
+		matrix::Direction2D{.deltaY = -1, .deltaX = +1},
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1}};
+	for (const auto offset : kBishopOffsets) {
+		auto to = kingPosition + offset;
+		while (board.IsInside(to)) {
+			const auto pieceOpt = board.At(to);
+			if (pieceOpt.has_value()) {
+				if (pieceOpt.value().color == enemyColor &&
+					(pieceOpt.value().type == Type::Bishop || pieceOpt.value().type == Type::Queen)) {
 					return true;
 				}
+				break;
 			}
-			break;
+			to += offset;
 		}
-		case Type::Knight: {
-			for (const auto to : PseudoLegalMovesKnight(board, position)) {
-				if (to == kingPosition) {
+	}
+	constexpr auto kRookOffsets = std::array<matrix::Direction2D, 4>{
+		matrix::Direction2D{.deltaY = -1, .deltaX = 0},
+		matrix::Direction2D{.deltaY = 0, .deltaX = -1},
+		matrix::Direction2D{.deltaY = 0, .deltaX = +1},
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0}};
+	for (const auto offset : kRookOffsets) {
+		auto to = kingPosition + offset;
+		while (board.IsInside(to)) {
+			const auto pieceOpt = board.At(to);
+			if (pieceOpt.has_value()) {
+				if (pieceOpt.value().color == enemyColor &&
+					(pieceOpt.value().type == Type::Rook || pieceOpt.value().type == Type::Queen)) {
 					return true;
 				}
+				break;
 			}
-			break;
+			to += offset;
 		}
-		case Type::Bishop: {
-			for (const auto to : PseudoLegalMovesBishop(board, position)) {
-				if (to == kingPosition) {
-					return true;
-				}
-			}
-			break;
+	}
+	constexpr auto kKnightOffsets = std::array<matrix::Direction2D, 8>{
+		matrix::Direction2D{.deltaY = -2, .deltaX = -1},
+		matrix::Direction2D{.deltaY = -2, .deltaX = +1},
+		matrix::Direction2D{.deltaY = -1, .deltaX = -2},
+		matrix::Direction2D{.deltaY = -1, .deltaX = +2},
+		matrix::Direction2D{.deltaY = +1, .deltaX = -2},
+		matrix::Direction2D{.deltaY = +1, .deltaX = +2},
+		matrix::Direction2D{.deltaY = +2, .deltaX = -1},
+		matrix::Direction2D{.deltaY = +2, .deltaX = +1}};
+	for (const auto offset : kKnightOffsets) {
+		const auto to = kingPosition + offset;
+		if (board.IsInside(to) && board.At(to) == Piece{.type = Type::Knight, .color = enemyColor}) {
+			return true;
 		}
-		case Type::Rook: {
-			for (const auto to : PseudoLegalMovesRook(board, position)) {
-				if (to == kingPosition) {
-					return true;
-				}
-			}
-			break;
+	}
+	const auto kPawnOffsets = [&]() {
+		const auto yForwardOffset = color == Color::White ? +1 : -1;
+		return std::array<matrix::Direction2D, 2>{
+			matrix::Direction2D{.deltaY = yForwardOffset, .deltaX = -1},
+			matrix::Direction2D{.deltaY = yForwardOffset, .deltaX = +1}};
+	}();
+	for (const auto offset : kPawnOffsets) {
+		const auto to = kingPosition + offset;
+		if (board.IsInside(to) && board.At(to) == Piece{.type = Type::Pawn, .color = enemyColor}) {
+			return true;
 		}
-		case Type::Queen: {
-			for (const auto to : PseudoLegalMovesQueen(board, position)) {
-				if (to == kingPosition) {
-					return true;
-				}
-			}
-			break;
-		}
-		case Type::King: {
-			for (const auto to : PseudoLegalMovesKing(board, position)) {
-				if (to == kingPosition) {
-					return true;
-				}
-			}
-			break;
-		}
+	}
+	constexpr auto kKingOffsets = std::array<matrix::Direction2D, 8>{
+		matrix::Direction2D{.deltaY = -1, .deltaX = -1},
+		matrix::Direction2D{.deltaY = -1, .deltaX = 0},
+		matrix::Direction2D{.deltaY = -1, .deltaX = +1},
+		matrix::Direction2D{.deltaY = 0, .deltaX = -1},
+		matrix::Direction2D{.deltaY = 0, .deltaX = +1},
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1}};
+	for (const auto offset : kKingOffsets) {
+		const auto to = kingPosition + offset;
+		if (board.IsInside(to) && board.At(to) == Piece{.type = Type::King, .color = enemyColor}) {
+			return true;
 		}
 	}
 	return false;
