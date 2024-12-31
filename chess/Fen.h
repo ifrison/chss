@@ -218,6 +218,131 @@ constexpr char PieceToChar(const chss::Piece& piece) {
 	}
 }
 
+constexpr char* SerializeInteger(char* out, int integer) {
+	if (integer < 0) {
+		*out = '-';
+		++out;
+		integer = -integer;
+	}
+	if (integer == 0) {
+		*out = '0';
+		++out;
+		return out;
+	}
+	int closestPow10 = 1;
+	while (integer >= closestPow10) {
+		closestPow10 *= 10;
+	}
+	closestPow10 /= 10;
+	while (closestPow10 > 0) {
+		const int quotient = integer / closestPow10;
+		const int remainder = integer % closestPow10;
+		*out = static_cast<char>('0' + quotient);
+		++out;
+		integer = remainder;
+		closestPow10 /= 10;
+	}
+	return out;
+}
+
+constexpr char* SerializeBoard(char* out, const chss::Board& board) {
+	for (int y = 7; y >= 0; --y) {
+		int emptyConsecutive = 0;
+		for (int x = 0; x < 8; ++x) {
+			const auto piece = board.At(chss::Position{.y = y, .x = x});
+			if (!piece.has_value()) {
+				++emptyConsecutive;
+			} else {
+				if (emptyConsecutive > 0) {
+					*out = static_cast<char>('0' + emptyConsecutive);
+					++out;
+					emptyConsecutive = 0;
+				}
+				*out = PieceToChar(piece.value());
+				++out;
+			}
+		}
+		if (emptyConsecutive > 0) {
+			*out = static_cast<char>('0' + emptyConsecutive);
+			++out;
+		}
+		if (y > 0) {
+			*out = '/';
+			++out;
+		}
+	}
+	return out;
+}
+
+constexpr char* SerializeActiveColor(char* out, chss::Color activeColor) {
+	*out = activeColor == chss::Color::White ? 'w' : 'b';
+	++out;
+	return out;
+}
+
+constexpr char* SerializeCastlingAvailabilities(char* out, const chss::CastlingAvailabilities& castlingAvailabilities) {
+	bool anyOutput = false;
+	if (castlingAvailabilities.white.isKingSideAvailable) {
+		*out = 'K';
+		++out;
+		anyOutput = true;
+	}
+	if (castlingAvailabilities.white.isQueenSideAvailable) {
+		*out = 'Q';
+		++out;
+		anyOutput = true;
+	}
+	if (castlingAvailabilities.black.isKingSideAvailable) {
+		*out = 'k';
+		++out;
+		anyOutput = true;
+	}
+	if (castlingAvailabilities.black.isQueenSideAvailable) {
+		*out = 'q';
+		++out;
+		anyOutput = true;
+	}
+	if (!anyOutput) {
+		*out = '-';
+		++out;
+	}
+	return out;
+}
+
+constexpr char* SerializeEnPassantTargetSquare(char* out, const std::optional<chss::Position>& enPassantTargetSquare) {
+	if (!enPassantTargetSquare.has_value()) {
+		*out = '-';
+		++out;
+	} else {
+		const auto& position = enPassantTargetSquare.value();
+		*out = static_cast<char>('a' + position.x);
+		++out;
+		*out = static_cast<char>('1' + position.y);
+		++out;
+	}
+	return out;
+}
+
+constexpr char* SerializeToBuffer(char* out, const chss::State& state) {
+	out = detail::SerializeBoard(out, state.board);
+	*out = ' ';
+	++out;
+	out = detail::SerializeActiveColor(out, state.activeColor);
+	*out = ' ';
+	++out;
+	out = detail::SerializeCastlingAvailabilities(out, state.castlingAvailabilities);
+	*out = ' ';
+	++out;
+	out = detail::SerializeEnPassantTargetSquare(out, state.enPassantTargetSquare);
+	*out = ' ';
+	++out;
+	out = detail::SerializeInteger(out, state.halfmoveClock);
+	*out = ' ';
+	++out;
+	out = detail::SerializeInteger(out, state.fullmoveNumber);
+	return out;
+}
+
 } // namespace detail
 
 // Forsyth–Edwards Notation
@@ -234,6 +359,11 @@ namespace chss::fen {
 		.fullmoveNumber = detail::ParseInteger(fenParts[5])};
 }
 
-[[nodiscard]] std::string Serialize(const State& state);
+[[nodiscard]] constexpr std::string Serialize(const State& state) {
+	auto buffer = std::array<char, 90>(); // https://chess.stackexchange.com/questions/30004/longest-possible-fen
+	char* out = buffer.begin();
+	out = detail::SerializeToBuffer(out, state);
+	return std::string(buffer.begin(), out);
+}
 
 } // namespace chss::fen

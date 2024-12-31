@@ -5,7 +5,7 @@
 
 namespace {
 
-bool ParseAndSerializeCycle(const std::string_view& input) {
+constexpr bool ParseAndSerializeCycle(const std::string_view& input) {
 	const auto state = chss::fen::Parse(input);
 	const auto output = chss::fen::Serialize(state);
 	return input == output;

@@ -1,7 +1,6 @@
 add_executable(chess)
 target_sources(chess PRIVATE
         DebugUtils.cpp
-        Fen.cpp
         PieceMovements.cpp
         Movements.cpp
         Perft.cpp
@@ -18,7 +17,6 @@ target_sources(chess_tests PRIVATE
         Board_test.cpp
         DebugUtils.cpp
         DebugUtils_test.cpp
-        Fen.cpp
         Fen_test.cpp
         PieceMovements.cpp
         PieceMovements_test.cpp
