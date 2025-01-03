@@ -323,26 +323,6 @@ constexpr char* SerializeEnPassantTargetSquare(char* out, const std::optional<ch
 	return out;
 }
 
-constexpr char* SerializeToBuffer(char* out, const chss::State& state) {
-	out = detail::SerializeBoard(out, state.board);
-	*out = ' ';
-	++out;
-	out = detail::SerializeActiveColor(out, state.activeColor);
-	*out = ' ';
-	++out;
-	out = detail::SerializeCastlingAvailabilities(out, state.castlingAvailabilities);
-	*out = ' ';
-	++out;
-	out = detail::SerializeEnPassantTargetSquare(out, state.enPassantTargetSquare);
-	*out = ' ';
-	++out;
-	out = detail::SerializeInteger(out, state.halfmoveClock);
-	*out = ' ';
-	++out;
-	out = detail::SerializeInteger(out, state.fullmoveNumber);
-	return out;
-}
-
 } // namespace detail
 
 // Forsyth–Edwards Notation
@@ -362,7 +342,33 @@ namespace chss::fen {
 [[nodiscard]] constexpr std::string Serialize(const State& state) {
 	auto buffer = std::array<char, 90>(); // https://chess.stackexchange.com/questions/30004/longest-possible-fen
 	char* out = buffer.begin();
-	out = detail::SerializeToBuffer(out, state);
+	out = detail::SerializeBoard(out, state.board);
+	*out = ' ';
+	++out;
+	out = detail::SerializeActiveColor(out, state.activeColor);
+	*out = ' ';
+	++out;
+	out = detail::SerializeCastlingAvailabilities(out, state.castlingAvailabilities);
+	*out = ' ';
+	++out;
+	out = detail::SerializeEnPassantTargetSquare(out, state.enPassantTargetSquare);
+	*out = ' ';
+	++out;
+	out = detail::SerializeInteger(out, state.halfmoveClock);
+	*out = ' ';
+	++out;
+	out = detail::SerializeInteger(out, state.fullmoveNumber);
+	return std::string(buffer.begin(), out);
+}
+
+[[nodiscard]] constexpr Board ParseBoard(const std::string_view& input) {
+	return detail::ParseBoard(input);
+}
+
+[[nodiscard]] constexpr std::string SerializeBoard(const Board& board) {
+	auto buffer = std::array<char, 71>(); // https://chess.stackexchange.com/questions/30004/longest-possible-fen
+	char* out = buffer.begin();
+	out = detail::SerializeBoard(out, board);
 	return std::string(buffer.begin(), out);
 }
 
