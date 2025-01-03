@@ -19,7 +19,7 @@ enum class Color : std::int8_t { White, Black };
 struct Piece {
 	Type type;
 	Color color;
-	[[nodiscard]] bool operator==(const Piece& other) const = default;
+	[[nodiscard]] constexpr bool operator==(const Piece& other) const = default;
 };
 
 using Position = matrix::Position2D;

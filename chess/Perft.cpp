@@ -1,10 +1,8 @@
-#pragma once
-
+#include "DebugUtils.h"
 #include "Fen.h"
 #include "Movements.h"
 #include "PieceMovements.h"
 #include "State.h"
-#include "DebugUtils.h"
 
 #include <iostream>
 #include <ranges>
@@ -30,4 +28,4 @@ std::int64_t Perft(const State& state, int depth) {
 	return nodesVisited;
 }
 
-} // namespace MoveGeneration
+} // namespace chss::MoveGeneration

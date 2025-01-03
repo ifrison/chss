@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Movements.h"
 
 #include "PieceMovements.h"
