@@ -536,4 +536,12 @@ namespace chss::MoveGeneration {
 	return false;
 }
 
+[[nodiscard]] std::generator<std::pair<Move, State>> LegalMoves(const chss::State& state) {
+	for (const auto [move, newState] : PseudoLegalMoves(state)) {
+		if (!IsInCheck(newState.board, state.activeColor)) {
+			co_yield std::pair<Move, State>(move, newState);
+		}
+	}
+}
+
 } // namespace chss::MoveGeneration

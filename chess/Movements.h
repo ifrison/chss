@@ -20,6 +20,8 @@ struct Move {
 
 [[nodiscard]] bool IsInCheck(const chss::Board& board, chss::Color color);
 
+[[nodiscard]] std::generator<std::pair<Move, State>> LegalMoves(const chss::State& state);
+
 } // namespace MoveGeneration
 
 } // namespace chss

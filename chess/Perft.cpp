@@ -15,14 +15,12 @@ std::int64_t Perft(const State& state, int depth) {
 	}
 
 	std::int64_t nodesVisited = 0;
-	for (const auto [move, newState] : PseudoLegalMoves(state)) {
-		if (!IsInCheck(newState.board, state.activeColor)) {
-			const auto newNodesVisited = Perft(newState, depth - 1);
-			if (depth > 10) {
-				std::cout << debug::PositionToString(move.from) << debug::PositionToString(move.to) << ": " << newNodesVisited /*<< chss::fen::Serialize(newState)*/ << std::endl;
-			}
-			nodesVisited += newNodesVisited;
+	for (const auto [move, newState] : LegalMoves(state)) {
+		const auto newNodesVisited = Perft(newState, depth - 1);
+		if (depth > 10) {
+			std::cout << debug::PositionToString(move.from) << debug::PositionToString(move.to) << ": " << newNodesVisited /*<< chss::fen::Serialize(newState)*/ << std::endl;
 		}
+		nodesVisited += newNodesVisited;
 	}
 
 	return nodesVisited;
