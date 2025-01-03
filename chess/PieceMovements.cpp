@@ -2,6 +2,8 @@
 
 #include "State.h"
 
+#include <generator>
+
 namespace chss::MoveGeneration {
 
 [[nodiscard]] std::generator<chss::Position> PseudoLegalMovesPawn(const chss::Board& board,const chss::Position& pawnPosition) {

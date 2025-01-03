@@ -233,19 +233,3 @@ TEST(Matrix2D, Transpose) {
 	constexpr auto expectedResult = matrix::Matrix2D<int, matrix::Size2D{.sizeY = 3, .sizeX = 2}>(std::array<int, 6>{1, 4, 2, 5, 3, 6});
 	EXPECT_EQ(result, expectedResult);
 }
-
-TEST(Matrix2D, ToString_int) {
-	constexpr auto size = matrix::Size2D{.sizeY = 2, .sizeX = 3};
-	constexpr auto matrix = matrix::Matrix2D<int, size>(std::array<int, 6>{1, 2, 3, 4, 5, 6});
-	const auto result = matrix::ToString(matrix, "\n", " ");
-	constexpr auto expectedResult = "1 2 3\n4 5 6";
-	EXPECT_EQ(result, expectedResult);
-}
-
-TEST(Matrix2D, ToString_char) {
-	constexpr auto size = matrix::Size2D{.sizeY = 2, .sizeX = 3};
-	constexpr auto matrix = matrix::Matrix2D<char, size>(std::array<char, 6>{'a', 'b', 'c', 'd', 'e', 'f'});
-	const auto result = matrix::ToString(matrix, ";", "");
-	constexpr auto expectedResult = "abc;def";
-	EXPECT_EQ(result, expectedResult);
-}

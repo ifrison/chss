@@ -2,6 +2,8 @@
 
 #include "Board.h"
 
+#include <generator>
+
 namespace chss {
 
 struct State;

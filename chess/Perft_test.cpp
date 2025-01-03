@@ -59,7 +59,7 @@ TEST(Perft, Z) {
 	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/P1k5/K7/8/8/8/8/8 w - - 0 1"), 6), 92683);
 	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("K1k5/8/P7/8/8/8/8/8 w - - 0 1"), 6), 2217);
 	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/k1P5/8/1K6/8/8/8/8 w - - 0 1"), 7), 567584);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/8/2k5/5q2/5n2/8/5K2/8 b - - 0 1"), 4), 2217);
+	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/8/2k5/5q2/5n2/8/5K2/8 b - - 0 1"), 4), 23527);
 }
 
 TEST(Perft, Test001) {

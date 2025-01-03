@@ -182,22 +182,4 @@ template<typename T, Size2D S>
 	return result;
 }
 
-template<typename T, Size2D S>
-[[nodiscard]] std::string ToString(const Matrix2D<T, S>& matrix, std::string_view separRow, std::string_view separCol) {
-	auto ss = std::stringstream();
-	for (int y = 0; y < S.sizeY; ++y) {
-		if (y != 0) {
-			ss << separRow;
-		}
-		for (int x = 0; x < S.sizeX; ++x) {
-			if (x != 0) {
-				ss << separCol;
-			}
-			const auto pos = Position2D{.y = y, .x = x};
-			ss << matrix.At(pos);
-		}
-	}
-	return std::move(ss).str();
-}
-
 } // namespace matrix
