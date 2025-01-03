@@ -5,8 +5,6 @@
 #include <sstream>
 #include <string_view>
 
-#include <generator>
-
 namespace detail {
 
 template<typename T, std::size_t Size>
@@ -68,12 +66,63 @@ struct Size2D {
 	return 0 <= pos.y && pos.y < size.sizeY && 0 <= pos.x && pos.x < size.sizeX;
 }
 
-[[nodiscard]] inline std::generator<Position2D> ForEach(Size2D size) {
-	for (int y = 0; y < size.sizeY; ++y) {
-		for (int x = 0; x < size.sizeX; ++x) {
-			co_yield Position2D{.y = y, .x = x};
-		}
-	}
+[[nodiscard]] constexpr auto ForEach(Size2D size) {
+	class Generator {
+	public:
+		class Sentinel {};
+
+		class Iterator {
+		public:
+			constexpr explicit Iterator(Size2D size)
+				: mSize(size)
+				, mY(0)
+				, mX(0) {}
+
+			[[nodiscard]] constexpr Position2D operator*() const {
+				assert(0 <= mY && mY < mSize.sizeY);
+				assert(0 <= mX && mX < mSize.sizeX);
+				return Position2D{.y = mY, .x = mX};
+			}
+
+			constexpr Iterator& operator++() {
+				assert(0 <= mY && mY < mSize.sizeY);
+				assert(0 <= mX && mX < mSize.sizeX);
+				++mX;
+				if (mX == mSize.sizeX) {
+					mX = 0;
+					++mY;
+				}
+				return *this;
+			}
+
+			[[nodiscard]] constexpr bool operator==(const Sentinel&) const {
+				assert((0 <= mY && mY < mSize.sizeY && 0 <= mX && mX < mSize.sizeX) || (mY == mSize.sizeY && mX == 0));
+				return mY == mSize.sizeY;
+			}
+
+			[[nodiscard]] constexpr bool operator!=(const Sentinel&) const {
+				assert((0 <= mY && mY < mSize.sizeY && 0 <= mX && mX < mSize.sizeX) || (mY == mSize.sizeY && mX == 0));
+				return mY != mSize.sizeY;
+			}
+
+		private:
+			Size2D mSize;
+			int mY;
+			int mX;
+		};
+
+		constexpr explicit Generator(Size2D size)
+			: mSize(size) {}
+
+		[[nodiscard]] constexpr Iterator begin() const { return Iterator(mSize); }
+
+		[[nodiscard]] constexpr Sentinel end() const { return Sentinel{}; }
+
+	private:
+		Size2D mSize;
+	};
+
+	return Generator(size);
 }
 
 template<typename T, Size2D S>
