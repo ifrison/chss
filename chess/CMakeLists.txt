@@ -24,6 +24,7 @@ target_sources(chess_tests PRIVATE
         Movements_test.cpp
         Perft.cpp
         Perft_test.cpp
+        Evaluation_test.cpp
 )
 target_link_libraries(chess_tests
         cpp_utils
