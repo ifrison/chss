@@ -4,6 +4,7 @@ target_sources(chess PRIVATE
         PieceMovements.cpp
         Movements.cpp
         Perft.cpp
+        MinMax.cpp
         chess.cpp
 )
 target_link_libraries(chess
@@ -25,6 +26,8 @@ target_sources(chess_tests PRIVATE
         Perft.cpp
         Perft_test.cpp
         Evaluation_test.cpp
+        MinMax.cpp
+        MinMax_test.cpp
 )
 target_link_libraries(chess_tests
         cpp_utils
