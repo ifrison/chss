@@ -1,7 +1,8 @@
 #include "Board.h"
-#include "State.h"
-#include "Movements.h"
 #include "Fen.h"
+#include "Movements.h"
+#include "State.h"
+#include "UCI.h"
 
 #include <array>
 #include <cassert>
@@ -14,8 +15,6 @@
 #include <generator>
 
 int main() {
-	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-	const auto str = chss::fen::Serialize(state);
-	std::cout << str << std::endl;
+	chss::uci::UCI(std::cin, std::cout);
 	return 0;
 }
