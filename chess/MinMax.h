@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atomic>
+
 namespace chss {
 
 struct State;
@@ -10,9 +12,7 @@ struct Move;
 
 namespace search {
 
-[[nodiscard]] int MinMax(const State& state, int depth);
-
-[[nodiscard]] MoveGeneration::Move Search(const State& state, int depth);
+[[nodiscard]] std::pair<MoveGeneration::Move, MoveGeneration::Move> Search(const State& state, int depth, const std::atomic_flag& stop);
 
 } // namespace search
 
