@@ -6,6 +6,7 @@ target_sources(chess PRIVATE
         Perft.cpp
         MinMax.cpp
         chess.cpp
+        TaskQueue.cpp
 )
 target_link_libraries(chess
         cpp_utils
@@ -28,6 +29,8 @@ target_sources(chess_tests PRIVATE
         Evaluation_test.cpp
         MinMax.cpp
         MinMax_test.cpp
+        TaskQueue.cpp
+        TaskQueue_test.cpp
 )
 target_link_libraries(chess_tests
         cpp_utils
