@@ -4,6 +4,8 @@
 #include "PieceMovements.h"
 #include "State.h"
 
+#include <cpp_utils/Overloaded.h>
+
 #include <iostream>
 #include <ranges>
 
@@ -64,6 +66,109 @@ chss::CastlingAvailabilities UpdateAvailabilitiesIfRookEaten(const chss::State& 
 } // namespace
 
 namespace chss::MoveGeneration {
+
+State MakeMove(const chss::State& state, const chss::Move& move) {
+	return std::visit(
+		Overloaded{
+			[&state](const NormalMove& normalMove) -> State {
+				auto newState = state;
+				newState.activeColor = InverseColor(state.activeColor);
+				newState.board.At(normalMove.to) = newState.board.At(normalMove.from);
+				newState.board.At(normalMove.from) = std::nullopt;
+				newState.enPassantTargetSquare = std::nullopt;
+				newState.fullmoveNumber = state.fullmoveNumber + 1;
+				if (state.enPassantTargetSquare == normalMove.to &&
+					state.board.At(normalMove.from).value().type == PieceType::Pawn) {
+					newState.board.At(Position{.y = normalMove.from.y, .x = normalMove.to.x}) = std::nullopt;
+				} else if (normalMove.to == Position{.y = 0, .x = 0}) {
+					newState.castlingAvailabilities.white.isQueenSideAvailable = false;
+				} else if (normalMove.to == Position{.y = 0, .x = 7}) {
+					newState.castlingAvailabilities.white.isKingSideAvailable = false;
+				} else if (normalMove.to == Position{.y = 7, .x = 0}) {
+					newState.castlingAvailabilities.black.isQueenSideAvailable = false;
+				} else if (normalMove.to == Position{.y = 7, .x = 7}) {
+					newState.castlingAvailabilities.black.isKingSideAvailable = false;
+				}
+				if (normalMove.from == Position{.y = 0, .x = 0}) {
+					newState.castlingAvailabilities.white.isQueenSideAvailable = false;
+				} else if (normalMove.from == Position{.y = 0, .x = 7}) {
+					newState.castlingAvailabilities.white.isKingSideAvailable = false;
+				} else if (normalMove.from == Position{.y = 7, .x = 0}) {
+					newState.castlingAvailabilities.black.isQueenSideAvailable = false;
+				} else if (normalMove.from == Position{.y = 7, .x = 7}) {
+					newState.castlingAvailabilities.black.isKingSideAvailable = false;
+				} else if (normalMove.from == Position{.y = 0, .x = 4}) {
+					newState.castlingAvailabilities.white =
+						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+				} else if (normalMove.from == Position{.y = 7, .x = 4}) {
+					newState.castlingAvailabilities.black =
+						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+				}
+				return newState;
+			},
+			[&state](const TwoSquaresAdvance& twoSquaresAdvance) -> State {
+				auto newState = state;
+				newState.activeColor = InverseColor(state.activeColor);
+				newState.board.At(twoSquaresAdvance.to) = newState.board.At(twoSquaresAdvance.from);
+				newState.board.At(twoSquaresAdvance.from) = std::nullopt;
+				newState.enPassantTargetSquare = Position{
+					.y = (twoSquaresAdvance.from.y + twoSquaresAdvance.to.y) / 2,
+					.x = twoSquaresAdvance.from.x};
+				newState.fullmoveNumber = state.fullmoveNumber + 1;
+				return newState;
+			},
+			[&state](const Promotion& promotion) -> State {
+				auto newState = state;
+				newState.activeColor = InverseColor(state.activeColor);
+				newState.board.At(promotion.to) = Piece{.type = promotion.type, .color = state.activeColor};
+				newState.board.At(promotion.from) = std::nullopt;
+				newState.enPassantTargetSquare = std::nullopt;
+				newState.fullmoveNumber = state.fullmoveNumber + 1;
+				if (promotion.to == Position{.y = 0, .x = 0}) {
+					newState.castlingAvailabilities.white.isQueenSideAvailable = false;
+				} else if (promotion.to == Position{.y = 0, .x = 7}) {
+					newState.castlingAvailabilities.white.isKingSideAvailable = false;
+				} else if (promotion.to == Position{.y = 7, .x = 0}) {
+					newState.castlingAvailabilities.black.isQueenSideAvailable = false;
+				} else if (promotion.to == Position{.y = 7, .x = 7}) {
+					newState.castlingAvailabilities.black.isKingSideAvailable = false;
+				}
+				return newState;
+			},
+			[&state](const Castling& castling) -> State {
+				auto newState = state;
+				newState.activeColor = InverseColor(state.activeColor);
+				newState.board.At(castling.to) = newState.board.At(castling.from);
+				newState.board.At(castling.from) = std::nullopt;
+				newState.enPassantTargetSquare = std::nullopt;
+				newState.fullmoveNumber = state.fullmoveNumber + 1;
+				if (castling.to == Position{.y = 0, .x = 2}) {
+					newState.board.At(Position{.y = 0, .x = 3}) = newState.board.At(Position{.y = 0, .x = 0});
+					newState.board.At(Position{.y = 0, .x = 0}) = std::nullopt;
+					newState.castlingAvailabilities.white =
+						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+				} else if (castling.to == Position{.y = 0, .x = 6}) {
+					newState.board.At(Position{.y = 0, .x = 5}) = newState.board.At(Position{.y = 0, .x = 7});
+					newState.board.At(Position{.y = 0, .x = 7}) = std::nullopt;
+					newState.castlingAvailabilities.white =
+						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+				} else if (castling.to == Position{.y = 7, .x = 2}) {
+					newState.board.At(Position{.y = 7, .x = 3}) = newState.board.At(Position{.y = 7, .x = 0});
+					newState.board.At(Position{.y = 7, .x = 0}) = std::nullopt;
+					newState.castlingAvailabilities.black =
+						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+				} else if (castling.to == Position{.y = 7, .x = 6}) {
+					newState.board.At(Position{.y = 7, .x = 5}) = newState.board.At(Position{.y = 7, .x = 7});
+					newState.board.At(Position{.y = 7, .x = 7}) = std::nullopt;
+					newState.castlingAvailabilities.black =
+						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+				} else {
+					assert(false);
+				}
+				return newState;
+			}},
+		move);
+}
 
 [[nodiscard]] std::generator<std::pair<Move, State>> PseudoLegalMoves(const chss::State& state) {
 	for (const auto from : ForEach(state.board.GetSize())) {

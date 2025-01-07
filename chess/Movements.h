@@ -11,6 +11,8 @@ struct State;
 
 namespace MoveGeneration {
 
+[[nodiscard]] State MakeMove(const chss::State& state, const chss::Move& move);
+
 [[nodiscard]] std::generator<std::pair<Move, State>> PseudoLegalMoves(const chss::State& state);
 
 [[nodiscard]] bool IsInCheck(const chss::Board& board, chss::Color color);
