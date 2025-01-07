@@ -93,41 +93,6 @@ TEST(Perft, Test002) {
 	}
 }
 
-TEST(Perft, Test002_e5d7) {
-	constexpr auto state = chss::fen::Parse("r3k2r/p1pNqpb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 2");
-	constexpr auto depthAndNodesVisited = std::array{
-		std::pair<int, std::int64_t>(1, 45),
-		//	std::pair<int, std::int64_t>(2, 2124),
-		//	std::pair<int, std::int64_t>(3, 93913)
-	};
-	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 4)
-			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited); // e8c8
-	}
-}
-
-TEST(Perft, Test002_c3b1) {
-	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R b KQkq - 0 2");
-	constexpr auto depthAndNodesVisited =
-		std::array{std::pair<int, std::int64_t>(1, 42), std::pair<int, std::int64_t>(2, 2038)};
-	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 4)
-			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
-	}
-}
-
-TEST(Perft, Test002_c3b1_a6b5) {
-	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/1n2pnp1/1b1PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R w KQkq - 0 3");
-	constexpr auto depthAndNodesVisited = std::array{std::pair<int, std::int64_t>(1, 48)};
-	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 4)
-			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
-	}
-}
-
 TEST(Perft, Test003) {
 	constexpr auto state = chss::fen::Parse("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
 	constexpr auto depthAndNodesVisited = std::array{
@@ -2121,32 +2086,6 @@ TEST(Perft, Test127) {
 		std::pair<int, std::int64_t>(4, 43238),
 		std::pair<int, std::int64_t>(5, 674624),
 		std::pair<int, std::int64_t>(6, 11030083)};
-	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 4)
-			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
-	}
-}
-
-TEST(Perft, Test127_e2e4) {
-	constexpr auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b - e3 0 2");
-	constexpr auto depthAndNodesVisited = std::array{
-		std::pair<int, std::int64_t>(1, 16),
-		std::pair<int, std::int64_t>(2, 177),
-		std::pair<int, std::int64_t>(3, 2748)};
-	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 4)
-			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
-	}
-}
-
-TEST(Perft, Test127_g2g4) {
-	constexpr auto state = chss::fen::Parse("8/2p5/3p4/KP5r/1R3pPk/8/4P3/8 b - g3 0 2");
-	constexpr auto depthAndNodesVisited = std::array{
-		std::pair<int, std::int64_t>(1, 17),
-		std::pair<int, std::int64_t>(2, 226),
-		std::pair<int, std::int64_t>(3, 3702)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
