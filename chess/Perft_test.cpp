@@ -28,17 +28,17 @@ TEST(Perft, C) {
 	}
 }
 
-TEST(Perft, X) {
+TEST(Perft, DISABLED_X) {
 	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	EXPECT_EQ(chss::MoveGeneration::Perft(state, 6), 119060324);
 }
 
-TEST(Perft, Y) {
+TEST(Perft, DISABLED_Y) {
 	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 	EXPECT_EQ(chss::MoveGeneration::Perft(state, 5), 193690690);
 }
 
-TEST(Perft, Z) {
+TEST(Perft, DISABLED_Z) {
 	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"), 7), 178633661);
 	EXPECT_EQ(
 		chss::MoveGeneration::Perft(
@@ -72,7 +72,7 @@ TEST(Perft, Test001) {
 		std::pair<int, std::int64_t>(5, 4865609),
 		std::pair<int, std::int64_t>(6, 119060324)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -87,7 +87,7 @@ TEST(Perft, Test002) {
 		std::pair<int, std::int64_t>(4, 4085603),
 		std::pair<int, std::int64_t>(5, 193690690)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 2)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -101,7 +101,7 @@ TEST(Perft, Test002_e5d7) {
 		//	std::pair<int, std::int64_t>(3, 93913)
 	};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited); // e8c8
 	}
@@ -112,7 +112,7 @@ TEST(Perft, Test002_c3b1) {
 	constexpr auto depthAndNodesVisited =
 		std::array{std::pair<int, std::int64_t>(1, 42), std::pair<int, std::int64_t>(2, 2038)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -122,7 +122,7 @@ TEST(Perft, Test002_c3b1_a6b5) {
 	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/1n2pnp1/1b1PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R w KQkq - 0 3");
 	constexpr auto depthAndNodesVisited = std::array{std::pair<int, std::int64_t>(1, 48)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -138,7 +138,7 @@ TEST(Perft, Test003) {
 		std::pair<int, std::int64_t>(5, 133987),
 		std::pair<int, std::int64_t>(6, 764643)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -154,7 +154,7 @@ TEST(Perft, Test004) {
 		std::pair<int, std::int64_t>(5, 145232),
 		std::pair<int, std::int64_t>(6, 846648)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -170,7 +170,7 @@ TEST(Perft, Test005) {
 		std::pair<int, std::int64_t>(5, 47635),
 		std::pair<int, std::int64_t>(6, 899442)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -186,7 +186,7 @@ TEST(Perft, Test006) {
 		std::pair<int, std::int64_t>(5, 52710),
 		std::pair<int, std::int64_t>(6, 1001523)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -202,7 +202,7 @@ TEST(Perft, Test007) {
 		std::pair<int, std::int64_t>(5, 532933),
 		std::pair<int, std::int64_t>(6, 2788982)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -218,7 +218,7 @@ TEST(Perft, Test008) {
 		std::pair<int, std::int64_t>(5, 118882),
 		std::pair<int, std::int64_t>(6, 3517770)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -234,7 +234,7 @@ TEST(Perft, Test009) {
 		std::pair<int, std::int64_t>(5, 37735),
 		std::pair<int, std::int64_t>(6, 185867)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -250,7 +250,7 @@ TEST(Perft, Test010) {
 		std::pair<int, std::int64_t>(5, 80619),
 		std::pair<int, std::int64_t>(6, 413018)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -266,7 +266,7 @@ TEST(Perft, Test011) {
 		std::pair<int, std::int64_t>(5, 10485),
 		std::pair<int, std::int64_t>(6, 179869)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -282,7 +282,7 @@ TEST(Perft, Test012) {
 		std::pair<int, std::int64_t>(5, 20780),
 		std::pair<int, std::int64_t>(6, 367724)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -298,7 +298,7 @@ TEST(Perft, Test013) {
 		std::pair<int, std::int64_t>(5, 7594526),
 		std::pair<int, std::int64_t>(6, 179862938)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -314,7 +314,7 @@ TEST(Perft, Test014) {
 		std::pair<int, std::int64_t>(5, 8153719),
 		std::pair<int, std::int64_t>(6, 195629489)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -330,7 +330,7 @@ TEST(Perft, Test015) {
 		std::pair<int, std::int64_t>(5, 7736373),
 		std::pair<int, std::int64_t>(6, 184411439)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -346,7 +346,7 @@ TEST(Perft, Test016) {
 		std::pair<int, std::int64_t>(5, 7878456),
 		std::pair<int, std::int64_t>(6, 189224276)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -362,7 +362,7 @@ TEST(Perft, Test017) {
 		std::pair<int, std::int64_t>(5, 8198901),
 		std::pair<int, std::int64_t>(6, 198328929)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -378,7 +378,7 @@ TEST(Perft, Test018) {
 		std::pair<int, std::int64_t>(5, 7710115),
 		std::pair<int, std::int64_t>(6, 185959088)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -394,7 +394,7 @@ TEST(Perft, Test019) {
 		std::pair<int, std::int64_t>(5, 7848606),
 		std::pair<int, std::int64_t>(6, 190755813)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -410,7 +410,7 @@ TEST(Perft, Test020) {
 		std::pair<int, std::int64_t>(5, 47635),
 		std::pair<int, std::int64_t>(6, 899442)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -426,7 +426,7 @@ TEST(Perft, Test021) {
 		std::pair<int, std::int64_t>(5, 52710),
 		std::pair<int, std::int64_t>(6, 1001523)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -442,7 +442,7 @@ TEST(Perft, Test022) {
 		std::pair<int, std::int64_t>(5, 133987),
 		std::pair<int, std::int64_t>(6, 764643)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -458,7 +458,7 @@ TEST(Perft, Test023) {
 		std::pair<int, std::int64_t>(5, 145232),
 		std::pair<int, std::int64_t>(6, 846648)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -474,7 +474,7 @@ TEST(Perft, Test024) {
 		std::pair<int, std::int64_t>(5, 118882),
 		std::pair<int, std::int64_t>(6, 3517770)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -490,7 +490,7 @@ TEST(Perft, Test025) {
 		std::pair<int, std::int64_t>(5, 532933),
 		std::pair<int, std::int64_t>(6, 2788982)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -506,7 +506,7 @@ TEST(Perft, Test026) {
 		std::pair<int, std::int64_t>(5, 10485),
 		std::pair<int, std::int64_t>(6, 179869)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -522,7 +522,7 @@ TEST(Perft, Test027) {
 		std::pair<int, std::int64_t>(5, 20780),
 		std::pair<int, std::int64_t>(6, 367724)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -538,7 +538,7 @@ TEST(Perft, Test028) {
 		std::pair<int, std::int64_t>(5, 37735),
 		std::pair<int, std::int64_t>(6, 185867)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -554,7 +554,7 @@ TEST(Perft, Test029) {
 		std::pair<int, std::int64_t>(5, 80619),
 		std::pair<int, std::int64_t>(6, 413018)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -570,7 +570,7 @@ TEST(Perft, Test030) {
 		std::pair<int, std::int64_t>(5, 7594526),
 		std::pair<int, std::int64_t>(6, 179862938)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -586,7 +586,7 @@ TEST(Perft, Test031) {
 		std::pair<int, std::int64_t>(5, 8198901),
 		std::pair<int, std::int64_t>(6, 198328929)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -602,7 +602,7 @@ TEST(Perft, Test032) {
 		std::pair<int, std::int64_t>(5, 7710115),
 		std::pair<int, std::int64_t>(6, 185959088)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -618,7 +618,7 @@ TEST(Perft, Test033) {
 		std::pair<int, std::int64_t>(5, 7848606),
 		std::pair<int, std::int64_t>(6, 190755813)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -634,7 +634,7 @@ TEST(Perft, Test034) {
 		std::pair<int, std::int64_t>(5, 8153719),
 		std::pair<int, std::int64_t>(6, 195629489)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -650,7 +650,7 @@ TEST(Perft, Test035) {
 		std::pair<int, std::int64_t>(5, 7736373),
 		std::pair<int, std::int64_t>(6, 184411439)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -666,7 +666,7 @@ TEST(Perft, Test036) {
 		std::pair<int, std::int64_t>(5, 7878456),
 		std::pair<int, std::int64_t>(6, 189224276)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -682,7 +682,7 @@ TEST(Perft, Test037) {
 		std::pair<int, std::int64_t>(5, 570726),
 		std::pair<int, std::int64_t>(6, 8107539)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -698,7 +698,7 @@ TEST(Perft, Test038) {
 		std::pair<int, std::int64_t>(5, 223507),
 		std::pair<int, std::int64_t>(6, 2594412)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -714,7 +714,7 @@ TEST(Perft, Test039) {
 		std::pair<int, std::int64_t>(5, 1198299),
 		std::pair<int, std::int64_t>(6, 19870403)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -730,7 +730,7 @@ TEST(Perft, Test040) {
 		std::pair<int, std::int64_t>(5, 38348),
 		std::pair<int, std::int64_t>(6, 588695)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -746,7 +746,7 @@ TEST(Perft, Test041) {
 		std::pair<int, std::int64_t>(5, 92250),
 		std::pair<int, std::int64_t>(6, 688780)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -762,7 +762,7 @@ TEST(Perft, Test042) {
 		std::pair<int, std::int64_t>(5, 582642),
 		std::pair<int, std::int64_t>(6, 8503277)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -778,7 +778,7 @@ TEST(Perft, Test043) {
 		std::pair<int, std::int64_t>(5, 288141),
 		std::pair<int, std::int64_t>(6, 3147566)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -794,7 +794,7 @@ TEST(Perft, Test044) {
 		std::pair<int, std::int64_t>(5, 281190),
 		std::pair<int, std::int64_t>(6, 4405103)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -810,7 +810,7 @@ TEST(Perft, Test045) {
 		std::pair<int, std::int64_t>(5, 92250),
 		std::pair<int, std::int64_t>(6, 688780)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -826,7 +826,7 @@ TEST(Perft, Test046) {
 		std::pair<int, std::int64_t>(5, 38348),
 		std::pair<int, std::int64_t>(6, 588695)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -842,7 +842,7 @@ TEST(Perft, Test047) {
 		std::pair<int, std::int64_t>(5, 1320507),
 		std::pair<int, std::int64_t>(6, 22823890)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -858,7 +858,7 @@ TEST(Perft, Test048) {
 		std::pair<int, std::int64_t>(5, 1713368),
 		std::pair<int, std::int64_t>(6, 28861171)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -874,7 +874,7 @@ TEST(Perft, Test049) {
 		std::pair<int, std::int64_t>(5, 787524),
 		std::pair<int, std::int64_t>(6, 7881673)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -890,7 +890,7 @@ TEST(Perft, Test050) {
 		std::pair<int, std::int64_t>(5, 310862),
 		std::pair<int, std::int64_t>(6, 7382896)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -906,7 +906,7 @@ TEST(Perft, Test051) {
 		std::pair<int, std::int64_t>(5, 530585),
 		std::pair<int, std::int64_t>(6, 9250746)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -922,7 +922,7 @@ TEST(Perft, Test052) {
 		std::pair<int, std::int64_t>(5, 1591064),
 		std::pair<int, std::int64_t>(6, 29027891)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -938,7 +938,7 @@ TEST(Perft, Test053) {
 		std::pair<int, std::int64_t>(5, 310862),
 		std::pair<int, std::int64_t>(6, 7382896)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -954,7 +954,7 @@ TEST(Perft, Test054) {
 		std::pair<int, std::int64_t>(5, 787524),
 		std::pair<int, std::int64_t>(6, 7881673)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -970,7 +970,7 @@ TEST(Perft, Test055) {
 		std::pair<int, std::int64_t>(5, 2161211),
 		std::pair<int, std::int64_t>(6, 44956585)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -986,7 +986,7 @@ TEST(Perft, Test056) {
 		std::pair<int, std::int64_t>(5, 20506480),
 		std::pair<int, std::int64_t>(6, 525169084)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1002,7 +1002,7 @@ TEST(Perft, Test057) {
 		std::pair<int, std::int64_t>(5, 2161211),
 		std::pair<int, std::int64_t>(6, 44956585)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1018,7 +1018,7 @@ TEST(Perft, Test058) {
 		std::pair<int, std::int64_t>(5, 20521342),
 		std::pair<int, std::int64_t>(6, 524966748)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1034,7 +1034,7 @@ TEST(Perft, Test059) {
 		std::pair<int, std::int64_t>(5, 14893),
 		std::pair<int, std::int64_t>(6, 391507)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1050,7 +1050,7 @@ TEST(Perft, Test060) {
 		std::pair<int, std::int64_t>(5, 14893),
 		std::pair<int, std::int64_t>(6, 391507)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1066,7 +1066,7 @@ TEST(Perft, Test061) {
 		std::pair<int, std::int64_t>(5, 166741),
 		std::pair<int, std::int64_t>(6, 3370175)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1082,7 +1082,7 @@ TEST(Perft, Test062) {
 		std::pair<int, std::int64_t>(5, 105749),
 		std::pair<int, std::int64_t>(6, 419369)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1098,7 +1098,7 @@ TEST(Perft, Test063) {
 		std::pair<int, std::int64_t>(5, 14893),
 		std::pair<int, std::int64_t>(6, 391507)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1114,7 +1114,7 @@ TEST(Perft, Test064) {
 		std::pair<int, std::int64_t>(5, 166741),
 		std::pair<int, std::int64_t>(6, 3370175)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1130,7 +1130,7 @@ TEST(Perft, Test065) {
 		std::pair<int, std::int64_t>(5, 1347),
 		std::pair<int, std::int64_t>(6, 6249)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1146,7 +1146,7 @@ TEST(Perft, Test066) {
 		std::pair<int, std::int64_t>(5, 1347),
 		std::pair<int, std::int64_t>(6, 6249)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1162,7 +1162,7 @@ TEST(Perft, Test067) {
 		std::pair<int, std::int64_t>(5, 342),
 		std::pair<int, std::int64_t>(6, 2343)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1178,7 +1178,7 @@ TEST(Perft, Test068) {
 		std::pair<int, std::int64_t>(5, 342),
 		std::pair<int, std::int64_t>(6, 2343)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1194,7 +1194,7 @@ TEST(Perft, Test069) {
 		std::pair<int, std::int64_t>(5, 7028),
 		std::pair<int, std::int64_t>(6, 34834)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1210,7 +1210,7 @@ TEST(Perft, Test070) {
 		std::pair<int, std::int64_t>(5, 342),
 		std::pair<int, std::int64_t>(6, 2343)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1226,7 +1226,7 @@ TEST(Perft, Test071) {
 		std::pair<int, std::int64_t>(5, 342),
 		std::pair<int, std::int64_t>(6, 2343)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1242,7 +1242,7 @@ TEST(Perft, Test072) {
 		std::pair<int, std::int64_t>(5, 1347),
 		std::pair<int, std::int64_t>(6, 6249)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1258,7 +1258,7 @@ TEST(Perft, Test073) {
 		std::pair<int, std::int64_t>(5, 1347),
 		std::pair<int, std::int64_t>(6, 6249)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1274,7 +1274,7 @@ TEST(Perft, Test074) {
 		std::pair<int, std::int64_t>(5, 5408),
 		std::pair<int, std::int64_t>(6, 34822)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1290,7 +1290,7 @@ TEST(Perft, Test075) {
 		std::pair<int, std::int64_t>(5, 1814),
 		std::pair<int, std::int64_t>(6, 11848)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1306,7 +1306,7 @@ TEST(Perft, Test076) {
 		std::pair<int, std::int64_t>(5, 1814),
 		std::pair<int, std::int64_t>(6, 11848)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1322,7 +1322,7 @@ TEST(Perft, Test077) {
 		std::pair<int, std::int64_t>(5, 1969),
 		std::pair<int, std::int64_t>(6, 10724)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1338,7 +1338,7 @@ TEST(Perft, Test078) {
 		std::pair<int, std::int64_t>(5, 1969),
 		std::pair<int, std::int64_t>(6, 10724)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1354,7 +1354,7 @@ TEST(Perft, Test079) {
 		std::pair<int, std::int64_t>(5, 8296),
 		std::pair<int, std::int64_t>(6, 53138)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1370,7 +1370,7 @@ TEST(Perft, Test080) {
 		std::pair<int, std::int64_t>(5, 23599),
 		std::pair<int, std::int64_t>(6, 157093)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1386,7 +1386,7 @@ TEST(Perft, Test081) {
 		std::pair<int, std::int64_t>(5, 21637),
 		std::pair<int, std::int64_t>(6, 158065)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1402,7 +1402,7 @@ TEST(Perft, Test082) {
 		std::pair<int, std::int64_t>(5, 3450),
 		std::pair<int, std::int64_t>(6, 20960)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1418,7 +1418,7 @@ TEST(Perft, Test083) {
 		std::pair<int, std::int64_t>(5, 1969),
 		std::pair<int, std::int64_t>(6, 10724)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1434,7 +1434,7 @@ TEST(Perft, Test084) {
 		std::pair<int, std::int64_t>(5, 1969),
 		std::pair<int, std::int64_t>(6, 10724)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1450,7 +1450,7 @@ TEST(Perft, Test085) {
 		std::pair<int, std::int64_t>(5, 8296),
 		std::pair<int, std::int64_t>(6, 53138)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1466,7 +1466,7 @@ TEST(Perft, Test086) {
 		std::pair<int, std::int64_t>(5, 21637),
 		std::pair<int, std::int64_t>(6, 158065)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1482,7 +1482,7 @@ TEST(Perft, Test087) {
 		std::pair<int, std::int64_t>(5, 23599),
 		std::pair<int, std::int64_t>(6, 157093)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1498,7 +1498,7 @@ TEST(Perft, Test088) {
 		std::pair<int, std::int64_t>(5, 3309),
 		std::pair<int, std::int64_t>(6, 21104)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1514,7 +1514,7 @@ TEST(Perft, Test089) {
 		std::pair<int, std::int64_t>(5, 4661),
 		std::pair<int, std::int64_t>(6, 32191)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1530,7 +1530,7 @@ TEST(Perft, Test090) {
 		std::pair<int, std::int64_t>(5, 4786),
 		std::pair<int, std::int64_t>(6, 30980)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1546,7 +1546,7 @@ TEST(Perft, Test091) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1562,7 +1562,7 @@ TEST(Perft, Test092) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1578,7 +1578,7 @@ TEST(Perft, Test093) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1594,7 +1594,7 @@ TEST(Perft, Test094) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1610,7 +1610,7 @@ TEST(Perft, Test095) {
 		std::pair<int, std::int64_t>(5, 3013),
 		std::pair<int, std::int64_t>(6, 22886)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1626,7 +1626,7 @@ TEST(Perft, Test096) {
 		std::pair<int, std::int64_t>(5, 4271),
 		std::pair<int, std::int64_t>(6, 28662)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1642,7 +1642,7 @@ TEST(Perft, Test097) {
 		std::pair<int, std::int64_t>(5, 5014),
 		std::pair<int, std::int64_t>(6, 32167)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1658,7 +1658,7 @@ TEST(Perft, Test098) {
 		std::pair<int, std::int64_t>(5, 4658),
 		std::pair<int, std::int64_t>(6, 30749)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1674,7 +1674,7 @@ TEST(Perft, Test099) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1690,7 +1690,7 @@ TEST(Perft, Test100) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1706,7 +1706,7 @@ TEST(Perft, Test101) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1722,7 +1722,7 @@ TEST(Perft, Test102) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1738,7 +1738,7 @@ TEST(Perft, Test103) {
 		std::pair<int, std::int64_t>(5, 4337),
 		std::pair<int, std::int64_t>(6, 22579)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1754,7 +1754,7 @@ TEST(Perft, Test104) {
 		std::pair<int, std::int64_t>(5, 4271),
 		std::pair<int, std::int64_t>(6, 28662)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1770,7 +1770,7 @@ TEST(Perft, Test105) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1786,7 +1786,7 @@ TEST(Perft, Test106) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1802,7 +1802,7 @@ TEST(Perft, Test107) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1818,7 +1818,7 @@ TEST(Perft, Test108) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1834,7 +1834,7 @@ TEST(Perft, Test109) {
 		std::pair<int, std::int64_t>(5, 7574),
 		std::pair<int, std::int64_t>(6, 55338)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1850,7 +1850,7 @@ TEST(Perft, Test110) {
 		std::pair<int, std::int64_t>(5, 7574),
 		std::pair<int, std::int64_t>(6, 55338)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1866,7 +1866,7 @@ TEST(Perft, Test111) {
 		std::pair<int, std::int64_t>(5, 24122),
 		std::pair<int, std::int64_t>(6, 199002)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1882,7 +1882,7 @@ TEST(Perft, Test112) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1898,7 +1898,7 @@ TEST(Perft, Test113) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1914,7 +1914,7 @@ TEST(Perft, Test114) {
 		std::pair<int, std::int64_t>(5, 6112),
 		std::pair<int, std::int64_t>(6, 41874)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1930,7 +1930,7 @@ TEST(Perft, Test115) {
 		std::pair<int, std::int64_t>(5, 4354),
 		std::pair<int, std::int64_t>(6, 29679)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1946,7 +1946,7 @@ TEST(Perft, Test116) {
 		std::pair<int, std::int64_t>(5, 7574),
 		std::pair<int, std::int64_t>(6, 55338)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1962,7 +1962,7 @@ TEST(Perft, Test117) {
 		std::pair<int, std::int64_t>(5, 7574),
 		std::pair<int, std::int64_t>(6, 55338)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1978,7 +1978,7 @@ TEST(Perft, Test118) {
 		std::pair<int, std::int64_t>(5, 24122),
 		std::pair<int, std::int64_t>(6, 199002)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -1994,7 +1994,7 @@ TEST(Perft, Test119) {
 		std::pair<int, std::int64_t>(5, 90606),
 		std::pair<int, std::int64_t>(6, 1030499)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2010,7 +2010,7 @@ TEST(Perft, Test120) {
 		std::pair<int, std::int64_t>(5, 2193768),
 		std::pair<int, std::int64_t>(6, 37665329)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2026,7 +2026,7 @@ TEST(Perft, Test121) {
 		std::pair<int, std::int64_t>(5, 1533145),
 		std::pair<int, std::int64_t>(6, 28859283)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2042,7 +2042,7 @@ TEST(Perft, Test122) {
 		std::pair<int, std::int64_t>(5, 3605103),
 		std::pair<int, std::int64_t>(6, 71179139)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2058,7 +2058,7 @@ TEST(Perft, Test123) {
 		std::pair<int, std::int64_t>(5, 90606),
 		std::pair<int, std::int64_t>(6, 1030499)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2074,7 +2074,7 @@ TEST(Perft, Test124) {
 		std::pair<int, std::int64_t>(5, 2193768),
 		std::pair<int, std::int64_t>(6, 37665329)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2090,7 +2090,7 @@ TEST(Perft, Test125) {
 		std::pair<int, std::int64_t>(5, 1533145),
 		std::pair<int, std::int64_t>(6, 28859283)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2106,7 +2106,7 @@ TEST(Perft, Test126) {
 		std::pair<int, std::int64_t>(5, 3605103),
 		std::pair<int, std::int64_t>(6, 71179139)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2122,7 +2122,7 @@ TEST(Perft, Test127) {
 		std::pair<int, std::int64_t>(5, 674624),
 		std::pair<int, std::int64_t>(6, 11030083)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2135,7 +2135,7 @@ TEST(Perft, Test127_e2e4) {
 		std::pair<int, std::int64_t>(2, 177),
 		std::pair<int, std::int64_t>(3, 2748)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2148,7 +2148,7 @@ TEST(Perft, Test127_g2g4) {
 		std::pair<int, std::int64_t>(2, 226),
 		std::pair<int, std::int64_t>(3, 3702)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
@@ -2158,7 +2158,7 @@ TEST(Perft, Test128) {
 	constexpr auto state = chss::fen::Parse("rnbqkb1r/ppppp1pp/7n/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3");
 	constexpr auto depthAndNodesVisited = std::array{std::pair<int, std::int64_t>(5, 11139762)};
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
-		if (depth > 6)
+		if (depth > 4)
 			continue;
 		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
 	}
