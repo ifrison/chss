@@ -84,7 +84,7 @@ void UCI(std::istream& in, std::ostream& out) {
 	auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	auto taskQueue = TaskQueue(1);
 	auto stop = std::atomic_flag(false);
-	auto searchResult = std::future<std::pair<Move, Move>>();
+	auto searchResult = std::future<std::tuple<Move, Move, int>>();
 
 	auto command = std::string();
 	while (getline(in, command)) {
@@ -142,9 +142,10 @@ void UCI(std::istream& in, std::ostream& out) {
 			else if (tokens[1] == "movetime") {
 				const auto time = std::stoi(tokens[2]) - 1000;
 				stop.clear();
-				searchResult = taskQueue.PushBack(std::function<std::pair<Move, Move>()>([&stop, state]() {
+				searchResult = taskQueue.PushBack(std::function<std::tuple<Move, Move, int>()>([&stop, state]() {
 					const auto neverStop = std::atomic_flag(false);
 					auto [bestMove, bestPonderMove] = search::Search(state, 2, neverStop);
+					auto bestDepth = 2;
 					for (int depth = 3; depth < 100; ++depth) {
 						if (stop.test()) {
 							break;
@@ -153,18 +154,19 @@ void UCI(std::istream& in, std::ostream& out) {
 						if (!stop.test()) {
 							bestMove = move;
 							bestPonderMove = ponderMove;
+							bestDepth = depth;
 						}
 					}
-					return std::pair<Move, Move>(bestMove, bestPonderMove);
+					return std::tuple<Move, Move, int>(bestMove, bestPonderMove, bestDepth);
 				}));
 				searchResult.wait_for(std::chrono::milliseconds(time));
 				stop.test_and_set();
-				const auto [move, ponderMove] = searchResult.get();
+				const auto [move, ponderMove, depth] = searchResult.get();
 				const auto fromStr = debug::PositionToString(move.from);
 				const auto toStr = debug::PositionToString(move.to);
 				const auto promotionStr = PromotionToString(move.promotionType);
 				out << "bestmove " << fromStr << toStr << promotionStr << std::endl;
-				Log("bestmove " + fromStr + toStr + promotionStr);
+				Log("bestmove " + fromStr + toStr + promotionStr + " - depth " + std::to_string(depth));
 			}
 			else if (tokens[1] == "depth") {
 				Log("\"depth\" not supported!");
@@ -178,12 +180,12 @@ void UCI(std::istream& in, std::ostream& out) {
 		else if (tokens[0] == "stop") {
 			stop.test_and_set();
 			searchResult.wait();
-			const auto [move, ponderMove] = searchResult.get();
+			const auto [move, ponderMove, depth] = searchResult.get();
 			const auto fromStr = debug::PositionToString(move.from);
 			const auto toStr = debug::PositionToString(move.to);
 			const auto promotionStr = PromotionToString(move.promotionType);
 			out << "bestmove " << fromStr << toStr << promotionStr << std::endl;
-			Log("bestmove " + fromStr + toStr + promotionStr);
+			Log("bestmove " + fromStr + toStr + promotionStr + " - depth " + std::to_string(depth));
 		}
 		else if (tokens[0] == "quit") {
 			Log("QUIT!");
