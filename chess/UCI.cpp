@@ -141,10 +141,11 @@ void UCI(std::istream& in, std::ostream& out) {
 			}
 			else if (tokens[1] == "movetime") {
 				const auto time = std::stoi(tokens[2]) - 1000;
+				stop.clear();
 				searchResult = taskQueue.PushBack(std::function<std::pair<Move, Move>()>([&stop, state]() {
 					const auto neverStop = std::atomic_flag(false);
 					auto [bestMove, bestPonderMove] = search::Search(state, 2, neverStop);
-					for (int depth = 2; depth < 100; ++depth) {
+					for (int depth = 3; depth < 100; ++depth) {
 						if (stop.test()) {
 							break;
 						}
