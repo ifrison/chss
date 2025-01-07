@@ -4,114 +4,63 @@
 #include "PieceMovements.h"
 #include "State.h"
 
-#include <cpp_utils/Overloaded.h>
-
 #include <iostream>
 #include <ranges>
 
 namespace chss::MoveGeneration {
 
 State MakeMove(const chss::State& state, const chss::Move& move) {
-	return std::visit(
-		Overloaded{
-			[&state](const NormalMove& normalMove) -> State {
-				auto newState = state;
-				newState.activeColor = InverseColor(state.activeColor);
-				newState.board.At(normalMove.to) = newState.board.At(normalMove.from);
-				newState.board.At(normalMove.from) = std::nullopt;
-				newState.enPassantTargetSquare = std::nullopt;
-				newState.fullmoveNumber = state.fullmoveNumber + 1;
-				if (state.enPassantTargetSquare == normalMove.to &&
-					state.board.At(normalMove.from).value().type == PieceType::Pawn) {
-					newState.board.At(Position{.y = normalMove.from.y, .x = normalMove.to.x}) = std::nullopt;
-				} else if (normalMove.to == Position{.y = 0, .x = 0}) {
-					newState.castlingAvailabilities.white.isQueenSideAvailable = false;
-				} else if (normalMove.to == Position{.y = 0, .x = 7}) {
-					newState.castlingAvailabilities.white.isKingSideAvailable = false;
-				} else if (normalMove.to == Position{.y = 7, .x = 0}) {
-					newState.castlingAvailabilities.black.isQueenSideAvailable = false;
-				} else if (normalMove.to == Position{.y = 7, .x = 7}) {
-					newState.castlingAvailabilities.black.isKingSideAvailable = false;
-				}
-				if (normalMove.from == Position{.y = 0, .x = 0}) {
-					newState.castlingAvailabilities.white.isQueenSideAvailable = false;
-				} else if (normalMove.from == Position{.y = 0, .x = 7}) {
-					newState.castlingAvailabilities.white.isKingSideAvailable = false;
-				} else if (normalMove.from == Position{.y = 7, .x = 0}) {
-					newState.castlingAvailabilities.black.isQueenSideAvailable = false;
-				} else if (normalMove.from == Position{.y = 7, .x = 7}) {
-					newState.castlingAvailabilities.black.isKingSideAvailable = false;
-				} else if (normalMove.from == Position{.y = 0, .x = 4}) {
-					newState.castlingAvailabilities.white =
-						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
-				} else if (normalMove.from == Position{.y = 7, .x = 4}) {
-					newState.castlingAvailabilities.black =
-						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
-				}
-				return newState;
-			},
-			[&state](const TwoSquaresAdvance& twoSquaresAdvance) -> State {
-				auto newState = state;
-				newState.activeColor = InverseColor(state.activeColor);
-				newState.board.At(twoSquaresAdvance.to) = newState.board.At(twoSquaresAdvance.from);
-				newState.board.At(twoSquaresAdvance.from) = std::nullopt;
-				newState.enPassantTargetSquare = Position{
-					.y = (twoSquaresAdvance.from.y + twoSquaresAdvance.to.y) / 2,
-					.x = twoSquaresAdvance.from.x};
-				newState.fullmoveNumber = state.fullmoveNumber + 1;
-				return newState;
-			},
-			[&state](const Promotion& promotion) -> State {
-				auto newState = state;
-				newState.activeColor = InverseColor(state.activeColor);
-				newState.board.At(promotion.to) = Piece{.type = promotion.type, .color = state.activeColor};
-				newState.board.At(promotion.from) = std::nullopt;
-				newState.enPassantTargetSquare = std::nullopt;
-				newState.fullmoveNumber = state.fullmoveNumber + 1;
-				if (promotion.to == Position{.y = 0, .x = 0}) {
-					newState.castlingAvailabilities.white.isQueenSideAvailable = false;
-				} else if (promotion.to == Position{.y = 0, .x = 7}) {
-					newState.castlingAvailabilities.white.isKingSideAvailable = false;
-				} else if (promotion.to == Position{.y = 7, .x = 0}) {
-					newState.castlingAvailabilities.black.isQueenSideAvailable = false;
-				} else if (promotion.to == Position{.y = 7, .x = 7}) {
-					newState.castlingAvailabilities.black.isKingSideAvailable = false;
-				}
-				return newState;
-			},
-			[&state](const Castling& castling) -> State {
-				auto newState = state;
-				newState.activeColor = InverseColor(state.activeColor);
-				newState.board.At(castling.to) = newState.board.At(castling.from);
-				newState.board.At(castling.from) = std::nullopt;
-				newState.enPassantTargetSquare = std::nullopt;
-				newState.fullmoveNumber = state.fullmoveNumber + 1;
-				if (castling.to == Position{.y = 0, .x = 2}) {
-					newState.board.At(Position{.y = 0, .x = 3}) = newState.board.At(Position{.y = 0, .x = 0});
-					newState.board.At(Position{.y = 0, .x = 0}) = std::nullopt;
-					newState.castlingAvailabilities.white =
-						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
-				} else if (castling.to == Position{.y = 0, .x = 6}) {
-					newState.board.At(Position{.y = 0, .x = 5}) = newState.board.At(Position{.y = 0, .x = 7});
-					newState.board.At(Position{.y = 0, .x = 7}) = std::nullopt;
-					newState.castlingAvailabilities.white =
-						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
-				} else if (castling.to == Position{.y = 7, .x = 2}) {
-					newState.board.At(Position{.y = 7, .x = 3}) = newState.board.At(Position{.y = 7, .x = 0});
-					newState.board.At(Position{.y = 7, .x = 0}) = std::nullopt;
-					newState.castlingAvailabilities.black =
-						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
-				} else if (castling.to == Position{.y = 7, .x = 6}) {
-					newState.board.At(Position{.y = 7, .x = 5}) = newState.board.At(Position{.y = 7, .x = 7});
-					newState.board.At(Position{.y = 7, .x = 7}) = std::nullopt;
-					newState.castlingAvailabilities.black =
-						CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
-				} else {
-					assert(false);
-				}
-				return newState;
-			}},
-		move);
+	auto newState = state;
+	newState.activeColor = InverseColor(state.activeColor);
+	newState.board.At(move.to) = newState.board.At(move.from);
+	newState.board.At(move.from) = std::nullopt;
+	newState.enPassantTargetSquare = std::nullopt;
+	newState.fullmoveNumber = state.fullmoveNumber + 1;
+	if (move.promotionType.has_value()) {
+		newState.board.At(move.to) = Piece{.type = move.promotionType.value(), .color = state.activeColor};
+	} else if (move.from == Position{.y = 0, .x = 0}) {
+		newState.castlingAvailabilities.white.isQueenSideAvailable = false;
+	} else if (move.from == Position{.y = 0, .x = 7}) {
+		newState.castlingAvailabilities.white.isKingSideAvailable = false;
+	} else if (move.from == Position{.y = 7, .x = 0}) {
+		newState.castlingAvailabilities.black.isQueenSideAvailable = false;
+	} else if (move.from == Position{.y = 7, .x = 7}) {
+		newState.castlingAvailabilities.black.isKingSideAvailable = false;
+	} else if (move.from == Position{.y = 0, .x = 4} && state.board.At(move.from).value().type == PieceType::King) {
+		newState.castlingAvailabilities.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+		if (move.to == Position{.y = 0, .x = 2}) {
+			newState.board.At(Position{.y = 0, .x = 3}) = newState.board.At(Position{.y = 0, .x = 0});
+			newState.board.At(Position{.y = 0, .x = 0}) = std::nullopt;
+		} else if (move.to == Position{.y = 0, .x = 6}) {
+			newState.board.At(Position{.y = 0, .x = 5}) = newState.board.At(Position{.y = 0, .x = 7});
+			newState.board.At(Position{.y = 0, .x = 7}) = std::nullopt;
+		}
+	} else if (move.from == Position{.y = 7, .x = 4} && state.board.At(move.from).value().type == PieceType::King) {
+		newState.castlingAvailabilities.black = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false};
+		if (move.to == Position{.y = 7, .x = 2}) {
+			newState.board.At(Position{.y = 7, .x = 3}) = newState.board.At(Position{.y = 7, .x = 0});
+			newState.board.At(Position{.y = 7, .x = 0}) = std::nullopt;
+		} else if (move.to == Position{.y = 7, .x = 6}) {
+			newState.board.At(Position{.y = 7, .x = 5}) = newState.board.At(Position{.y = 7, .x = 7});
+			newState.board.At(Position{.y = 7, .x = 7}) = std::nullopt;
+		}
+	} else if (move.from.y == 1 && move.to.y == 3 && state.board.At(move.from).value().type == PieceType::Pawn) {
+		newState.enPassantTargetSquare = Position{.y = 2, .x = move.from.x};
+	} else if (move.from.y == 6 && move.to.y == 4 && state.board.At(move.from).value().type == PieceType::Pawn) {
+		newState.enPassantTargetSquare = Position{.y = 5, .x = move.from.x};
+	}
+	if (move.to == Position{.y = 0, .x = 0}) {
+		newState.castlingAvailabilities.white.isQueenSideAvailable = false;
+	} else if (move.to == Position{.y = 0, .x = 7}) {
+		newState.castlingAvailabilities.white.isKingSideAvailable = false;
+	} else if (move.to == Position{.y = 7, .x = 0}) {
+		newState.castlingAvailabilities.black.isQueenSideAvailable = false;
+	} else if (move.to == Position{.y = 7, .x = 7}) {
+		newState.castlingAvailabilities.black.isKingSideAvailable = false;
+	} else if (move.to == state.enPassantTargetSquare && state.board.At(move.from).value().type == PieceType::Pawn) {
+		newState.board.At(Position{.y = move.from.y, .x = move.to.x}) = std::nullopt;
+	}
+	return newState;
 }
 
 [[nodiscard]] std::generator<Move> PseudoLegalMoves(const chss::State& state) {
@@ -130,12 +79,10 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 				if (to.y == 0 || to.y == 7) { // promotions
 					for (const auto promotionType :
 						 {PieceType::Knight, PieceType::Bishop, PieceType::Rook, PieceType::Queen}) {
-						co_yield Promotion{.from = from, .to = to, .type = promotionType};
+						co_yield Move{.from = from, .to = to, .promotionType = promotionType};
 					}
-				} else if ((from.y == 1 && to.y == 3) || (from.y == 6 && to.y == 4)) { // two squares advance
-					co_yield TwoSquaresAdvance{.from = from, .to = to};
 				} else {
-					co_yield NormalMove{.from = from, .to = to};
+					co_yield Move{.from = from, .to = to, .promotionType = std::nullopt};
 				}
 			}
 			if (state.enPassantTargetSquare.has_value()) { // en passant capture
@@ -148,38 +95,38 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 					 Piece{.type = PieceType::Pawn, .color = InverseColor(state.activeColor)}));
 				if (enPassantTargetSquare == Position{.y = from.y + yForwardOffset, .x = from.x - 1} ||
 					enPassantTargetSquare == Position{.y = from.y + yForwardOffset, .x = from.x + 1}) {
-					co_yield NormalMove{.from = from, .to = enPassantTargetSquare};
+					co_yield Move{.from = from, .to = enPassantTargetSquare, .promotionType = std::nullopt};
 				}
 			}
 			break;
 		}
 		case PieceType::Knight: {
 			for (const auto to : PseudoLegalMovesKnight(state.board, from)) {
-				co_yield NormalMove{.from = from, .to = to};
+				co_yield Move{.from = from, .to = to, .promotionType = std::nullopt};
 			}
 			break;
 		}
 		case PieceType::Bishop: {
 			for (const auto to : PseudoLegalMovesBishop(state.board, from)) {
-				co_yield NormalMove{.from = from, .to = to};
+				co_yield Move{.from = from, .to = to, .promotionType = std::nullopt};
 			}
 			break;
 		}
 		case PieceType::Rook: {
 			for (const auto to : PseudoLegalMovesRook(state.board, from)) {
-				co_yield NormalMove{.from = from, .to = to};
+				co_yield Move{.from = from, .to = to, .promotionType = std::nullopt};
 			}
 			break;
 		}
 		case PieceType::Queen: {
 			for (const auto to : PseudoLegalMovesQueen(state.board, from)) {
-				co_yield NormalMove{.from = from, .to = to};
+				co_yield Move{.from = from, .to = to, .promotionType = std::nullopt};
 			}
 			break;
 		}
 		case PieceType::King: {
 			for (const auto to : PseudoLegalMovesKing(state.board, from)) {
-				co_yield NormalMove{.from = from, .to = to};
+				co_yield Move{.from = from, .to = to, .promotionType = std::nullopt};
 			}
 			// castling
 			switch (state.activeColor) {
@@ -205,7 +152,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						co_yield Castling{.from = from, .to = Position{.y = 0, .x = 6}};
+						co_yield Move{.from = from, .to = Position{.y = 0, .x = 6}, .promotionType = std::nullopt};
 					}
 				}
 				if (castlingAvailabilities.isQueenSideAvailable) {
@@ -228,7 +175,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						co_yield Castling{.from = from, .to = Position{.y = 0, .x = 2}};
+						co_yield Move{.from = from, .to = Position{.y = 0, .x = 2}, .promotionType = std::nullopt};
 					}
 				}
 				break;
@@ -255,7 +202,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						co_yield Castling{.from = from, .to = Position{.y = 7, .x = 6}};
+						co_yield Move{.from = from, .to = Position{.y = 7, .x = 6}, .promotionType = std::nullopt};
 					}
 				}
 				if (castlingAvailabilities.isQueenSideAvailable) {
@@ -278,7 +225,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						co_yield Castling{.from = from, .to = Position{.y = 7, .x = 2}};
+						co_yield Move{.from = from, .to = Position{.y = 7, .x = 2}, .promotionType = std::nullopt};
 					}
 				}
 				break;

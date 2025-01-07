@@ -10,6 +10,18 @@
 #include <iostream>
 #include <ranges>
 
+namespace {
+
+std::string PromotionToString(const std::optional<chss::PieceType>& promotionType) {
+	auto result = std::string();
+	if (promotionType.has_value()) {
+		result.push_back(chss::debug::PieceTypeToChar(promotionType.value()));
+	}
+	return result;
+}
+
+}
+
 namespace chss::MoveGeneration {
 
 std::int64_t Perft(const State& state, int depth) {
@@ -21,20 +33,10 @@ std::int64_t Perft(const State& state, int depth) {
 	for (const auto [move, newState] : LegalMoves(state)) {
 		const std::int64_t newNodesVisited = Perft(newState, depth - 1);
 		if (depth > 10) {
-			std::visit(
-				Overloaded{
-					[newNodesVisited](const Promotion& promotion) -> void {
-						const auto fromStr = debug::PositionToString(promotion.from);
-						const auto toStr = debug::PositionToString(promotion.to);
-						const auto promotionStr = debug::PieceTypeToChar(promotion.type);
-						std::cout << fromStr << toStr << promotionStr << ": " << newNodesVisited << std::endl;
-					},
-					[newNodesVisited](const auto& move) -> void {
-						const auto fromStr = debug::PositionToString(move.from);
-						const auto toStr = debug::PositionToString(move.to);
-						std::cout << fromStr << toStr << ": " << newNodesVisited << std::endl;
-					}},
-				move);
+			const auto fromStr = debug::PositionToString(move.from);
+			const auto toStr = debug::PositionToString(move.to);
+			const auto promotionStr = PromotionToString(move.promotionType);
+			std::cout << fromStr << toStr << promotionStr << ": " << newNodesVisited << std::endl;
 		}
 		nodesVisited += newNodesVisited;
 	}

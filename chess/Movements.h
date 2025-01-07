@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Board.h"
-#include "Move.h"
 
 #include <generator>
 
 namespace chss {
 
+struct Move;
 struct State;
 
 namespace MoveGeneration {

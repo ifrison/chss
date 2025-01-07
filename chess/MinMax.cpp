@@ -28,7 +28,7 @@ namespace chss::search {
 [[nodiscard]] std::tuple<int, Move> Search1(const State& state, int depth, const std::atomic_flag& stop) {
 	assert(depth > 0);
 	auto resultScore = state.activeColor == Color::White ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();
-	auto resultMove = Move(NormalMove{.from = Position{.y = -1, .x = -1}, .to = Position{.y = -1, .x = -1}});
+	auto resultMove = Move{.from = Position{.y = -1, .x = -1}, .to = Position{.y = -1, .x = -1}};
 	for (const auto [move, newState] : MoveGeneration::LegalMoves(state)) {
 		if (stop.test()) {
 			break;
@@ -52,8 +52,8 @@ namespace chss::search {
 [[nodiscard]] std::tuple<int, Move, Move> Search2(const State& state, int depth, const std::atomic_flag& stop) {
 	assert(depth > 1);
 	auto resultScore = state.activeColor == Color::White ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();
-	auto resultMove = Move(NormalMove{.from = Position{.y = -1, .x = -1}, .to = Position{.y = -1, .x = -1}});
-	auto resultPonderMove = Move(NormalMove{.from = Position{.y = -1, .x = -1}, .to = Position{.y = -1, .x = -1}});
+	auto resultMove = Move{.from = Position{.y = -1, .x = -1}, .to = Position{.y = -1, .x = -1}};
+	auto resultPonderMove = Move{.from = Position{.y = -1, .x = -1}, .to = Position{.y = -1, .x = -1}};
 	for (const auto [move, newState] : MoveGeneration::LegalMoves(state)) {
 		if (stop.test()) {
 			break;

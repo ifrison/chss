@@ -33,6 +33,14 @@ void Log(const std::string& message) {
 	logFile.close();
 }
 
+std::string PromotionToString(const std::optional<chss::PieceType>& promotionType) {
+	auto result = std::string();
+	if (promotionType.has_value()) {
+		result.push_back(chss::debug::PieceTypeToChar(promotionType.value()));
+	}
+	return result;
+}
+
 }
 
 namespace chss::uci {
@@ -102,10 +110,11 @@ void UCI(std::istream& in, std::ostream& out) {
 				searchResult.wait_for(std::chrono::milliseconds(time));
 				stop.test_and_set();
 				const auto [move, ponderMove] = searchResult.get();
-				std::visit([&out](const auto& m) -> void {
-					out << "bestmove " << debug::PositionToString(m.from) << debug::PositionToString(m.to) << std::endl;
-					Log("bestmove " + debug::PositionToString(m.from) + debug::PositionToString(m.to));
-				}, move);
+				const auto fromStr = debug::PositionToString(move.from);
+				const auto toStr = debug::PositionToString(move.to);
+				const auto promotionStr = PromotionToString(move.promotionType);
+				out << "bestmove " << fromStr << toStr << promotionStr << std::endl;
+				Log("bestmove " + fromStr + toStr + promotionStr);
 			}
 			else if (tokens[1] == "depth") {
 				Log("\"depth\" not supported!");
@@ -120,10 +129,11 @@ void UCI(std::istream& in, std::ostream& out) {
 			stop.test_and_set();
 			searchResult.wait();
 			const auto [move, ponderMove] = searchResult.get();
-			std::visit([&out](const auto& m) -> void {
-				out << "bestmove " << debug::PositionToString(m.from) << debug::PositionToString(m.to) << std::endl;
-				Log("bestmove " + debug::PositionToString(m.from) + debug::PositionToString(m.to));
-			}, move);
+			const auto fromStr = debug::PositionToString(move.from);
+			const auto toStr = debug::PositionToString(move.to);
+			const auto promotionStr = PromotionToString(move.promotionType);
+			out << "bestmove " << fromStr << toStr << promotionStr << std::endl;
+			Log("bestmove " + fromStr + toStr + promotionStr);
 		}
 		else if (tokens[0] == "quit") {
 			Log("QUIT!");
