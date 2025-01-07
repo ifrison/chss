@@ -41,6 +41,40 @@ std::string PromotionToString(const std::optional<chss::PieceType>& promotionTyp
 	return result;
 }
 
+chss::Position ParsePosition(const std::string_view& input) {
+	const auto x = input[0] - 'a';
+	const auto y = input[1] - '1';
+	return chss::Position{.x = x, .y = y};
+}
+
+std::optional<chss::PieceType> ParsePromotion(const std::string_view& input) {
+	if (input.empty()) {
+		return std::nullopt;
+	}
+	switch (input[0]) {
+	case 'q':
+		return chss::PieceType::Queen;
+	case 'r':
+		return chss::PieceType::Rook;
+	case 'b':
+		return chss::PieceType::Bishop;
+	case 'n':
+		return chss::PieceType::Knight;
+	default:
+		assert(false);
+	}
+}
+
+chss::Move ParseMove(const std::string_view& input) {
+	const auto fromStr = std::string_view(input.substr(0, 2));
+	const auto from = ParsePosition(fromStr);
+	const auto toStr = std::string_view(input.substr(2, 2));
+	const auto to = ParsePosition(toStr);
+	const auto promotionTypeStr = std::string_view(input.substr(4));
+	const auto promotionType = ParsePromotion(promotionTypeStr);
+	return chss::Move{.from = from, .to = to, .promotionType = promotionType};
+}
+
 }
 
 namespace chss::uci {
@@ -69,11 +103,25 @@ void UCI(std::istream& in, std::ostream& out) {
 		else if (tokens[0] == "position") {
 			if (tokens[1] == "startpos") {
 				state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+				if (tokens.size() > 2) {
+					assert(tokens[2] == "moves");
+					for (size_t i = 3; i < tokens.size(); ++i) {
+						const auto move = ParseMove(tokens[i]);
+						state = chss::MoveGeneration::MakeMove(state, move);
+					}
+				}
 			}
 			else if (tokens[1] == "fen") {
 				assert(tokens.size() >= 8);
 				const auto fenString = tokens[2] + " " + tokens[3] + " " + tokens[4] + " " + tokens[5] + " " + tokens[6] + " " + tokens[7];
 				state = fen::Parse(fenString);
+				if (tokens.size() > 8) {
+					assert(tokens[8] == "moves");
+					for (size_t i = 9; i < tokens.size(); ++i) {
+						const auto move = ParseMove(tokens[i]);
+						state = chss::MoveGeneration::MakeMove(state, move);
+					}
+				}
 			}
 			else {
 				Log("Unknown \"position " + tokens[1] + "\" command!");
