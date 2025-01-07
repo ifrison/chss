@@ -5,6 +5,8 @@
 #include "PieceMovements.h"
 #include "State.h"
 
+#include "cpp_utils/Overloaded.h"
+
 #include <iostream>
 #include <ranges>
 
@@ -17,9 +19,22 @@ std::int64_t Perft(const State& state, int depth) {
 
 	std::int64_t nodesVisited = 0;
 	for (const auto [move, newState] : LegalMoves(state)) {
-		const auto newNodesVisited = Perft(newState, depth - 1);
+		const std::int64_t newNodesVisited = Perft(newState, depth - 1);
 		if (depth > 10) {
-			std::cout << debug::PositionToString(move.from) << debug::PositionToString(move.to) << ": " << newNodesVisited /*<< chss::fen::Serialize(newState)*/ << std::endl;
+			std::visit(
+				Overloaded{
+					[newNodesVisited](const Promotion& promotion) -> void {
+						const auto fromStr = debug::PositionToString(promotion.from);
+						const auto toStr = debug::PositionToString(promotion.to);
+						const auto promotionStr = debug::PieceTypeToChar(promotion.type);
+						std::cout << fromStr << toStr << promotionStr << ": " << newNodesVisited << std::endl;
+					},
+					[newNodesVisited](const auto& move) -> void {
+						const auto fromStr = debug::PositionToString(move.from);
+						const auto toStr = debug::PositionToString(move.to);
+						std::cout << fromStr << toStr << ": " << newNodesVisited << std::endl;
+					}},
+				move);
 		}
 		nodesVisited += newNodesVisited;
 	}

@@ -8,6 +8,8 @@
 #include "DebugUtils.h"
 #include "file_utils/FileUtils.h"
 
+#include <cpp_utils/Overloaded.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -100,8 +102,10 @@ void UCI(std::istream& in, std::ostream& out) {
 				searchResult.wait_for(std::chrono::milliseconds(time));
 				stop.test_and_set();
 				const auto [move, ponderMove] = searchResult.get();
-				out << "bestmove " << debug::PositionToString(move.from) << debug::PositionToString(move.to) << std::endl;
-				Log("bestmove " + debug::PositionToString(move.from) + debug::PositionToString(move.to));
+				std::visit([&out](const auto& m) -> void {
+					out << "bestmove " << debug::PositionToString(m.from) << debug::PositionToString(m.to) << std::endl;
+					Log("bestmove " + debug::PositionToString(m.from) + debug::PositionToString(m.to));
+				}, move);
 			}
 			else if (tokens[1] == "depth") {
 				Log("\"depth\" not supported!");
@@ -116,8 +120,10 @@ void UCI(std::istream& in, std::ostream& out) {
 			stop.test_and_set();
 			searchResult.wait();
 			const auto [move, ponderMove] = searchResult.get();
-			out << "bestmove " << debug::PositionToString(move.from) << debug::PositionToString(move.to) << std::endl << std::flush;
-			Log("bestmove " + debug::PositionToString(move.from) + debug::PositionToString(move.to));
+			std::visit([&out](const auto& m) -> void {
+				out << "bestmove " << debug::PositionToString(m.from) << debug::PositionToString(m.to) << std::endl;
+				Log("bestmove " + debug::PositionToString(m.from) + debug::PositionToString(m.to));
+			}, move);
 		}
 		else if (tokens[0] == "quit") {
 			Log("QUIT!");

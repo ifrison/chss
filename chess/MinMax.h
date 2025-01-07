@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Move.h"
+
 #include <atomic>
 
 namespace chss {
 
-struct Move;
 struct State;
 
 namespace search {

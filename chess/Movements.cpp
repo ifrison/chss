@@ -86,7 +86,7 @@ namespace chss::MoveGeneration {
 						newBoard.At(to) = Piece{.type = promotionType, .color = state.activeColor};
 						newBoard.At(from) = std::nullopt;
 						co_yield std::pair<Move, State>(
-							Move{.from = from, .to = to},
+							Promotion{.from = from, .to = to, .type = promotionType},
 							State{
 								.board = newBoard,
 								.activeColor = InverseColor(state.activeColor),
@@ -95,12 +95,12 @@ namespace chss::MoveGeneration {
 								.halfmoveClock = 0,
 								.fullmoveNumber = state.fullmoveNumber + 1});
 					}
-				} else if ((from.y == 1 && to.y == 3) || (from.y == 6 && to.y == 4)) { // en passant target square
+				} else if ((from.y == 1 && to.y == 3) || (from.y == 6 && to.y == 4)) { // two squares advance
 					auto newBoard = state.board;
 					newBoard.At(to) = newBoard.At(from);
 					newBoard.At(from) = std::nullopt;
 					co_yield std::pair<Move, State>(
-						Move{.from = from, .to = to},
+						TwoSquaresAdvance{.from = from, .to = to},
 						State{
 							.board = newBoard,
 							.activeColor = InverseColor(state.activeColor),
@@ -113,7 +113,7 @@ namespace chss::MoveGeneration {
 					newBoard.At(to) = newBoard.At(from);
 					newBoard.At(from) = std::nullopt;
 					co_yield std::pair<Move, State>(
-						Move{.from = from, .to = to},
+						NormalMove{.from = from, .to = to},
 						State{
 							.board = newBoard,
 							.activeColor = InverseColor(state.activeColor),
@@ -140,7 +140,7 @@ namespace chss::MoveGeneration {
 					const auto newCastlingAvailabilities =
 						UpdateAvailabilitiesIfRookEaten(state, enPassantTargetSquare);
 					co_yield std::pair<Move, State>(
-						Move{.from = from, .to = enPassantTargetSquare},
+						NormalMove{.from = from, .to = enPassantTargetSquare},
 						State{
 							.board = newBoard,
 							.activeColor = InverseColor(state.activeColor),
@@ -159,7 +159,7 @@ namespace chss::MoveGeneration {
 				newBoard.At(from) = std::nullopt;
 				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
 				co_yield std::pair<Move, State>(
-					Move{.from = from, .to = to},
+					NormalMove{.from = from, .to = to},
 					State{
 						.board = newBoard,
 						.activeColor = InverseColor(state.activeColor),
@@ -177,7 +177,7 @@ namespace chss::MoveGeneration {
 				newBoard.At(from) = std::nullopt;
 				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
 				co_yield std::pair<Move, State>(
-					Move{.from = from, .to = to},
+					NormalMove{.from = from, .to = to},
 					State{
 						.board = newBoard,
 						.activeColor = InverseColor(state.activeColor),
@@ -213,7 +213,7 @@ namespace chss::MoveGeneration {
 				}
 				}
 				co_yield std::pair<Move, State>(
-					Move{.from = from, .to = to},
+					NormalMove{.from = from, .to = to},
 					State{
 						.board = newBoard,
 						.activeColor = InverseColor(state.activeColor),
@@ -231,7 +231,7 @@ namespace chss::MoveGeneration {
 				newBoard.At(from) = std::nullopt;
 				auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
 				co_yield std::pair<Move, State>(
-					Move{.from = from, .to = to},
+					NormalMove{.from = from, .to = to},
 					State{
 						.board = newBoard,
 						.activeColor = InverseColor(state.activeColor),
@@ -263,7 +263,7 @@ namespace chss::MoveGeneration {
 				}
 				}
 				co_yield std::pair<Move, State>(
-					Move{.from = from, .to = to},
+					NormalMove{.from = from, .to = to},
 					State{
 						.board = newBoard,
 						.activeColor = InverseColor(state.activeColor),
@@ -305,7 +305,7 @@ namespace chss::MoveGeneration {
 							.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
 							.black = state.castlingAvailabilities.black};
 						co_yield std::pair<Move, State>(
-							Move{.from = from, .to = Position{.y = 0, .x = 6}},
+							Castling{.from = from, .to = Position{.y = 0, .x = 6}},
 							State{
 								.board = newBoard,
 								.activeColor = InverseColor(state.activeColor),
@@ -344,7 +344,7 @@ namespace chss::MoveGeneration {
 							.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
 							.black = state.castlingAvailabilities.black};
 						co_yield std::pair<Move, State>(
-							Move{.from = from, .to = Position{.y = 0, .x = 2}},
+							Castling{.from = from, .to = Position{.y = 0, .x = 2}},
 							State{
 								.board = newBoard,
 								.activeColor = InverseColor(state.activeColor),
@@ -387,7 +387,7 @@ namespace chss::MoveGeneration {
 							.white = state.castlingAvailabilities.white,
 							.black = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false}};
 						co_yield std::pair<Move, State>(
-							Move{.from = from, .to = Position{.y = 7, .x = 6}},
+							Castling{.from = from, .to = Position{.y = 7, .x = 6}},
 							State{
 								.board = newBoard,
 								.activeColor = InverseColor(state.activeColor),
@@ -426,7 +426,7 @@ namespace chss::MoveGeneration {
 							.white = state.castlingAvailabilities.white,
 							.black = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false}};
 						co_yield std::pair<Move, State>(
-							Move{.from = from, .to = Position{.y = 7, .x = 2}},
+							Castling{.from = from, .to = Position{.y = 7, .x = 2}},
 							State{
 								.board = newBoard,
 								.activeColor = InverseColor(state.activeColor),
