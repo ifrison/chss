@@ -9,62 +9,6 @@
 #include <iostream>
 #include <ranges>
 
-namespace {
-
-chss::CastlingAvailabilities UpdateAvailabilitiesIfRookEaten(const chss::State& state, const chss::Position to) {
-	switch (state.activeColor) {
-	case chss::Color::White: {
-		if (to == chss::Position{.y = 7, .x = 0}) {
-			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::Black}) ||
-				!state.castlingAvailabilities.black.isQueenSideAvailable);
-			return chss::CastlingAvailabilities{
-				.white = state.castlingAvailabilities.white,
-				.black = chss::CastlingAvailability{
-					.isKingSideAvailable = state.castlingAvailabilities.black.isKingSideAvailable,
-					.isQueenSideAvailable = false}};
-		} else if (to == chss::Position{.y = 7, .x = 7}) {
-			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::Black}) ||
-				!state.castlingAvailabilities.black.isKingSideAvailable);
-			return chss::CastlingAvailabilities{
-				.white = state.castlingAvailabilities.white,
-				.black = chss::CastlingAvailability{
-					.isKingSideAvailable = false,
-					.isQueenSideAvailable = state.castlingAvailabilities.black.isQueenSideAvailable}};
-		}
-		break;
-	}
-	case chss::Color::Black: {
-		if (to == chss::Position{.y = 0, .x = 0}) {
-			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::White}) ||
-				!state.castlingAvailabilities.white.isQueenSideAvailable);
-			return chss::CastlingAvailabilities{
-				.white =
-					chss::CastlingAvailability{
-						.isKingSideAvailable = state.castlingAvailabilities.white.isKingSideAvailable,
-						.isQueenSideAvailable = false},
-				.black = state.castlingAvailabilities.black};
-		} else if (to == chss::Position{.y = 0, .x = 7}) {
-			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::White}) ||
-				!state.castlingAvailabilities.white.isKingSideAvailable);
-			return chss::CastlingAvailabilities{
-				.white =
-					chss::CastlingAvailability{
-						.isKingSideAvailable = false,
-						.isQueenSideAvailable = state.castlingAvailabilities.white.isQueenSideAvailable},
-				.black = state.castlingAvailabilities.black};
-		}
-		break;
-	}
-	}
-	return state.castlingAvailabilities;
-}
-
-} // namespace
-
 namespace chss::MoveGeneration {
 
 State MakeMove(const chss::State& state, const chss::Move& move) {
@@ -170,7 +114,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 		move);
 }
 
-[[nodiscard]] std::generator<std::pair<Move, State>> PseudoLegalMoves(const chss::State& state) {
+[[nodiscard]] std::generator<Move> PseudoLegalMoves(const chss::State& state) {
 	for (const auto from : ForEach(state.board.GetSize())) {
 		const auto& pieceOpt = state.board.At(from);
 		if (!pieceOpt.has_value()) {
@@ -183,199 +127,59 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 		switch (type) {
 		case PieceType::Pawn: {
 			for (const auto to : PseudoLegalMovesPawn(state.board, from)) {
-				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
 				if (to.y == 0 || to.y == 7) { // promotions
 					for (const auto promotionType :
 						 {PieceType::Knight, PieceType::Bishop, PieceType::Rook, PieceType::Queen}) {
-						auto newBoard = state.board;
-						newBoard.At(to) = Piece{.type = promotionType, .color = state.activeColor};
-						newBoard.At(from) = std::nullopt;
-						co_yield std::pair<Move, State>(
-							Promotion{.from = from, .to = to, .type = promotionType},
-							State{
-								.board = newBoard,
-								.activeColor = InverseColor(state.activeColor),
-								.castlingAvailabilities = newCastlingAvailabilities,
-								.enPassantTargetSquare = std::nullopt,
-								.halfmoveClock = 0,
-								.fullmoveNumber = state.fullmoveNumber + 1});
+						co_yield Promotion{.from = from, .to = to, .type = promotionType};
 					}
 				} else if ((from.y == 1 && to.y == 3) || (from.y == 6 && to.y == 4)) { // two squares advance
-					auto newBoard = state.board;
-					newBoard.At(to) = newBoard.At(from);
-					newBoard.At(from) = std::nullopt;
-					co_yield std::pair<Move, State>(
-						TwoSquaresAdvance{.from = from, .to = to},
-						State{
-							.board = newBoard,
-							.activeColor = InverseColor(state.activeColor),
-							.castlingAvailabilities = newCastlingAvailabilities,
-							.enPassantTargetSquare = Position{.y = (from.y + to.y) / 2, .x = from.x},
-							.halfmoveClock = 0,
-							.fullmoveNumber = state.fullmoveNumber + 1});
+					co_yield TwoSquaresAdvance{.from = from, .to = to};
 				} else {
-					auto newBoard = state.board;
-					newBoard.At(to) = newBoard.At(from);
-					newBoard.At(from) = std::nullopt;
-					co_yield std::pair<Move, State>(
-						NormalMove{.from = from, .to = to},
-						State{
-							.board = newBoard,
-							.activeColor = InverseColor(state.activeColor),
-							.castlingAvailabilities = newCastlingAvailabilities,
-							.enPassantTargetSquare = std::nullopt,
-							.halfmoveClock = 0,
-							.fullmoveNumber = state.fullmoveNumber + 1});
+					co_yield NormalMove{.from = from, .to = to};
 				}
 			}
 			if (state.enPassantTargetSquare.has_value()) { // en passant capture
 				const auto yForwardOffset = state.activeColor == chss::Color::White ? +1 : -1;
 				const auto enPassantTargetSquare = state.enPassantTargetSquare.value();
-				const auto enPassantCaptureSquare =
+				const auto enPassantPawnSquare =
 					Position{.y = enPassantTargetSquare.y - yForwardOffset, .x = enPassantTargetSquare.x};
 				assert(
-					(state.board.At(enPassantCaptureSquare) ==
+					(state.board.At(enPassantPawnSquare) ==
 					 Piece{.type = PieceType::Pawn, .color = InverseColor(state.activeColor)}));
 				if (enPassantTargetSquare == Position{.y = from.y + yForwardOffset, .x = from.x - 1} ||
 					enPassantTargetSquare == Position{.y = from.y + yForwardOffset, .x = from.x + 1}) {
-					auto newBoard = state.board;
-					newBoard.At(enPassantTargetSquare) = newBoard.At(from);
-					newBoard.At(from) = std::nullopt;
-					newBoard.At(enPassantCaptureSquare) = std::nullopt;
-					const auto newCastlingAvailabilities =
-						UpdateAvailabilitiesIfRookEaten(state, enPassantTargetSquare);
-					co_yield std::pair<Move, State>(
-						NormalMove{.from = from, .to = enPassantTargetSquare},
-						State{
-							.board = newBoard,
-							.activeColor = InverseColor(state.activeColor),
-							.castlingAvailabilities = newCastlingAvailabilities,
-							.enPassantTargetSquare = std::nullopt,
-							.halfmoveClock = 0,
-							.fullmoveNumber = state.fullmoveNumber + 1});
+					co_yield NormalMove{.from = from, .to = enPassantTargetSquare};
 				}
 			}
 			break;
 		}
 		case PieceType::Knight: {
 			for (const auto to : PseudoLegalMovesKnight(state.board, from)) {
-				auto newBoard = state.board;
-				newBoard.At(to) = newBoard.At(from);
-				newBoard.At(from) = std::nullopt;
-				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
-				co_yield std::pair<Move, State>(
-					NormalMove{.from = from, .to = to},
-					State{
-						.board = newBoard,
-						.activeColor = InverseColor(state.activeColor),
-						.castlingAvailabilities = newCastlingAvailabilities,
-						.enPassantTargetSquare = std::nullopt,
-						.halfmoveClock = 0,
-						.fullmoveNumber = state.fullmoveNumber + 1});
+				co_yield NormalMove{.from = from, .to = to};
 			}
 			break;
 		}
 		case PieceType::Bishop: {
 			for (const auto to : PseudoLegalMovesBishop(state.board, from)) {
-				auto newBoard = state.board;
-				newBoard.At(to) = newBoard.At(from);
-				newBoard.At(from) = std::nullopt;
-				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
-				co_yield std::pair<Move, State>(
-					NormalMove{.from = from, .to = to},
-					State{
-						.board = newBoard,
-						.activeColor = InverseColor(state.activeColor),
-						.castlingAvailabilities = newCastlingAvailabilities,
-						.enPassantTargetSquare = std::nullopt,
-						.halfmoveClock = 0,
-						.fullmoveNumber = state.fullmoveNumber + 1});
+				co_yield NormalMove{.from = from, .to = to};
 			}
 			break;
 		}
 		case PieceType::Rook: {
 			for (const auto to : PseudoLegalMovesRook(state.board, from)) {
-				auto newBoard = state.board;
-				newBoard.At(to) = newBoard.At(from);
-				newBoard.At(from) = std::nullopt;
-				auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
-				switch (state.activeColor) {
-				case Color::White: {
-					if (from == Position{.y = 0, .x = 0}) {
-						newCastlingAvailabilities.white.isQueenSideAvailable = false;
-					} else if (from == Position{.y = 0, .x = 7}) {
-						newCastlingAvailabilities.white.isKingSideAvailable = false;
-					}
-					break;
-				}
-				case Color::Black: {
-					if (from == Position{.y = 7, .x = 0}) {
-						newCastlingAvailabilities.black.isQueenSideAvailable = false;
-					} else if (from == Position{.y = 7, .x = 7}) {
-						newCastlingAvailabilities.black.isKingSideAvailable = false;
-					}
-					break;
-				}
-				}
-				co_yield std::pair<Move, State>(
-					NormalMove{.from = from, .to = to},
-					State{
-						.board = newBoard,
-						.activeColor = InverseColor(state.activeColor),
-						.castlingAvailabilities = newCastlingAvailabilities,
-						.enPassantTargetSquare = std::nullopt,
-						.halfmoveClock = 0,
-						.fullmoveNumber = state.fullmoveNumber + 1});
+				co_yield NormalMove{.from = from, .to = to};
 			}
 			break;
 		}
 		case PieceType::Queen: {
 			for (const auto to : PseudoLegalMovesQueen(state.board, from)) {
-				auto newBoard = state.board;
-				newBoard.At(to) = newBoard.At(from);
-				newBoard.At(from) = std::nullopt;
-				auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
-				co_yield std::pair<Move, State>(
-					NormalMove{.from = from, .to = to},
-					State{
-						.board = newBoard,
-						.activeColor = InverseColor(state.activeColor),
-						.castlingAvailabilities = newCastlingAvailabilities,
-						.enPassantTargetSquare = std::nullopt,
-						.halfmoveClock = 0,
-						.fullmoveNumber = state.fullmoveNumber + 1});
+				co_yield NormalMove{.from = from, .to = to};
 			}
 			break;
 		}
 		case PieceType::King: {
 			for (const auto to : PseudoLegalMovesKing(state.board, from)) {
-				auto newBoard = state.board;
-				newBoard.At(to) = newBoard.At(from);
-				newBoard.At(from) = std::nullopt;
-				auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
-				switch (state.activeColor) {
-				case Color::White: {
-					newCastlingAvailabilities = CastlingAvailabilities{
-						.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
-						.black = newCastlingAvailabilities.black};
-					break;
-				}
-				case Color::Black: {
-					newCastlingAvailabilities = CastlingAvailabilities{
-						.white = newCastlingAvailabilities.white,
-						.black = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false}};
-					break;
-				}
-				}
-				co_yield std::pair<Move, State>(
-					NormalMove{.from = from, .to = to},
-					State{
-						.board = newBoard,
-						.activeColor = InverseColor(state.activeColor),
-						.castlingAvailabilities = newCastlingAvailabilities,
-						.enPassantTargetSquare = std::nullopt,
-						.halfmoveClock = 0,
-						.fullmoveNumber = state.fullmoveNumber + 1});
+				co_yield NormalMove{.from = from, .to = to};
 			}
 			// castling
 			switch (state.activeColor) {
@@ -383,10 +187,10 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 				const auto& castlingAvailabilities = state.castlingAvailabilities.white;
 				if (castlingAvailabilities.isKingSideAvailable) {
 					assert((from == Position{.y = 0, .x = 4}));
+					assert(state.board.At(Position{.y = 0, .x = 7}).has_value());
 					assert(
-						(state.board.At(Position{.y = 0, .x = 7}).has_value() &&
-						 state.board.At(Position{.y = 0, .x = 7}).value() ==
-							 Piece{.type = PieceType::Rook, .color = Color::White}));
+						(state.board.At(Position{.y = 0, .x = 7}).value() ==
+						 Piece{.type = PieceType::Rook, .color = Color::White}));
 					bool isInBetweenEmpty = true;
 					for (int x = 5; x <= 6; ++x) {
 						const auto to = Position{.y = 0, .x = x};
@@ -401,23 +205,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						auto newBoard = state.board;
-						newBoard.At(Position{.y = 0, .x = 4}) = std::nullopt;
-						newBoard.At(Position{.y = 0, .x = 5}) = Piece{.type = PieceType::Rook, .color = Color::White};
-						newBoard.At(Position{.y = 0, .x = 6}) = Piece{.type = PieceType::King, .color = Color::White};
-						newBoard.At(Position{.y = 0, .x = 7}) = std::nullopt;
-						auto newCastlingAvailabilities = CastlingAvailabilities{
-							.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
-							.black = state.castlingAvailabilities.black};
-						co_yield std::pair<Move, State>(
-							Castling{.from = from, .to = Position{.y = 0, .x = 6}},
-							State{
-								.board = newBoard,
-								.activeColor = InverseColor(state.activeColor),
-								.castlingAvailabilities = newCastlingAvailabilities,
-								.enPassantTargetSquare = std::nullopt,
-								.halfmoveClock = 0,
-								.fullmoveNumber = state.fullmoveNumber + 1});
+						co_yield Castling{.from = from, .to = Position{.y = 0, .x = 6}};
 					}
 				}
 				if (castlingAvailabilities.isQueenSideAvailable) {
@@ -440,23 +228,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						auto newBoard = state.board;
-						newBoard.At(Position{.y = 0, .x = 0}) = std::nullopt;
-						newBoard.At(Position{.y = 0, .x = 2}) = Piece{.type = PieceType::King, .color = Color::White};
-						newBoard.At(Position{.y = 0, .x = 3}) = Piece{.type = PieceType::Rook, .color = Color::White};
-						newBoard.At(Position{.y = 0, .x = 4}) = std::nullopt;
-						auto newCastlingAvailabilities = CastlingAvailabilities{
-							.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
-							.black = state.castlingAvailabilities.black};
-						co_yield std::pair<Move, State>(
-							Castling{.from = from, .to = Position{.y = 0, .x = 2}},
-							State{
-								.board = newBoard,
-								.activeColor = InverseColor(state.activeColor),
-								.castlingAvailabilities = newCastlingAvailabilities,
-								.enPassantTargetSquare = std::nullopt,
-								.halfmoveClock = 0,
-								.fullmoveNumber = state.fullmoveNumber + 1});
+						co_yield Castling{.from = from, .to = Position{.y = 0, .x = 2}};
 					}
 				}
 				break;
@@ -483,23 +255,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						auto newBoard = state.board;
-						newBoard.At(Position{.y = 7, .x = 4}) = std::nullopt;
-						newBoard.At(Position{.y = 7, .x = 5}) = Piece{.type = PieceType::Rook, .color = Color::Black};
-						newBoard.At(Position{.y = 7, .x = 6}) = Piece{.type = PieceType::King, .color = Color::Black};
-						newBoard.At(Position{.y = 7, .x = 7}) = std::nullopt;
-						auto newCastlingAvailabilities = CastlingAvailabilities{
-							.white = state.castlingAvailabilities.white,
-							.black = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false}};
-						co_yield std::pair<Move, State>(
-							Castling{.from = from, .to = Position{.y = 7, .x = 6}},
-							State{
-								.board = newBoard,
-								.activeColor = InverseColor(state.activeColor),
-								.castlingAvailabilities = newCastlingAvailabilities,
-								.enPassantTargetSquare = std::nullopt,
-								.halfmoveClock = 0,
-								.fullmoveNumber = state.fullmoveNumber + 1});
+						co_yield Castling{.from = from, .to = Position{.y = 7, .x = 6}};
 					}
 				}
 				if (castlingAvailabilities.isQueenSideAvailable) {
@@ -522,23 +278,7 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 						isInBetweenSafe = isInBetweenSafe && !IsInCheck(newBoard, state.activeColor);
 					}
 					if (isInBetweenEmpty && isInBetweenSafe) {
-						auto newBoard = state.board;
-						newBoard.At(Position{.y = 7, .x = 0}) = std::nullopt;
-						newBoard.At(Position{.y = 7, .x = 2}) = Piece{.type = PieceType::King, .color = Color::Black};
-						newBoard.At(Position{.y = 7, .x = 3}) = Piece{.type = PieceType::Rook, .color = Color::Black};
-						newBoard.At(Position{.y = 7, .x = 4}) = std::nullopt;
-						auto newCastlingAvailabilities = CastlingAvailabilities{
-							.white = state.castlingAvailabilities.white,
-							.black = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false}};
-						co_yield std::pair<Move, State>(
-							Castling{.from = from, .to = Position{.y = 7, .x = 2}},
-							State{
-								.board = newBoard,
-								.activeColor = InverseColor(state.activeColor),
-								.castlingAvailabilities = newCastlingAvailabilities,
-								.enPassantTargetSquare = std::nullopt,
-								.halfmoveClock = 0,
-								.fullmoveNumber = state.fullmoveNumber + 1});
+						co_yield Castling{.from = from, .to = Position{.y = 7, .x = 2}};
 					}
 				}
 				break;
@@ -644,7 +384,8 @@ State MakeMove(const chss::State& state, const chss::Move& move) {
 }
 
 [[nodiscard]] std::generator<std::pair<Move, State>> LegalMoves(const chss::State& state) {
-	for (const auto [move, newState] : PseudoLegalMoves(state)) {
+	for (const auto move : PseudoLegalMoves(state)) {
+		const auto newState = MakeMove(state, move);
 		if (!IsInCheck(newState.board, state.activeColor)) {
 			co_yield std::pair<Move, State>(move, newState);
 		}
