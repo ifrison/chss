@@ -1,5 +1,6 @@
 #include "DebugUtils.h"
 #include "Fen.h"
+#include "Move.h"
 #include "Movements.h"
 #include "PieceMovements.h"
 #include "State.h"

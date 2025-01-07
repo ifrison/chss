@@ -1,5 +1,6 @@
 #include "Movements.h"
 
+#include "Move.h"
 #include "PieceMovements.h"
 #include "State.h"
 
@@ -79,7 +80,8 @@ namespace chss::MoveGeneration {
 			for (const auto to : PseudoLegalMovesPawn(state.board, from)) {
 				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
 				if (to.y == 0 || to.y == 7) { // promotions
-					for (const auto promotionType : {PieceType::Knight, PieceType::Bishop, PieceType::Rook, PieceType::Queen}) {
+					for (const auto promotionType :
+						 {PieceType::Knight, PieceType::Bishop, PieceType::Rook, PieceType::Queen}) {
 						auto newBoard = state.board;
 						newBoard.At(to) = Piece{.type = promotionType, .color = state.activeColor};
 						newBoard.At(from) = std::nullopt;

@@ -6,15 +6,10 @@
 
 namespace chss {
 
+struct Move;
 struct State;
 
 namespace MoveGeneration {
-
-struct Move {
-	Position from;
-	Position to;
-	[[nodiscard]] constexpr bool operator==(const Move& other) const = default;
-};
 
 [[nodiscard]] std::generator<std::pair<Move, State>> PseudoLegalMoves(const chss::State& state);
 

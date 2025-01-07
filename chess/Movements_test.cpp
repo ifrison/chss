@@ -1,3 +1,4 @@
+#include "Move.h"
 #include "Movements.h"
 #include "State.h"
 
@@ -24,7 +25,7 @@ TEST(Movements, PseudoLegalMoves) {
 		.halfmoveClock = 0,
 		.fullmoveNumber = 1};
 	auto statesGenerator = chss::MoveGeneration::PseudoLegalMoves(state);
-	const auto result = ToVector<std::pair<chss::MoveGeneration::Move, chss::State>>(std::move(statesGenerator));
+	const auto result = ToVector<std::pair<chss::Move, chss::State>>(std::move(statesGenerator));
 	EXPECT_EQ(result.size(), 20);
 }
 

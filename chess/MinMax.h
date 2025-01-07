@@ -4,15 +4,12 @@
 
 namespace chss {
 
-struct State;
-
-namespace MoveGeneration {
 struct Move;
-} // namespace MoveGeneration
+struct State;
 
 namespace search {
 
-[[nodiscard]] std::pair<MoveGeneration::Move, MoveGeneration::Move> Search(const State& state, int depth, const std::atomic_flag& stop);
+[[nodiscard]] std::pair<Move, Move> Search(const State& state, int depth, const std::atomic_flag& stop);
 
 } // namespace search
 

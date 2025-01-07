@@ -2,6 +2,7 @@
 #include "State.h"
 #include "Fen.h"
 #include "MinMax.h"
+#include "Move.h"
 #include "TaskQueue.h"
 #include "Movements.h"
 #include "DebugUtils.h"
@@ -38,7 +39,7 @@ void UCI(std::istream& in, std::ostream& out) {
 	auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	auto taskQueue = TaskQueue(1);
 	auto stop = std::atomic_flag(false);
-	auto searchResult = std::future<std::pair<MoveGeneration::Move, MoveGeneration::Move>>();
+	auto searchResult = std::future<std::pair<Move, Move>>();
 
 	auto command = std::string();
 	while (getline(in, command)) {
@@ -81,7 +82,7 @@ void UCI(std::istream& in, std::ostream& out) {
 			}
 			else if (tokens[1] == "movetime") {
 				const auto time = std::stoi(tokens[2]) - 1000;
-				searchResult = taskQueue.PushBack(std::function<std::pair<MoveGeneration::Move, MoveGeneration::Move>()>([&stop, state]() {
+				searchResult = taskQueue.PushBack(std::function<std::pair<Move, Move>()>([&stop, state]() {
 					const auto neverStop = std::atomic_flag(false);
 					auto [bestMove, bestPonderMove] = search::Search(state, 2, neverStop);
 					for (int depth = 2; depth < 100; ++depth) {
@@ -94,7 +95,7 @@ void UCI(std::istream& in, std::ostream& out) {
 							bestPonderMove = ponderMove;
 						}
 					}
-					return std::pair<MoveGeneration::Move, MoveGeneration::Move>(bestMove, bestPonderMove);
+					return std::pair<Move, Move>(bestMove, bestPonderMove);
 				}));
 				searchResult.wait_for(std::chrono::milliseconds(time));
 				stop.test_and_set();
