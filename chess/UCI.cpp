@@ -27,8 +27,9 @@ std::vector<std::string> SplitInTokens(const std::string& input) {
 }
 
 void Log(const std::string& message) {
+	const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto logFile = std::ofstream("/Users/inaki.frison/Development/chss/cmake-build-debug/chess/logs.txt", std::ios::out | std::ios::app);
-	logFile << message << std::endl;
+	logFile << std::put_time(std::localtime(&now), "%Y-%m-%d %X") << " " << message << std::endl;
 	logFile.flush();
 	logFile.close();
 }
@@ -97,7 +98,7 @@ void UCI(std::istream& in, std::ostream& out) {
 		}
 		assert(!tokens.empty());
 		if (tokens[0] == "uci") {
-			Log("uci version: 8");
+			Log("uci version: 9");
 			out << "id name chss\n" << "id author ifrison\n" << "uciok\n" << std::flush;
 		}
 		else if (tokens[0] == "position") {
