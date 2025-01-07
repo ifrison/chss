@@ -1,26 +1,13 @@
 #pragma once
 
+#include "Piece.h"
+
 #include <matrix/Matrix2D.h>
 
 #include <array>
-#include <cstdint>
 #include <optional>
 
 namespace chss {
-
-enum class PieceType : std::int8_t { Pawn, Knight, Bishop, Rook, Queen, King };
-
-enum class Color : std::int8_t { White, Black };
-
-[[nodiscard]] constexpr Color InverseColor(Color color) {
-	return color == Color::White ? Color::Black : Color::White;
-};
-
-struct Piece {
-	PieceType type;
-	Color color;
-	[[nodiscard]] constexpr bool operator==(const Piece& other) const = default;
-};
 
 using Position = matrix::Position2D;
 namespace positions {

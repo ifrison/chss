@@ -17,7 +17,7 @@ target_link_libraries(chess
 
 add_executable(chess_tests)
 target_sources(chess_tests PRIVATE
-        Board_test.cpp
+        Piece_test.cpp
         DebugUtils.cpp
         DebugUtils_test.cpp
         Fen_test.cpp
