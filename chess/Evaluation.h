@@ -13,7 +13,7 @@ namespace chss::evaluation {
 			continue;
 		}
 		const auto [type, color] = pieceOpt.value();
-		const auto typeIndex = static_cast<std::underlying_type_t<chss::Type>>(type);
+		const auto typeIndex = static_cast<std::underlying_type_t<chss::PieceType>>(type);
 		const auto colorFactor = color == Color::White ? +1 : -1;
 		const auto pieceValue = kPieceValues[typeIndex];
 		result += colorFactor * pieceValue;

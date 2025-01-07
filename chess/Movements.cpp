@@ -13,7 +13,7 @@ chss::CastlingAvailabilities UpdateAvailabilitiesIfRookEaten(const chss::State& 
 	case chss::Color::White: {
 		if (to == chss::Position{.y = 7, .x = 0}) {
 			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::Type::Rook, .color = chss::Color::Black}) ||
+				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::Black}) ||
 				!state.castlingAvailabilities.black.isQueenSideAvailable);
 			return chss::CastlingAvailabilities{
 				.white = state.castlingAvailabilities.white,
@@ -22,7 +22,7 @@ chss::CastlingAvailabilities UpdateAvailabilitiesIfRookEaten(const chss::State& 
 					.isQueenSideAvailable = false}};
 		} else if (to == chss::Position{.y = 7, .x = 7}) {
 			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::Type::Rook, .color = chss::Color::Black}) ||
+				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::Black}) ||
 				!state.castlingAvailabilities.black.isKingSideAvailable);
 			return chss::CastlingAvailabilities{
 				.white = state.castlingAvailabilities.white,
@@ -35,7 +35,7 @@ chss::CastlingAvailabilities UpdateAvailabilitiesIfRookEaten(const chss::State& 
 	case chss::Color::Black: {
 		if (to == chss::Position{.y = 0, .x = 0}) {
 			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::Type::Rook, .color = chss::Color::White}) ||
+				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::White}) ||
 				!state.castlingAvailabilities.white.isQueenSideAvailable);
 			return chss::CastlingAvailabilities{
 				.white =
@@ -45,7 +45,7 @@ chss::CastlingAvailabilities UpdateAvailabilitiesIfRookEaten(const chss::State& 
 				.black = state.castlingAvailabilities.black};
 		} else if (to == chss::Position{.y = 0, .x = 7}) {
 			assert(
-				(state.board.At(to) == chss::Piece{.type = chss::Type::Rook, .color = chss::Color::White}) ||
+				(state.board.At(to) == chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::White}) ||
 				!state.castlingAvailabilities.white.isKingSideAvailable);
 			return chss::CastlingAvailabilities{
 				.white =
@@ -75,11 +75,11 @@ namespace chss::MoveGeneration {
 			continue;
 		}
 		switch (type) {
-		case Type::Pawn: {
+		case PieceType::Pawn: {
 			for (const auto to : PseudoLegalMovesPawn(state.board, from)) {
 				const auto newCastlingAvailabilities = UpdateAvailabilitiesIfRookEaten(state, to);
 				if (to.y == 0 || to.y == 7) { // promotions
-					for (const auto promotionType : {Type::Knight, Type::Bishop, Type::Rook, Type::Queen}) {
+					for (const auto promotionType : {PieceType::Knight, PieceType::Bishop, PieceType::Rook, PieceType::Queen}) {
 						auto newBoard = state.board;
 						newBoard.At(to) = Piece{.type = promotionType, .color = state.activeColor};
 						newBoard.At(from) = std::nullopt;
@@ -128,7 +128,7 @@ namespace chss::MoveGeneration {
 					Position{.y = enPassantTargetSquare.y - yForwardOffset, .x = enPassantTargetSquare.x};
 				assert(
 					(state.board.At(enPassantCaptureSquare) ==
-					 Piece{.type = Type::Pawn, .color = InverseColor(state.activeColor)}));
+					 Piece{.type = PieceType::Pawn, .color = InverseColor(state.activeColor)}));
 				if (enPassantTargetSquare == Position{.y = from.y + yForwardOffset, .x = from.x - 1} ||
 					enPassantTargetSquare == Position{.y = from.y + yForwardOffset, .x = from.x + 1}) {
 					auto newBoard = state.board;
@@ -150,7 +150,7 @@ namespace chss::MoveGeneration {
 			}
 			break;
 		}
-		case Type::Knight: {
+		case PieceType::Knight: {
 			for (const auto to : PseudoLegalMovesKnight(state.board, from)) {
 				auto newBoard = state.board;
 				newBoard.At(to) = newBoard.At(from);
@@ -168,7 +168,7 @@ namespace chss::MoveGeneration {
 			}
 			break;
 		}
-		case Type::Bishop: {
+		case PieceType::Bishop: {
 			for (const auto to : PseudoLegalMovesBishop(state.board, from)) {
 				auto newBoard = state.board;
 				newBoard.At(to) = newBoard.At(from);
@@ -186,7 +186,7 @@ namespace chss::MoveGeneration {
 			}
 			break;
 		}
-		case Type::Rook: {
+		case PieceType::Rook: {
 			for (const auto to : PseudoLegalMovesRook(state.board, from)) {
 				auto newBoard = state.board;
 				newBoard.At(to) = newBoard.At(from);
@@ -222,7 +222,7 @@ namespace chss::MoveGeneration {
 			}
 			break;
 		}
-		case Type::Queen: {
+		case PieceType::Queen: {
 			for (const auto to : PseudoLegalMovesQueen(state.board, from)) {
 				auto newBoard = state.board;
 				newBoard.At(to) = newBoard.At(from);
@@ -240,7 +240,7 @@ namespace chss::MoveGeneration {
 			}
 			break;
 		}
-		case Type::King: {
+		case PieceType::King: {
 			for (const auto to : PseudoLegalMovesKing(state.board, from)) {
 				auto newBoard = state.board;
 				newBoard.At(to) = newBoard.At(from);
@@ -279,7 +279,7 @@ namespace chss::MoveGeneration {
 					assert(
 						(state.board.At(Position{.y = 0, .x = 7}).has_value() &&
 						 state.board.At(Position{.y = 0, .x = 7}).value() ==
-							 Piece{.type = Type::Rook, .color = Color::White}));
+							 Piece{.type = PieceType::Rook, .color = Color::White}));
 					bool isInBetweenEmpty = true;
 					for (int x = 5; x <= 6; ++x) {
 						const auto to = Position{.y = 0, .x = x};
@@ -296,8 +296,8 @@ namespace chss::MoveGeneration {
 					if (isInBetweenEmpty && isInBetweenSafe) {
 						auto newBoard = state.board;
 						newBoard.At(Position{.y = 0, .x = 4}) = std::nullopt;
-						newBoard.At(Position{.y = 0, .x = 5}) = Piece{.type = Type::Rook, .color = Color::White};
-						newBoard.At(Position{.y = 0, .x = 6}) = Piece{.type = Type::King, .color = Color::White};
+						newBoard.At(Position{.y = 0, .x = 5}) = Piece{.type = PieceType::Rook, .color = Color::White};
+						newBoard.At(Position{.y = 0, .x = 6}) = Piece{.type = PieceType::King, .color = Color::White};
 						newBoard.At(Position{.y = 0, .x = 7}) = std::nullopt;
 						auto newCastlingAvailabilities = CastlingAvailabilities{
 							.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
@@ -318,7 +318,7 @@ namespace chss::MoveGeneration {
 					assert(
 						(state.board.At(Position{.y = 0, .x = 0}).has_value() &&
 						 state.board.At(Position{.y = 0, .x = 0}).value() ==
-							 Piece{.type = Type::Rook, .color = Color::White}));
+							 Piece{.type = PieceType::Rook, .color = Color::White}));
 					bool isInBetweenEmpty = true;
 					for (int x = 3; x >= 1; --x) {
 						const auto to = Position{.y = 0, .x = x};
@@ -335,8 +335,8 @@ namespace chss::MoveGeneration {
 					if (isInBetweenEmpty && isInBetweenSafe) {
 						auto newBoard = state.board;
 						newBoard.At(Position{.y = 0, .x = 0}) = std::nullopt;
-						newBoard.At(Position{.y = 0, .x = 2}) = Piece{.type = Type::King, .color = Color::White};
-						newBoard.At(Position{.y = 0, .x = 3}) = Piece{.type = Type::Rook, .color = Color::White};
+						newBoard.At(Position{.y = 0, .x = 2}) = Piece{.type = PieceType::King, .color = Color::White};
+						newBoard.At(Position{.y = 0, .x = 3}) = Piece{.type = PieceType::Rook, .color = Color::White};
 						newBoard.At(Position{.y = 0, .x = 4}) = std::nullopt;
 						auto newCastlingAvailabilities = CastlingAvailabilities{
 							.white = CastlingAvailability{.isKingSideAvailable = false, .isQueenSideAvailable = false},
@@ -361,7 +361,7 @@ namespace chss::MoveGeneration {
 					assert(
 						(state.board.At(Position{.y = 7, .x = 7}).has_value() &&
 						 state.board.At(Position{.y = 7, .x = 7}).value() ==
-							 Piece{.type = Type::Rook, .color = Color::Black}));
+							 Piece{.type = PieceType::Rook, .color = Color::Black}));
 					bool isInBetweenEmpty = true;
 					for (int x = 5; x <= 6; ++x) {
 						const auto to = Position{.y = 7, .x = x};
@@ -378,8 +378,8 @@ namespace chss::MoveGeneration {
 					if (isInBetweenEmpty && isInBetweenSafe) {
 						auto newBoard = state.board;
 						newBoard.At(Position{.y = 7, .x = 4}) = std::nullopt;
-						newBoard.At(Position{.y = 7, .x = 5}) = Piece{.type = Type::Rook, .color = Color::Black};
-						newBoard.At(Position{.y = 7, .x = 6}) = Piece{.type = Type::King, .color = Color::Black};
+						newBoard.At(Position{.y = 7, .x = 5}) = Piece{.type = PieceType::Rook, .color = Color::Black};
+						newBoard.At(Position{.y = 7, .x = 6}) = Piece{.type = PieceType::King, .color = Color::Black};
 						newBoard.At(Position{.y = 7, .x = 7}) = std::nullopt;
 						auto newCastlingAvailabilities = CastlingAvailabilities{
 							.white = state.castlingAvailabilities.white,
@@ -400,7 +400,7 @@ namespace chss::MoveGeneration {
 					assert(
 						(state.board.At(Position{.y = 7, .x = 0}).has_value() &&
 						 state.board.At(Position{.y = 7, .x = 0}).value() ==
-							 Piece{.type = Type::Rook, .color = Color::Black}));
+							 Piece{.type = PieceType::Rook, .color = Color::Black}));
 					bool isInBetweenEmpty = true;
 					for (int x = 3; x >= 1; --x) {
 						const auto to = Position{.y = 7, .x = x};
@@ -417,8 +417,8 @@ namespace chss::MoveGeneration {
 					if (isInBetweenEmpty && isInBetweenSafe) {
 						auto newBoard = state.board;
 						newBoard.At(Position{.y = 7, .x = 0}) = std::nullopt;
-						newBoard.At(Position{.y = 7, .x = 2}) = Piece{.type = Type::King, .color = Color::Black};
-						newBoard.At(Position{.y = 7, .x = 3}) = Piece{.type = Type::Rook, .color = Color::Black};
+						newBoard.At(Position{.y = 7, .x = 2}) = Piece{.type = PieceType::King, .color = Color::Black};
+						newBoard.At(Position{.y = 7, .x = 3}) = Piece{.type = PieceType::Rook, .color = Color::Black};
 						newBoard.At(Position{.y = 7, .x = 4}) = std::nullopt;
 						auto newCastlingAvailabilities = CastlingAvailabilities{
 							.white = state.castlingAvailabilities.white,
@@ -447,7 +447,7 @@ namespace chss::MoveGeneration {
 	const auto kingPosition = [&] {
 		for (const auto position : ForEach(board.GetSize())) {
 			const auto pieceOpt = board.At(position);
-			if (pieceOpt.has_value() && pieceOpt.value() == Piece{.type = Type::King, .color = color}) {
+			if (pieceOpt.has_value() && pieceOpt.value() == Piece{.type = PieceType::King, .color = color}) {
 				return position;
 			}
 		}
@@ -464,7 +464,7 @@ namespace chss::MoveGeneration {
 			const auto pieceOpt = board.At(to);
 			if (pieceOpt.has_value()) {
 				if (pieceOpt.value().color == enemyColor &&
-					(pieceOpt.value().type == Type::Bishop || pieceOpt.value().type == Type::Queen)) {
+					(pieceOpt.value().type == PieceType::Bishop || pieceOpt.value().type == PieceType::Queen)) {
 					return true;
 				}
 				break;
@@ -483,7 +483,7 @@ namespace chss::MoveGeneration {
 			const auto pieceOpt = board.At(to);
 			if (pieceOpt.has_value()) {
 				if (pieceOpt.value().color == enemyColor &&
-					(pieceOpt.value().type == Type::Rook || pieceOpt.value().type == Type::Queen)) {
+					(pieceOpt.value().type == PieceType::Rook || pieceOpt.value().type == PieceType::Queen)) {
 					return true;
 				}
 				break;
@@ -502,7 +502,7 @@ namespace chss::MoveGeneration {
 		matrix::Direction2D{.deltaY = +2, .deltaX = +1}};
 	for (const auto offset : kKnightOffsets) {
 		const auto to = kingPosition + offset;
-		if (board.IsInside(to) && board.At(to) == Piece{.type = Type::Knight, .color = enemyColor}) {
+		if (board.IsInside(to) && board.At(to) == Piece{.type = PieceType::Knight, .color = enemyColor}) {
 			return true;
 		}
 	}
@@ -514,7 +514,7 @@ namespace chss::MoveGeneration {
 	}();
 	for (const auto offset : kPawnOffsets) {
 		const auto to = kingPosition + offset;
-		if (board.IsInside(to) && board.At(to) == Piece{.type = Type::Pawn, .color = enemyColor}) {
+		if (board.IsInside(to) && board.At(to) == Piece{.type = PieceType::Pawn, .color = enemyColor}) {
 			return true;
 		}
 	}
@@ -529,7 +529,7 @@ namespace chss::MoveGeneration {
 		matrix::Direction2D{.deltaY = +1, .deltaX = +1}};
 	for (const auto offset : kKingOffsets) {
 		const auto to = kingPosition + offset;
-		if (board.IsInside(to) && board.At(to) == Piece{.type = Type::King, .color = enemyColor}) {
+		if (board.IsInside(to) && board.At(to) == Piece{.type = PieceType::King, .color = enemyColor}) {
 			return true;
 		}
 	}

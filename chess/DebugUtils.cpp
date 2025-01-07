@@ -8,34 +8,34 @@ constexpr char PieceToChar(const chss::Piece& piece) {
 	switch (piece.color) {
 	case chss::Color::White:
 		switch (piece.type) {
-	case chss::Type::Pawn:
+	case chss::PieceType::Pawn:
 		return 'P';
-	case chss::Type::Knight:
+	case chss::PieceType::Knight:
 		return 'N';
-	case chss::Type::Bishop:
+	case chss::PieceType::Bishop:
 		return 'B';
-	case chss::Type::Rook:
+	case chss::PieceType::Rook:
 		return 'R';
-	case chss::Type::Queen:
+	case chss::PieceType::Queen:
 		return 'Q';
-	case chss::Type::King:
+	case chss::PieceType::King:
 		return 'K';
 	default:
 		assert(false);
 		}
 	case chss::Color::Black:
 		switch (piece.type) {
-	case chss::Type::Pawn:
+	case chss::PieceType::Pawn:
 		return 'p';
-	case chss::Type::Knight:
+	case chss::PieceType::Knight:
 		return 'n';
-	case chss::Type::Bishop:
+	case chss::PieceType::Bishop:
 		return 'b';
-	case chss::Type::Rook:
+	case chss::PieceType::Rook:
 		return 'r';
-	case chss::Type::Queen:
+	case chss::PieceType::Queen:
 		return 'q';
-	case chss::Type::King:
+	case chss::PieceType::King:
 		return 'k';
 	default:
 		assert(false);

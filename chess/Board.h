@@ -8,7 +8,7 @@
 
 namespace chss {
 
-enum class Type : std::int8_t { Pawn, Knight, Bishop, Rook, Queen, King };
+enum class PieceType : std::int8_t { Pawn, Knight, Bishop, Rook, Queen, King };
 
 enum class Color : std::int8_t { White, Black };
 
@@ -17,7 +17,7 @@ enum class Color : std::int8_t { White, Black };
 };
 
 struct Piece {
-	Type type;
+	PieceType type;
 	Color color;
 	[[nodiscard]] constexpr bool operator==(const Piece& other) const = default;
 };
@@ -96,22 +96,22 @@ static_assert(sizeof(Board) == 64 * 3);
 constexpr auto kEmptyBoard = Board(std::optional<Piece>(std::nullopt));
 constexpr auto kInitialBoard = Board(
 	std::array<std::optional<Piece>, 64>{
-		std::optional<Piece>(Piece{Type::Rook, Color::White}),
-		std::optional<Piece>(Piece{Type::Knight, Color::White}),
-		std::optional<Piece>(Piece{Type::Bishop, Color::White}),
-		std::optional<Piece>(Piece{Type::Queen, Color::White}),
-		std::optional<Piece>(Piece{Type::King, Color::White}),
-		std::optional<Piece>(Piece{Type::Bishop, Color::White}),
-		std::optional<Piece>(Piece{Type::Knight, Color::White}),
-		std::optional<Piece>(Piece{Type::Rook, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Rook, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Knight, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Bishop, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Queen, Color::White}),
+		std::optional<Piece>(Piece{PieceType::King, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Bishop, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Knight, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Rook, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::White}),
 		std::optional<Piece>(std::nullopt),
 		std::optional<Piece>(std::nullopt),
 		std::optional<Piece>(std::nullopt),
@@ -144,21 +144,21 @@ constexpr auto kInitialBoard = Board(
 		std::optional<Piece>(std::nullopt),
 		std::optional<Piece>(std::nullopt),
 		std::optional<Piece>(std::nullopt),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Pawn, Color::Black}),
-		std::optional<Piece>(Piece{Type::Rook, Color::Black}),
-		std::optional<Piece>(Piece{Type::Knight, Color::Black}),
-		std::optional<Piece>(Piece{Type::Bishop, Color::Black}),
-		std::optional<Piece>(Piece{Type::Queen, Color::Black}),
-		std::optional<Piece>(Piece{Type::King, Color::Black}),
-		std::optional<Piece>(Piece{Type::Bishop, Color::Black}),
-		std::optional<Piece>(Piece{Type::Knight, Color::Black}),
-		std::optional<Piece>(Piece{Type::Rook, Color::Black})});
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Pawn, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Rook, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Knight, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Bishop, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Queen, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::King, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Bishop, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Knight, Color::Black}),
+		std::optional<Piece>(Piece{PieceType::Rook, Color::Black})});
 
 } // namespace chss

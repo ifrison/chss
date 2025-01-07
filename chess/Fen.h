@@ -47,62 +47,62 @@ constexpr chss::Board ParseBoard(const std::string_view& boardStr) {
 			break;
 		case 'B':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Bishop, .color = chss::Color::White};
+				chss::Piece{.type = chss::PieceType::Bishop, .color = chss::Color::White};
 			++x;
 			break;
 		case 'K':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::King, .color = chss::Color::White};
+				chss::Piece{.type = chss::PieceType::King, .color = chss::Color::White};
 			++x;
 			break;
 		case 'N':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Knight, .color = chss::Color::White};
+				chss::Piece{.type = chss::PieceType::Knight, .color = chss::Color::White};
 			++x;
 			break;
 		case 'P':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Pawn, .color = chss::Color::White};
+				chss::Piece{.type = chss::PieceType::Pawn, .color = chss::Color::White};
 			++x;
 			break;
 		case 'Q':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Queen, .color = chss::Color::White};
+				chss::Piece{.type = chss::PieceType::Queen, .color = chss::Color::White};
 			++x;
 			break;
 		case 'R':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Rook, .color = chss::Color::White};
+				chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::White};
 			++x;
 			break;
 		case 'b':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Bishop, .color = chss::Color::Black};
+				chss::Piece{.type = chss::PieceType::Bishop, .color = chss::Color::Black};
 			++x;
 			break;
 		case 'k':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::King, .color = chss::Color::Black};
+				chss::Piece{.type = chss::PieceType::King, .color = chss::Color::Black};
 			++x;
 			break;
 		case 'n':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Knight, .color = chss::Color::Black};
+				chss::Piece{.type = chss::PieceType::Knight, .color = chss::Color::Black};
 			++x;
 			break;
 		case 'p':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Pawn, .color = chss::Color::Black};
+				chss::Piece{.type = chss::PieceType::Pawn, .color = chss::Color::Black};
 			++x;
 			break;
 		case 'q':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Queen, .color = chss::Color::Black};
+				chss::Piece{.type = chss::PieceType::Queen, .color = chss::Color::Black};
 			++x;
 			break;
 		case 'r':
 			board.At(chss::Position{.y = y, .x = x}) =
-				chss::Piece{.type = chss::Type::Rook, .color = chss::Color::Black};
+				chss::Piece{.type = chss::PieceType::Rook, .color = chss::Color::Black};
 			++x;
 			break;
 		default:
@@ -181,34 +181,34 @@ constexpr char PieceToChar(const chss::Piece& piece) {
 	switch (piece.color) {
 	case chss::Color::White:
 		switch (piece.type) {
-		case chss::Type::Pawn:
+		case chss::PieceType::Pawn:
 			return 'P';
-		case chss::Type::Knight:
+		case chss::PieceType::Knight:
 			return 'N';
-		case chss::Type::Bishop:
+		case chss::PieceType::Bishop:
 			return 'B';
-		case chss::Type::Rook:
+		case chss::PieceType::Rook:
 			return 'R';
-		case chss::Type::Queen:
+		case chss::PieceType::Queen:
 			return 'Q';
-		case chss::Type::King:
+		case chss::PieceType::King:
 			return 'K';
 		default:
 			assert(false);
 		}
 	case chss::Color::Black:
 		switch (piece.type) {
-		case chss::Type::Pawn:
+		case chss::PieceType::Pawn:
 			return 'p';
-		case chss::Type::Knight:
+		case chss::PieceType::Knight:
 			return 'n';
-		case chss::Type::Bishop:
+		case chss::PieceType::Bishop:
 			return 'b';
-		case chss::Type::Rook:
+		case chss::PieceType::Rook:
 			return 'r';
-		case chss::Type::Queen:
+		case chss::PieceType::Queen:
 			return 'q';
-		case chss::Type::King:
+		case chss::PieceType::King:
 			return 'k';
 		default:
 			assert(false);

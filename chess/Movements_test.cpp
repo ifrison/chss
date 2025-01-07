@@ -35,35 +35,35 @@ TEST(Movements, IsCheck_InitialBoard) {
 
 TEST(Movements, IsCheck_ByPawn) {
 	auto board = chss::kEmptyBoard;
-	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::Type::King, chss::Color::White};
-	board.At(chss::Position{.y = 4, .x = 2}) = chss::Piece{chss::Type::Pawn, chss::Color::Black};
+	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::PieceType::King, chss::Color::White};
+	board.At(chss::Position{.y = 4, .x = 2}) = chss::Piece{chss::PieceType::Pawn, chss::Color::Black};
 	EXPECT_TRUE(chss::MoveGeneration::IsInCheck(board, chss::Color::White));
 }
 
 TEST(Movements, IsCheck_ByKnight) {
 	auto board = chss::kEmptyBoard;
-	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::Type::King, chss::Color::White};
-	board.At(chss::Position{.y = 4, .x = 1}) = chss::Piece{chss::Type::Knight, chss::Color::Black};
+	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::PieceType::King, chss::Color::White};
+	board.At(chss::Position{.y = 4, .x = 1}) = chss::Piece{chss::PieceType::Knight, chss::Color::Black};
 	EXPECT_TRUE(chss::MoveGeneration::IsInCheck(board, chss::Color::White));
 }
 
 TEST(Movements, IsCheck_ByBishop) {
 	auto board = chss::kEmptyBoard;
-	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::Type::King, chss::Color::White};
-	board.At(chss::Position{.y = 5, .x = 1}) = chss::Piece{chss::Type::Bishop, chss::Color::Black};
+	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::PieceType::King, chss::Color::White};
+	board.At(chss::Position{.y = 5, .x = 1}) = chss::Piece{chss::PieceType::Bishop, chss::Color::Black};
 	EXPECT_TRUE(chss::MoveGeneration::IsInCheck(board, chss::Color::White));
 }
 
 TEST(Movements, IsCheck_ByRook) {
 	auto board = chss::kEmptyBoard;
-	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::Type::King, chss::Color::White};
-	board.At(chss::Position{.y = 3, .x = 1}) = chss::Piece{chss::Type::Rook, chss::Color::Black};
+	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::PieceType::King, chss::Color::White};
+	board.At(chss::Position{.y = 3, .x = 1}) = chss::Piece{chss::PieceType::Rook, chss::Color::Black};
 	EXPECT_TRUE(chss::MoveGeneration::IsInCheck(board, chss::Color::White));
 }
 
 TEST(Movements, IsCheck_ByQueen) {
 	auto board = chss::kEmptyBoard;
-	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::Type::King, chss::Color::White};
-	board.At(chss::Position{.y = 5, .x = 1}) = chss::Piece{chss::Type::Queen, chss::Color::Black};
+	board.At(chss::Position{.y = 3, .x = 3}) = chss::Piece{chss::PieceType::King, chss::Color::White};
+	board.At(chss::Position{.y = 5, .x = 1}) = chss::Piece{chss::PieceType::Queen, chss::Color::Black};
 	EXPECT_TRUE(chss::MoveGeneration::IsInCheck(board, chss::Color::White));
 }

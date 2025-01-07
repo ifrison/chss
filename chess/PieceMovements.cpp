@@ -8,7 +8,7 @@ namespace chss::MoveGeneration {
 	const auto pawnPieceOpt = board.At(pawnPosition);
 	assert(pawnPieceOpt.has_value());
 	const auto [type, color] = pawnPieceOpt.value();
-	assert(type == chss::Type::Pawn);
+	assert(type == chss::PieceType::Pawn);
 	const auto enemyColor = InverseColor(color);
 	const auto yPawnsRow = color == chss::Color::White ? 1 : 6;
 	const auto yForwardOffset = color == chss::Color::White ? +1 : -1;
@@ -51,7 +51,7 @@ namespace chss::MoveGeneration {
 	const auto& knightPieceOpt = board.At(knightPosition);
 	assert(knightPieceOpt.has_value());
 	const auto [type, color] = knightPieceOpt.value();
-	assert(type == chss::Type::Knight);
+	assert(type == chss::PieceType::Knight);
 	const auto enemyColor = InverseColor(color);
 	for (const auto offset : kOffsets) {
 		const auto position = knightPosition + offset;
@@ -74,7 +74,7 @@ namespace chss::MoveGeneration {
 	const auto& bishopPieceOpt = board.At(bishopPosition);
 	assert(bishopPieceOpt.has_value());
 	const auto [type, color] = bishopPieceOpt.value();
-	assert(type == chss::Type::Bishop);
+	assert(type == chss::PieceType::Bishop);
 	const auto enemyColor = InverseColor(color);
 	for (const auto offset : kOffsets) {
 		auto position = bishopPosition + offset;
@@ -103,7 +103,7 @@ namespace chss::MoveGeneration {
 	const auto& rookPieceOpt = board.At(rookPosition);
 	assert(rookPieceOpt.has_value());
 	const auto [type, color] = rookPieceOpt.value();
-	assert(type == chss::Type::Rook);
+	assert(type == chss::PieceType::Rook);
 	const auto enemyColor = InverseColor(color);
 	for (const auto offset : kOffsets) {
 		auto position = rookPosition + offset;
@@ -136,7 +136,7 @@ namespace chss::MoveGeneration {
 	const auto& queenPieceOpt = board.At(queenPosition);
 	assert(queenPieceOpt.has_value());
 	const auto [type, color] = queenPieceOpt.value();
-	assert(type == chss::Type::Queen);
+	assert(type == chss::PieceType::Queen);
 	const auto enemyColor = InverseColor(color);
 	for (const auto& offset : kOffsets) {
 		auto position = queenPosition + offset;
@@ -169,7 +169,7 @@ namespace chss::MoveGeneration {
 	const auto& kingPieceOpt = board.At(kingPosition);
 	assert(kingPieceOpt.has_value());
 	const auto [type, color] = kingPieceOpt.value();
-	assert(type == chss::Type::King);
+	assert(type == chss::PieceType::King);
 	const auto enemyColor = InverseColor(color);
 	for (const auto offset : kOffsets) {
 		const auto position = kingPosition + offset;
