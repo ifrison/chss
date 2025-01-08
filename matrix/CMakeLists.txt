@@ -5,8 +5,7 @@ target_include_directories(matrix
         $<INSTALL_INTERFACE:matrix>)
 
 add_executable(matrix_tests
-        Matrix2D_test.cpp)
+        Matrix2D_test.cpp
+        tests_main.cpp)
 target_link_libraries(matrix_tests
-        stdgenerator
-        GTest::gtest_main)
-gtest_discover_tests(matrix_tests)
+        testutils)
