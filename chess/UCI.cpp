@@ -1,6 +1,6 @@
 #include "UCI.h"
 #include "State.h"
-#include "Fen.h"
+#include "fen/Fen.h"
 #include "MinMax.h"
 #include "Move.h"
 #include <concurrency/TaskQueue.h>

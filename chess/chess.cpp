@@ -1,5 +1,5 @@
 #include "Board.h"
-#include "Fen.h"
+#include "fen/Fen.h"
 #include "Movements.h"
 #include "State.h"
 #include "UCI.h"

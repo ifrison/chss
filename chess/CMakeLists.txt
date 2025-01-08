@@ -17,7 +17,6 @@ target_sources(chess_tests PRIVATE
         Piece_test.cpp
         DebugUtils.cpp
         DebugUtils_test.cpp
-        Fen_test.cpp
         PieceMovements.cpp
         PieceMovements_test.cpp
         Movements.cpp
@@ -37,3 +36,4 @@ target_link_libraries(chess_tests
 gtest_discover_tests(chess_tests)
 
 add_subdirectory(evaluation)
+add_subdirectory(fen)

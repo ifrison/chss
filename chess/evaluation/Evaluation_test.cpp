@@ -1,6 +1,7 @@
 #include "Evaluation.h"
 
-#include <chess/Fen.h>
+#include "chess/fen/Fen.h"
+
 #include <test_utils/TestUtils.h>
 
 TEST_CASE("Evaluation", "EvaluateFullBoard") {

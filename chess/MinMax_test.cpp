@@ -1,5 +1,5 @@
 #include "MinMax.h"
-#include "Fen.h"
+#include "fen/Fen.h"
 #include "Move.h"
 #include "Movements.h"
 

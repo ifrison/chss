@@ -1,4 +1,4 @@
-#include "Fen.h"
+#include "fen/Fen.h"
 #include "Perft.h"
 #include "State.h"
 
