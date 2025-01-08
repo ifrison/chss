@@ -2,6 +2,8 @@
 
 #include "Board.h"
 
+#include <optional>
+
 namespace chss {
 
 struct Move {

@@ -112,9 +112,13 @@ struct Size2D {
 		constexpr explicit Generator(Size2D size)
 			: mSize(size) {}
 
-		[[nodiscard]] constexpr Iterator begin() const { return Iterator(mSize); }
+		[[nodiscard]] constexpr Iterator begin() const {
+			return Iterator(mSize);
+		}
 
-		[[nodiscard]] constexpr Sentinel end() const { return Sentinel{}; }
+		[[nodiscard]] constexpr Sentinel end() const {
+			return Sentinel{};
+		}
 
 	private:
 		Size2D mSize;
