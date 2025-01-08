@@ -4,7 +4,8 @@ target_include_directories(matrix
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
         $<INSTALL_INTERFACE:matrix>)
 
-add_executable(matrix_tests
+add_executable(matrix_tests)
+target_sources(matrix_tests PRIVATE
         Matrix2D_test.cpp
         tests_main.cpp)
 target_link_libraries(matrix_tests

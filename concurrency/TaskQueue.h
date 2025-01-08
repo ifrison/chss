@@ -7,8 +7,10 @@
 #include <thread>
 #include <vector>
 
+namespace concurrency {
+
 /**
- * A multi-threaded task queue.
+ * A multithreaded task queue.
  * The tasks are picked in order of arrival, and they do not have priorities.
  * The synchronization with the user happens through std::future<R>s.
  *
@@ -71,3 +73,5 @@ private:
 	std::queue<std::function<void()>> mTasks;
 	std::shared_ptr<SSynchronizationPrimitives> mSynchronizationPrimitives;
 };
+
+}

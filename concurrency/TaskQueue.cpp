@@ -1,5 +1,7 @@
 #include "TaskQueue.h"
 
+namespace concurrency {
+
 TaskQueue::TaskQueue(int numWorkers)
 	: mWorkers()
 	, mTasks()
@@ -48,3 +50,5 @@ void TaskQueue::PushBackImpl(std::function<void()>&& task) {
 	uniqueLock.unlock();
 	mSynchronizationPrimitives->mConditionVariable.notify_one();
 }
+
+} // namespace concurrency

@@ -50,7 +50,7 @@ struct STaskHandler {
 } // namespace
 
 TEST(TeskQueue, Task_ReturnsInt) {
-	auto taskQueue = TaskQueue(1);
+	auto taskQueue = concurrency::TaskQueue(1);
 	auto task = []() -> int { return 1234; };
 	auto future = taskQueue.PushBack<int>(task);
 	auto result = future.get();
@@ -58,7 +58,7 @@ TEST(TeskQueue, Task_ReturnsInt) {
 }
 
 TEST(TeskQueue, Task_ReturnsVoid) {
-	auto taskQueue = TaskQueue(1);
+	auto taskQueue = concurrency::TaskQueue(1);
 	auto task = []() -> void {};
 	auto future = taskQueue.PushBack<void>(task);
 	future.get();
@@ -71,7 +71,7 @@ TEST(TeskQueue, TasksConsumed_InOrder) {
 	auto randomDevice = std::random_device();
 	auto randomNumberEngine = std::minstd_rand(randomDevice());
 
-	auto taskQueue = TaskQueue(numWorkers);
+	auto taskQueue = concurrency::TaskQueue(numWorkers);
 
 	// PushBack all the tasks with their TaskHandlers. The first _numWorkers_ will start being
 	// executed.
@@ -125,7 +125,7 @@ TEST(TeskQueue, OnDestruction_WorkersDetach) {
 	auto tasksHandlers = std::vector<STaskHandler>(numTasks);
 
 	{
-		auto taskQueue = TaskQueue(numWorkers);
+		auto taskQueue = concurrency::TaskQueue(numWorkers);
 
 		// PushBack all the tasks with their TaskHandlers. The first _numWorkers_ will start being
 		// executed.

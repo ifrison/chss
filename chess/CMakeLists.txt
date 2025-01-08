@@ -6,14 +6,11 @@ target_sources(chess PRIVATE
         Perft.cpp
         MinMax.cpp
         chess.cpp
-        UCI.cpp
-        TaskQueue.cpp
-)
+        UCI.cpp)
 target_link_libraries(chess
-        cpp_utils
-        file_utils
         matrix
-        stdgenerator)
+        stdgenerator
+        concurrency)
 
 add_executable(chess_tests)
 target_sources(chess_tests PRIVATE
@@ -30,14 +27,12 @@ target_sources(chess_tests PRIVATE
         Evaluation_test.cpp
         MinMax.cpp
         MinMax_test.cpp
-        UCI.cpp
-        TaskQueue.cpp
-        TaskQueue_test.cpp
-)
+        UCI.cpp)
 target_link_libraries(chess_tests
         testutils
         matrix
         stdgenerator
         GTest::gtest_main
-        GTest::gmock)
+        GTest::gmock
+        concurrency)
 gtest_discover_tests(chess_tests)

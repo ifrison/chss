@@ -3,7 +3,7 @@
 #include "Fen.h"
 #include "MinMax.h"
 #include "Move.h"
-#include "TaskQueue.h"
+#include <concurrency/TaskQueue.h>
 #include "Movements.h"
 #include "DebugUtils.h"
 
@@ -80,7 +80,7 @@ namespace chss::uci {
 
 void UCI(std::istream& in, std::ostream& out) {
 	auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-	auto taskQueue = TaskQueue(1);
+	auto taskQueue = concurrency::TaskQueue(1);
 	auto stop = std::atomic_flag(false);
 	auto searchResult = std::future<std::tuple<Move, Move, int>>();
 
