@@ -31,6 +31,7 @@ target_link_libraries(chess_tests
 gtest_discover_tests(chess_tests)
 
 add_subdirectory(representation)
+add_subdirectory(move_generation)
 add_subdirectory(evaluation)
 add_subdirectory(fen)
 add_subdirectory(uci)
