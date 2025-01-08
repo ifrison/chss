@@ -24,7 +24,6 @@ target_sources(chess_tests PRIVATE
         Movements_test.cpp
         Perft.cpp
         Perft_test.cpp
-        Evaluation_test.cpp
         MinMax.cpp
         MinMax_test.cpp
         UCI.cpp)
@@ -36,3 +35,5 @@ target_link_libraries(chess_tests
         GTest::gmock
         concurrency)
 gtest_discover_tests(chess_tests)
+
+add_subdirectory(evaluation)
