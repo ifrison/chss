@@ -1,6 +1,6 @@
 #include "TaskQueue.h"
 
-#include <gtest/gtest.h>
+#include <test_utils/TestUtils.h>
 
 #include <random>
 
@@ -49,22 +49,22 @@ struct STaskHandler {
 
 } // namespace
 
-TEST(TeskQueue, Task_ReturnsInt) {
+TEST_CASE("TaskQueue", "Task_ReturnsInt") {
 	auto taskQueue = concurrency::TaskQueue(1);
 	auto task = []() -> int { return 1234; };
 	auto future = taskQueue.PushBack<int>(task);
 	auto result = future.get();
-	EXPECT_EQ(result, 1234);
+	REQUIRE(result == 1234);
 }
 
-TEST(TeskQueue, Task_ReturnsVoid) {
+TEST_CASE("TaskQueue", "Task_ReturnsVoid") {
 	auto taskQueue = concurrency::TaskQueue(1);
 	auto task = []() -> void {};
 	auto future = taskQueue.PushBack<void>(task);
 	future.get();
 }
 
-TEST(TeskQueue, TasksConsumed_InOrder) {
+TEST_CASE("TaskQueue", "TasksConsumed_InOrder") {
 	const int numWorkers = 100;
 	const int numTasks = numWorkers * 100;
 
@@ -118,7 +118,7 @@ TEST(TeskQueue, TasksConsumed_InOrder) {
 	}
 }
 
-TEST(TeskQueue, OnDestruction_WorkersDetach) {
+TEST_CASE("TaskQueue", "OnDestruction_WorkersDetach") {
 	const int numWorkers = 100;
 	const int numTasks = 3 * numWorkers;
 
@@ -165,17 +165,24 @@ TEST(TeskQueue, OnDestruction_WorkersDetach) {
 	for (int i = numWorkers; i < numTasks; ++i) {
 		auto& taskHandler = tasksHandlers[i];
 		const bool isTaskStarted = taskHandler.IsStarted(std::chrono::milliseconds(0));
-		EXPECT_FALSE(isTaskStarted);
+		REQUIRE(!isTaskStarted);
 
 		auto& future = taskHandler.mFuture;
 		// Their futures will still return true when calling valid().
 		const bool isFutureValid = future.valid();
-		EXPECT_TRUE(isFutureValid);
+		REQUIRE(isFutureValid);
 		// They will be ready when calling wait_for() (because they have a exception inside).
 		const auto future_status = future.wait_for(std::chrono::milliseconds(0));
-		EXPECT_EQ(future_status, std::future_status::ready);
+		REQUIRE(future_status == std::future_status::ready);
 		// They will throw std::future_error exceptions with the std::future_errc::broken_promise
 		// error code when calling get().
-		// EXPECT_THROW(future.get(), std::future_error); // Cannot 'try' with exceptions disabled.
+		try {
+			future.get();
+			REQUIRE(false); // It should not reach here. An exception is triggered in the previous line.
+		} catch (const std::future_error& e) {
+			REQUIRE(e.code() == std::make_error_code(std::future_errc::broken_promise));
+		} catch (...) {
+			REQUIRE(false);
+		}
 	}
 }

@@ -9,9 +9,7 @@ target_include_directories(concurrency
 add_executable(concurrency_tests)
 target_sources(concurrency_tests PRIVATE
         TaskQueue.cpp
-        TaskQueue_test.cpp)
+        TaskQueue_test.cpp
+        tests_main.cpp)
 target_link_libraries(concurrency_tests
-        testutils
-        GTest::gtest_main
-        GTest::gmock)
-gtest_discover_tests(concurrency_tests)
+        testutils)
