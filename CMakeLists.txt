@@ -33,7 +33,5 @@ include(GoogleTest)
 add_subdirectory(test_utils)
 add_subdirectory(matrix)
 
-add_subdirectory(cpp_utils)
-
 add_subdirectory(chess)
 
