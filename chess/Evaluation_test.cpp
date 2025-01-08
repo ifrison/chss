@@ -1,19 +1,19 @@
 #include "Evaluation.h"
 #include "Fen.h"
 
-#include <gtest/gtest.h>
+#include <test_utils/TestUtils.h>
 
-TEST(Evaluation, EvaluateFullBoard) {
+TEST_CASE("Evaluation", "EvaluateFullBoard") {
 	constexpr auto board = chss::fen::ParseBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-	EXPECT_EQ(chss::evaluation::Evaluate(board), 0);
+	STATIC_REQUIRE(chss::evaluation::Evaluate(board) == 0);
 }
 
-TEST(Evaluation, EvaluateOnlyWhite) {
+TEST_CASE("Evaluation", "EvaluateOnlyWhite") {
 	constexpr auto board = chss::fen::ParseBoard("8/8/8/8/8/8/PPPPPPPP/RNBQKBNR");
-	EXPECT_EQ(chss::evaluation::Evaluate(board), 239);
+	STATIC_REQUIRE(chss::evaluation::Evaluate(board) == 23922);
 }
 
-TEST(Evaluation, EvaluateOnlyBlack) {
+TEST_CASE("Evaluation", "EvaluateOnlyBlack") {
 	constexpr auto board = chss::fen::ParseBoard("rnbqkbnr/pppppppp/8/8/8/8/8/8");
-	EXPECT_EQ(chss::evaluation::Evaluate(board), -239);
+	STATIC_REQUIRE(chss::evaluation::Evaluate(board) == -23922);
 }

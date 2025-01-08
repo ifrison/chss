@@ -1,5 +1,6 @@
 #include "Board.h"
 
+#include <ostream>
 #include <string>
 
 namespace {

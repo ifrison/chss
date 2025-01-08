@@ -35,8 +35,7 @@ target_sources(chess_tests PRIVATE
         TaskQueue_test.cpp
 )
 target_link_libraries(chess_tests
-        cpp_utils
-        file_utils
+        testutils
         matrix
         stdgenerator
         GTest::gtest_main

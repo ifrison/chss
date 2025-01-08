@@ -3,6 +3,7 @@
 #include "State.h"
 
 #include <array>
+#include <string>
 #include <string_view>
 
 namespace detail {
