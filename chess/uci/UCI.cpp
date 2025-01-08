@@ -159,8 +159,8 @@ void UCI(std::istream& in, std::ostream& out) {
 				searchResult.wait_for(std::chrono::milliseconds(time));
 				stop.test_and_set();
 				const auto [move, ponderMove, depth] = searchResult.get();
-				const auto fromStr = debug::PositionToString(move.from);
-				const auto toStr = debug::PositionToString(move.to);
+				const auto fromStr = std::string(debug::PositionToString(move.from));
+				const auto toStr = std::string(debug::PositionToString(move.to));
 				const auto promotionStr = PromotionToString(move.promotionType);
 				out << "bestmove " << fromStr << toStr << promotionStr << std::endl;
 				Log("bestmove " + fromStr + toStr + promotionStr + " - depth " + std::to_string(depth));
@@ -175,8 +175,8 @@ void UCI(std::istream& in, std::ostream& out) {
 			stop.test_and_set();
 			searchResult.wait();
 			const auto [move, ponderMove, depth] = searchResult.get();
-			const auto fromStr = debug::PositionToString(move.from);
-			const auto toStr = debug::PositionToString(move.to);
+			const auto fromStr = std::string(debug::PositionToString(move.from));
+			const auto toStr = std::string(debug::PositionToString(move.to));
 			const auto promotionStr = PromotionToString(move.promotionType);
 			out << "bestmove " << fromStr << toStr << promotionStr << std::endl;
 			Log("bestmove " + fromStr + toStr + promotionStr + " - depth " + std::to_string(depth));
