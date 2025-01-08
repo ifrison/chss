@@ -2,35 +2,18 @@
 
 #include <gtest/gtest.h>
 
-namespace {
-
-std::string Serialize(const chss::Board& board) {
-	auto ss = std::ostringstream();
-	chss::debug::PrintBoard(board, ss);
-	return ss.str();
+TEST(Debug, PieceTypeToChar) {
+	EXPECT_EQ(chss::debug::PieceTypeToChar(chss::PieceType::Pawn), 'p');
+	EXPECT_EQ(chss::debug::PieceTypeToChar(chss::PieceType::Knight), 'n');
+	EXPECT_EQ(chss::debug::PieceTypeToChar(chss::PieceType::Bishop), 'b');
+	EXPECT_EQ(chss::debug::PieceTypeToChar(chss::PieceType::Rook), 'r');
+	EXPECT_EQ(chss::debug::PieceTypeToChar(chss::PieceType::Queen), 'q');
+	EXPECT_EQ(chss::debug::PieceTypeToChar(chss::PieceType::King), 'k');
 }
 
-}
-
-TEST(Debug, PrintBoard) {
-	EXPECT_EQ(Serialize(chss::kInitialBoard),
-		"  +---+---+---+---+---+---+---+---+\n"
-		"8 | r | n | b | q | k | b | n | r |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"7 | p | p | p | p | p | p | p | p |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"6 |   |   |   |   |   |   |   |   |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"5 |   |   |   |   |   |   |   |   |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"4 |   |   |   |   |   |   |   |   |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"3 |   |   |   |   |   |   |   |   |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"2 | P | P | P | P | P | P | P | P |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"1 | R | N | B | Q | K | B | N | R |\n"
-		"  +---+---+---+---+---+---+---+---+\n"
-		"    a   b   c   d   e   f   g   h  \n"
-	);
+TEST (DEBUG, PositionToString) {
+	EXPECT_EQ(chss::debug::PositionToString({0, 0}), "a1");
+	EXPECT_EQ(chss::debug::PositionToString({1, 1}), "b2");
+	EXPECT_EQ(chss::debug::PositionToString({4, 4}), "e5");
+	EXPECT_EQ(chss::debug::PositionToString({7, 7}), "h8");
 }
