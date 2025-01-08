@@ -1,8 +1,9 @@
 #include "Movements.h"
 
-#include "Move.h"
 #include "PieceMovements.h"
-#include "State.h"
+
+#include "representation/Move.h"
+#include "representation/State.h"
 
 #include <iostream>
 #include <ranges>

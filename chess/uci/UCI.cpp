@@ -3,9 +3,9 @@
 #include "chess/DebugUtils.h"
 #include "chess/fen/Fen.h"
 #include "chess/MinMax.h"
-#include "chess/Move.h"
 #include "chess/Movements.h"
-#include "chess/State.h"
+#include "chess/representation/Move.h"
+#include "chess/representation/State.h"
 
 #include <concurrency/TaskQueue.h>
 

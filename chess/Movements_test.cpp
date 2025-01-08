@@ -1,6 +1,7 @@
-#include "Move.h"
 #include "Movements.h"
-#include "State.h"
+
+#include "representation/Move.h"
+#include "representation/State.h"
 
 #include <gtest/gtest.h>
 

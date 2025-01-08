@@ -1,7 +1,8 @@
 #include "MinMax.h"
-#include "fen/Fen.h"
-#include "Move.h"
 #include "Movements.h"
+
+#include "fen/Fen.h"
+#include "representation/Move.h"
 
 #include <gtest/gtest.h>
 

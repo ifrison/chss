@@ -12,7 +12,6 @@ target_link_libraries(chess
 
 add_executable(chess_tests)
 target_sources(chess_tests PRIVATE
-        Piece_test.cpp
         DebugUtils_test.cpp
         PieceMovements.cpp
         PieceMovements_test.cpp
@@ -31,6 +30,7 @@ target_link_libraries(chess_tests
         concurrency)
 gtest_discover_tests(chess_tests)
 
+add_subdirectory(representation)
 add_subdirectory(evaluation)
 add_subdirectory(fen)
 add_subdirectory(uci)

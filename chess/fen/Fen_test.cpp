@@ -1,6 +1,6 @@
 #include "Fen.h"
 
-#include "chess/State.h"
+#include "chess/representation/State.h"
 
 #include <test_utils/TestUtils.h>
 

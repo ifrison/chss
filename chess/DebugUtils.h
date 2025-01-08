@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Board.h"
+#include "representation/Board.h"
 
 #include <ostream>
 

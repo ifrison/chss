@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chess/Board.h>
+#include "chess/representation/Board.h"
 
 namespace chss::evaluation {
 

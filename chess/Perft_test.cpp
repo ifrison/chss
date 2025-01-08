@@ -1,6 +1,7 @@
-#include "fen/Fen.h"
 #include "Perft.h"
-#include "State.h"
+
+#include "fen/Fen.h"
+#include "representation/State.h"
 
 #include <gtest/gtest.h>
 

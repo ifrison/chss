@@ -1,5 +1,6 @@
 #include "PieceMovements.h"
-#include "State.h"
+
+#include "representation/State.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>

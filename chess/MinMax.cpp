@@ -1,10 +1,10 @@
 #include "MinMax.h"
 
-#include "Move.h"
 #include "Movements.h"
-#include "State.h"
 
 #include "evaluation/Evaluation.h"
+#include "representation/Move.h"
+#include "representation/State.h"
 
 namespace chss::search {
 

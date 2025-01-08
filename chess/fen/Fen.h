@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chess/State.h>
+#include "chess/representation/State.h"
 
 #include <array>
 #include <string>
