@@ -30,6 +30,8 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 include(GoogleTest)
 
+add_subdirectory(test_utils)
+
 add_subdirectory(cpp_utils)
 add_subdirectory(file_utils)
 add_subdirectory(matrix)
