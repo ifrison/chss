@@ -54,6 +54,16 @@ constexpr Position2D& operator-=(Position2D& lhs, const Direction2D& rhs) {
 	return Direction2D{.deltaY = lhs.y - rhs.y, .deltaX = lhs.x - rhs.x};
 }
 
+[[nodiscard]] constexpr Direction2D operator*(const Direction2D& lhs, const int rhs) {
+	return Direction2D{.deltaY = lhs.deltaY * rhs, .deltaX = lhs.deltaX * rhs};
+}
+
+constexpr Direction2D& operator*=(Direction2D& lhs, const int rhs) {
+	lhs.deltaY *= rhs;
+	lhs.deltaX *= rhs;
+	return lhs;
+}
+
 struct Size2D {
 	int sizeY; // height, numRows
 	int sizeX; // width, numCols

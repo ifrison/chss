@@ -93,6 +93,25 @@ TEST_CASE("Matrix2D", "Position2D_Minus_Position2D") {
 	STATIC_REQUIRE(result == expectedResult);
 }
 
+TEST_CASE("Matrix2D", "Direction2D_TimesEquals_Int") {
+	constexpr auto result = []() -> matrix::Direction2D {
+		auto dir = matrix::Direction2D{.deltaY = 3, .deltaX = 4};
+		constexpr int factor = 5;
+		dir *= factor;
+		return dir;
+	}();
+	constexpr auto expectedResult = matrix::Direction2D{.deltaY = 15, .deltaX = 20};
+	STATIC_REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("Matrix2D", "Direction2D_Times_Int") {
+	constexpr auto dir = matrix::Direction2D{.deltaY = 3, .deltaX = 4};
+	constexpr int factor = 5;
+	constexpr auto result = dir * factor;
+	constexpr auto expectedResult = matrix::Direction2D{.deltaY = 15, .deltaX = 20};
+	STATIC_REQUIRE(result == expectedResult);
+}
+
 TEST_CASE("Matrix2D", "IsInside") {
 	constexpr auto size = matrix::Size2D{.sizeY = 2, .sizeX = 3};
 	STATIC_REQUIRE(IsInside(size, matrix::Position2D{.y = 0, .x = 0}));
