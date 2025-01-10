@@ -44,7 +44,8 @@ constexpr std::size_t FindNextKingMoveOffsetIndex(
 		}
 		case 8: { // Castling Queen side
 			const auto y = state.activeColor == chss::Color::White ? 0 : 7;
-			if (state.castlingAvailabilities.black.isQueenSideAvailable && kingPosition == chss::Position{.y = y, .x = 4}) {
+			if (state.castlingAvailabilities.black.isQueenSideAvailable &&
+				kingPosition == chss::Position{.y = y, .x = 4}) {
 				bool isInBetweenEmpty = true;
 				for (int x = 3; x >= 1; --x) {
 					const auto to = chss::Position{.y = y, .x = x};
@@ -67,7 +68,8 @@ constexpr std::size_t FindNextKingMoveOffsetIndex(
 		}
 		case 9: { // Castling King side
 			const auto y = state.activeColor == chss::Color::White ? 0 : 7;
-			if (state.castlingAvailabilities.black.isKingSideAvailable && kingPosition == chss::Position{.y = y, .x = 4}) {
+			if (state.castlingAvailabilities.black.isKingSideAvailable &&
+				kingPosition == chss::Position{.y = y, .x = 4}) {
 				bool isInBetweenEmpty = true;
 				for (int x = 5; x <= 6; ++x) {
 					const auto to = chss::Position{.y = y, .x = x};
@@ -137,9 +139,13 @@ public:
 		: mState(state)
 		, mKingPosition(kingPosition) {}
 
-	[[nodiscard]] constexpr Iterator begin() const { return Iterator(mState, mKingPosition); }
+	[[nodiscard]] constexpr Iterator begin() const {
+		return Iterator(mState, mKingPosition);
+	}
 
-	[[nodiscard]] constexpr Sentinel end() const { return Sentinel{}; }
+	[[nodiscard]] constexpr Sentinel end() const {
+		return Sentinel{};
+	}
 
 private:
 	chss::State mState;

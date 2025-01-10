@@ -118,9 +118,13 @@ public:
 		: mState(state)
 		, mPiecePosition(knightPosition) {}
 
-	[[nodiscard]] constexpr Iterator begin() const { return Iterator(mState, mPiecePosition); }
+	[[nodiscard]] constexpr Iterator begin() const {
+		return Iterator(mState, mPiecePosition);
+	}
 
-	[[nodiscard]] constexpr Sentinel end() const { return Sentinel{}; }
+	[[nodiscard]] constexpr Sentinel end() const {
+		return Sentinel{};
+	}
 
 private:
 	chss::State mState;

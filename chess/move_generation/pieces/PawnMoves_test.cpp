@@ -52,24 +52,67 @@ TEST_CASE("PawnMoves", "Advance_Black") {
 }
 
 TEST_CASE("PawnMoves", "Advance_BlockedByOtherPiece_White") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/8/3n4/3P4/8/8/8/8 w - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D5);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 0>{};
+	STATIC_REQUIRE(array == expectedResult);
 }
+
 TEST_CASE("PawnMoves", "Advance_BlockedByOtherPiece_Black") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/8/8/3p4/3N4/8/8/8 b - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D5);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 0>{};
+	STATIC_REQUIRE(array == expectedResult);
 }
 
 TEST_CASE("PawnMoves", "Advance_BlockedByEndOfBoard_White") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("3P4/8/8/8/8/8/8/8 w - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D8);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 0>{};
+	STATIC_REQUIRE(array == expectedResult);
 }
+
 TEST_CASE("PawnMoves", "Advance_BlockedByEndOfBoard_Black") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/8/3p4 b - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D1);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 0>{};
+	STATIC_REQUIRE(array == expectedResult);
 }
 
 TEST_CASE("PawnMoves", "Advance_Promotion_White") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/3P4/8/8/8/8/8/8 w - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D7);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 4>{
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Queen},
+	};
+	STATIC_REQUIRE(array == expectedResult);
 }
+
 TEST_CASE("PawnMoves", "Advance_Promotion_Black") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/3p4/8 b - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D2);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 4>{
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Queen},
+	};
+	STATIC_REQUIRE(array == expectedResult);
 }
 
 // DoubleAdvance

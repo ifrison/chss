@@ -5,11 +5,31 @@
 
 namespace detail {
 
-constexpr auto kPawnMoveOffsets = std::array<matrix::Direction2D, 4>{
-	matrix::Direction2D{.deltaY = +1, .deltaX = 0},
-	matrix::Direction2D{.deltaY = +1, .deltaX = -1},
-	matrix::Direction2D{.deltaY = +1, .deltaX = +1},
-	matrix::Direction2D{.deltaY = +2, .deltaX = 0},
+constexpr auto kPawnMoveOffsets = std::array<std::pair<matrix::Direction2D, std::optional<chss::PieceType>>, 8>{
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
+		std::nullopt),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		std::nullopt),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
+		std::nullopt),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +2, .deltaX = 0},
+		std::nullopt),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
+		chss::PieceType::Knight),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
+		chss::PieceType::Bishop),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
+		chss::PieceType::Rook),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
+		chss::PieceType::Queen),
 };
 
 constexpr std::size_t FindNextPawnMoveOffsetIndex(
@@ -18,25 +38,41 @@ constexpr std::size_t FindNextPawnMoveOffsetIndex(
 	const std::size_t startIndex) {
 	std::size_t i = startIndex;
 	while (i < kPawnMoveOffsets.size()) {
-		const auto position = state.activeColor == chss::Color::White ? pawnPosition + kPawnMoveOffsets[i] : pawnPosition - kPawnMoveOffsets[i];
+		const auto position = state.activeColor == chss::Color::White ? pawnPosition + kPawnMoveOffsets[i].first
+																	  : pawnPosition - kPawnMoveOffsets[i].first;
 		switch (i) {
 		case 0: { // Advance
-			if (state.board.IsInside(position) && !state.board.At(position).has_value()) {
+			if (0 < position.y && position.y < 7 && !state.board.At(position).has_value()) {
+				assert(state.board.IsInside(position));
 				return i;
 			}
 			break;
 		}
 		case 1:
 		case 2: { // Capture
-			if (state.board.IsInside(position) &&
-				state.board.At(position).has_value() && state.board.At(position).value().color != state.activeColor) {
+			if (state.board.IsInside(position) && state.board.At(position).has_value() &&
+				state.board.At(position).value().color != state.activeColor) {
 				return i;
 			}
 			break;
 		}
 		case 3: { // Double Advance
-			if ((pawnPosition.y == 1 && state.activeColor == chss::Color::White && !state.board.At(chss::Position{.y = 2, .x = pawnPosition.x}).has_value() && !state.board.At(chss::Position{.y = 3, .x = pawnPosition.x}).has_value()) ||
-				(pawnPosition.y == 6 && state.activeColor == chss::Color::White && !state.board.At(chss::Position{.y = 5, .x = pawnPosition.x}).has_value() && !state.board.At(chss::Position{.y = 4, .x = pawnPosition.x}).has_value())) {
+			if ((pawnPosition.y == 1 && state.activeColor == chss::Color::White &&
+				 !state.board.At(chss::Position{.y = 2, .x = pawnPosition.x}).has_value() &&
+				 !state.board.At(chss::Position{.y = 3, .x = pawnPosition.x}).has_value()) ||
+				(pawnPosition.y == 6 && state.activeColor == chss::Color::Black &&
+				 !state.board.At(chss::Position{.y = 5, .x = pawnPosition.x}).has_value() &&
+				 !state.board.At(chss::Position{.y = 4, .x = pawnPosition.x}).has_value())) {
+				return i;
+			}
+			break;
+		}
+		case 4:
+		case 5:
+		case 6:
+		case 7: { // Promotion
+			if ((position.y == 0 || position.y == 7) && !state.board.At(position).has_value()) {
+				assert(state.board.IsInside(position));
 				return i;
 			}
 			break;
@@ -62,8 +98,10 @@ public:
 			assert(mMoveOffsetIndex < kPawnMoveOffsets.size());
 			return chss::Move{
 				.from = mPawnPosition,
-				.to = mState.activeColor == chss::Color::White ? mPawnPosition + kPawnMoveOffsets[mMoveOffsetIndex] : mPawnPosition - kPawnMoveOffsets[mMoveOffsetIndex],
-				.promotionType = std::nullopt};
+				.to = mState.activeColor == chss::Color::White
+					? mPawnPosition + kPawnMoveOffsets[mMoveOffsetIndex].first
+					: mPawnPosition - kPawnMoveOffsets[mMoveOffsetIndex].first,
+				.promotionType = kPawnMoveOffsets[mMoveOffsetIndex].second};
 		}
 
 		constexpr Iterator& operator++() {
@@ -90,9 +128,13 @@ public:
 		: mState(state)
 		, mPawnPosition(pawnPosition) {}
 
-	[[nodiscard]] constexpr Iterator begin() const { return Iterator(mState, mPawnPosition); }
+	[[nodiscard]] constexpr Iterator begin() const {
+		return Iterator(mState, mPawnPosition);
+	}
 
-	[[nodiscard]] constexpr Sentinel end() const { return Sentinel{}; }
+	[[nodiscard]] constexpr Sentinel end() const {
+		return Sentinel{};
+	}
 
 private:
 	chss::State mState;
