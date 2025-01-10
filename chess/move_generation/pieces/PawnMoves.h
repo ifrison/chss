@@ -20,24 +20,27 @@ constexpr std::size_t FindNextPawnMoveOffsetIndex(
 	while (i < kPawnMoveOffsets.size()) {
 		const auto position = state.activeColor == chss::Color::White ? pawnPosition + kPawnMoveOffsets[i] : pawnPosition - kPawnMoveOffsets[i];
 		switch (i) {
-		case 0: // Advance
+		case 0: { // Advance
 			if (state.board.IsInside(position) && !state.board.At(position).has_value()) {
 				return i;
 			}
 			break;
-		case 1: // Capture left
-		case 2: // Capture right
+		}
+		case 1:
+		case 2: { // Capture
 			if (state.board.IsInside(position) &&
 				state.board.At(position).has_value() && state.board.At(position).value().color != state.activeColor) {
 				return i;
 			}
 			break;
-		case 3: // Double Advance
+		}
+		case 3: { // Double Advance
 			if ((pawnPosition.y == 1 && state.activeColor == chss::Color::White && !state.board.At(chss::Position{.y = 2, .x = pawnPosition.x}).has_value() && !state.board.At(chss::Position{.y = 3, .x = pawnPosition.x}).has_value()) ||
 				(pawnPosition.y == 6 && state.activeColor == chss::Color::White && !state.board.At(chss::Position{.y = 5, .x = pawnPosition.x}).has_value() && !state.board.At(chss::Position{.y = 4, .x = pawnPosition.x}).has_value())) {
 				return i;
 			}
 			break;
+		}
 		}
 		++i;
 	}
