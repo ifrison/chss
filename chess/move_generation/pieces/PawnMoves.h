@@ -50,8 +50,10 @@ constexpr std::size_t FindNextPawnMoveOffsetIndex(
 		}
 		case 1:
 		case 2: { // Capture
-			if (state.board.IsInside(position) && state.board.At(position).has_value() &&
-				state.board.At(position).value().color != state.activeColor) {
+			if (state.board.IsInside(position) &&
+				((state.board.At(position).has_value() &&
+				  state.board.At(position).value().color != state.activeColor) ||
+				 state.enPassantTargetSquare == position)) {
 				return i;
 			}
 			break;

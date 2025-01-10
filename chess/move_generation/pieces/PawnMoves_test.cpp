@@ -280,9 +280,25 @@ TEST_CASE("PawnMoves", "DontCaptureAtDistanceTwo_Black") {
 }
 
 TEST_CASE("PawnMoves", "CaptureEnPassant_White") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/8/8/2pP4/8/8/8/8 w - c6 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D5);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 2>{
+		chss::Move{.from = chss::positions::D5, .to = chss::positions::D6, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::D5, .to = chss::positions::C6, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
 }
 
 TEST_CASE("PawnMoves", "CaptureEnPassant_Black") {
-	// TODO
+	constexpr auto state = chss::fen::Parse("8/8/8/8/2Pp4/8/8/8 b - c3 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D4);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 2>{
+		chss::Move{.from = chss::positions::D4, .to = chss::positions::D3, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::D4, .to = chss::positions::C3, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
 }
