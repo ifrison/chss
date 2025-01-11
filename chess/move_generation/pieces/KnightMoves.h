@@ -32,7 +32,7 @@ constexpr std::size_t FindNextKnightMoveOffsetIndex(
 	return i;
 }
 
-class Generator {
+class KnightMovesGenerator {
 public:
 	class Sentinel {};
 
@@ -66,12 +66,12 @@ public:
 		}
 
 	private:
-		const chss::State& mState;
-		const chss::Position mKnightPosition;
+		chss::State mState;
+		chss::Position mKnightPosition;
 		std::size_t mMoveOffsetIndex;
 	};
 
-	constexpr explicit Generator(const chss::State& state, const chss::Position& knightPosition)
+	constexpr explicit KnightMovesGenerator(const chss::State& state, const chss::Position& knightPosition)
 		: mState(state)
 		, mKnightPosition(knightPosition) {}
 
@@ -93,7 +93,7 @@ private:
 namespace chss::move_generation {
 
 [[nodiscard]] constexpr auto KnightPseudoLegalMoves(const State& state, const Position& knightPosition) {
-	return detail::Generator(state, knightPosition);
+	return detail::KnightMovesGenerator(state, knightPosition);
 }
 
 } // namespace chss::move_generation

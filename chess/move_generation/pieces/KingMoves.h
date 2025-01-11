@@ -101,7 +101,7 @@ constexpr std::size_t FindNextKingMoveOffsetIndex(
 	return i;
 }
 
-class Generator {
+class KingMovesGenerator {
 public:
 	class Sentinel {};
 
@@ -135,12 +135,12 @@ public:
 		}
 
 	private:
-		const chss::State& mState;
-		const chss::Position mKingPosition;
+		chss::State mState;
+		chss::Position mKingPosition;
 		std::size_t mMoveOffsetIndex;
 	};
 
-	constexpr explicit Generator(const chss::State& state, const chss::Position& kingPosition)
+	constexpr explicit KingMovesGenerator(const chss::State& state, const chss::Position& kingPosition)
 		: mState(state)
 		, mKingPosition(kingPosition) {}
 
@@ -162,7 +162,7 @@ private:
 namespace chss::move_generation {
 
 [[nodiscard]] constexpr auto KingPseudoLegalMoves(const State& state, const Position& kingPosition) {
-	return detail::Generator(state, kingPosition);
+	return detail::KingMovesGenerator(state, kingPosition);
 }
 
 } // namespace chss::move_generation

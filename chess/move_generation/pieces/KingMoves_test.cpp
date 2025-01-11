@@ -357,3 +357,5 @@ TEST_CASE("KingMoves", "CastlingWithB8Threatened_QueenSide_Black") {
 	};
 	STATIC_REQUIRE(array == expectedResult);
 }
+
+// TODO: King can not castle when in check

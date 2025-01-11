@@ -54,7 +54,7 @@ constexpr std::pair<std::size_t, int> FindNextMoveOffsetIndexAndFactor(
 }
 
 template<std::size_t S, std::array<matrix::Direction2D, S> kMoveOffsets>
-class Generator {
+class SlidingPieceMovesGenerator {
 public:
 	class Sentinel {};
 
@@ -67,7 +67,7 @@ public:
 				  FindNextMoveOffsetIndexAndFactor<S, kMoveOffsets>(
 					  state,
 					  piecePosition,
-					  std::pair<std::size_t, int>{0, 1})) {}
+					  std::pair<std::size_t, int>(0, 1))) {}
 
 		[[nodiscard]] constexpr chss::Move operator*() const {
 			const auto [moveOffsetIndex, moveOffsetFactor] = mMoveOffsetIndexAndFactor;
@@ -109,12 +109,12 @@ public:
 		}
 
 	private:
-		const chss::State& mState;
-		const chss::Position mPiecePosition;
+		chss::State mState;
+		chss::Position mPiecePosition;
 		std::pair<std::size_t, int> mMoveOffsetIndexAndFactor;
 	};
 
-	constexpr explicit Generator(const chss::State& state, const chss::Position& knightPosition)
+	constexpr explicit SlidingPieceMovesGenerator(const chss::State& state, const chss::Position& knightPosition)
 		: mState(state)
 		, mPiecePosition(knightPosition) {}
 
@@ -136,15 +136,15 @@ private:
 namespace chss::move_generation {
 
 [[nodiscard]] constexpr auto BishopPseudoLegalMoves(const State& state, const Position& knightPosition) {
-	return detail::Generator<4, detail::kBishopMoveOffsets>(state, knightPosition);
+	return detail::SlidingPieceMovesGenerator<4, detail::kBishopMoveOffsets>(state, knightPosition);
 }
 
 [[nodiscard]] constexpr auto RookPseudoLegalMoves(const State& state, const Position& knightPosition) {
-	return detail::Generator<4, detail::kRookMoveOffsets>(state, knightPosition);
+	return detail::SlidingPieceMovesGenerator<4, detail::kRookMoveOffsets>(state, knightPosition);
 }
 
 [[nodiscard]] constexpr auto QueenPseudoLegalMoves(const State& state, const Position& knightPosition) {
-	return detail::Generator<8, detail::kQueenMoveOffsets>(state, knightPosition);
+	return detail::SlidingPieceMovesGenerator<8, detail::kQueenMoveOffsets>(state, knightPosition);
 }
 
 } // namespace chss::move_generation

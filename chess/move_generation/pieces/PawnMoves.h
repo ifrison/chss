@@ -85,7 +85,7 @@ constexpr std::size_t FindNextPawnMoveOffsetIndex(
 	return i;
 }
 
-class Generator {
+class PawnMovesGenerator {
 public:
 	class Sentinel {};
 
@@ -121,12 +121,12 @@ public:
 		}
 
 	private:
-		const chss::State& mState;
-		const chss::Position mPawnPosition;
+		chss::State mState;
+		chss::Position mPawnPosition;
 		std::size_t mMoveOffsetIndex;
 	};
 
-	constexpr explicit Generator(const chss::State& state, const chss::Position& pawnPosition)
+	constexpr explicit PawnMovesGenerator(const chss::State& state, const chss::Position& pawnPosition)
 		: mState(state)
 		, mPawnPosition(pawnPosition) {}
 
@@ -148,7 +148,7 @@ private:
 namespace chss::move_generation {
 
 [[nodiscard]] constexpr auto PawnPseudoLegalMoves(const State& state, const Position& pawnPosition) {
-	return detail::Generator(state, pawnPosition);
+	return detail::PawnMovesGenerator(state, pawnPosition);
 }
 
 } // namespace chss::move_generation
