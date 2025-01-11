@@ -1,6 +1,5 @@
 #pragma once
 
-#include "chess/fen/Fen.h"
 #include "chess/move_generation/pieces/KingMoves.h"
 #include "chess/move_generation/pieces/KnightMoves.h"
 #include "chess/move_generation/pieces/PawnMoves.h"
