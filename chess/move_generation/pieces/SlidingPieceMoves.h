@@ -30,13 +30,18 @@ constexpr auto kQueenMoveOffsets = std::array<matrix::Direction2D, 8>{
 	matrix::Direction2D{.deltaY = +1, .deltaX = +1},
 };
 
+struct MoveOffsetIndexAndFactor {
+	std::size_t index;
+	int factor;
+};
+
 template<std::size_t S, std::array<matrix::Direction2D, S> kMoveOffsets>
-constexpr std::pair<std::size_t, int> FindNextMoveOffsetIndexAndFactor(
+constexpr MoveOffsetIndexAndFactor FindNextMoveOffsetIndexAndFactor(
 	const chss::State& state,
 	const chss::Position& piecePosition,
-	const std::pair<std::size_t, int> startIndexAndFactor) {
-	std::size_t i = startIndexAndFactor.first;
-	int f = startIndexAndFactor.second;
+	const MoveOffsetIndexAndFactor startIndexAndFactor) {
+	std::size_t i = startIndexAndFactor.index;
+	int f = startIndexAndFactor.factor;
 	if (f == 8) {
 		f = 1;
 		++i;
@@ -45,12 +50,12 @@ constexpr std::pair<std::size_t, int> FindNextMoveOffsetIndexAndFactor(
 		const auto position = piecePosition + kMoveOffsets[i] * f;
 		if (state.board.IsInside(position) &&
 			(!state.board.At(position) || state.board.At(position).value().color != state.activeColor)) {
-			return std::pair<std::size_t, int>(i, f);
+			return MoveOffsetIndexAndFactor{.index = i, .factor = f};
 		}
 		f = 1;
 		++i;
 	}
-	return std::pair<std::size_t, int>(i, f);
+	return MoveOffsetIndexAndFactor{.index = i, .factor = f};
 }
 
 template<std::size_t S, std::array<matrix::Direction2D, S> kMoveOffsets>
@@ -67,7 +72,7 @@ public:
 				  FindNextMoveOffsetIndexAndFactor<S, kMoveOffsets>(
 					  state,
 					  piecePosition,
-					  std::pair<std::size_t, int>(0, 1))) {}
+					  MoveOffsetIndexAndFactor{.index = 0, .factor = 1})) {}
 
 		[[nodiscard]] constexpr chss::Move operator*() const {
 			const auto [moveOffsetIndex, moveOffsetFactor] = mMoveOffsetIndexAndFactor;
@@ -88,12 +93,12 @@ public:
 				mMoveOffsetIndexAndFactor = FindNextMoveOffsetIndexAndFactor<S, kMoveOffsets>(
 					mState,
 					mPiecePosition,
-					std::pair<std::size_t, int>{moveOffsetIndex + 1, 1});
+					MoveOffsetIndexAndFactor{.index = moveOffsetIndex + 1, .factor = 1});
 			} else {
 				mMoveOffsetIndexAndFactor = FindNextMoveOffsetIndexAndFactor<S, kMoveOffsets>(
 					mState,
 					mPiecePosition,
-					std::pair<std::size_t, int>{moveOffsetIndex, moveOffsetFactor + 1});
+					MoveOffsetIndexAndFactor{.index = moveOffsetIndex, .factor = moveOffsetFactor + 1});
 			}
 			return *this;
 		}
@@ -111,7 +116,7 @@ public:
 	private:
 		chss::State mState;
 		chss::Position mPiecePosition;
-		std::pair<std::size_t, int> mMoveOffsetIndexAndFactor;
+		MoveOffsetIndexAndFactor mMoveOffsetIndexAndFactor;
 	};
 
 	constexpr explicit SlidingPieceMovesGenerator(const chss::State& state, const chss::Position& knightPosition)
