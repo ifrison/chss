@@ -1,4 +1,4 @@
-#include "Moves.h"
+#include "PseudoLegalMoves.h"
 
 #include "chess/DebugUtils.h"
 #include "chess/fen/Fen.h"
@@ -31,7 +31,7 @@ constexpr std::array<T, S> GeneratorToArray(const Generator& generator) {
 
 } // namespace
 
-TEST_CASE("Moves", "AllPieces_White") {
+TEST_CASE("PseudoLegalMoves", "AllPieces_White") {
 	constexpr auto state = chss::fen::Parse("8/8/8/1PNBRQK1/8/8/8/8 w - - 0 1");
 	constexpr auto generator = chss::move_generation::PseudoLegalMoves(state);
 	constexpr auto size = GeneratorSize(generator);
