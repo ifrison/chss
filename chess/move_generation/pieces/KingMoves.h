@@ -1,5 +1,6 @@
 #pragma once
 
+#include "chess/move_generation/IsInCheck.h"
 #include "chess/representation/Move.h"
 #include "chess/representation/State.h"
 
@@ -53,15 +54,15 @@ constexpr std::size_t FindNextKingMoveOffsetIndex(
 					const auto to = chss::Position{.y = y, .x = x};
 					isInBetweenEmpty = isInBetweenEmpty && !state.board.At(to).has_value();
 				}
-				const bool isInBetweenSafe = true;
-				// bool isInBetweenSafe = !chss::move_generation::IsInCheck(state.board, state.activeColor);
-				// for (int x = 3; x >= 2; --x) {
-				// 	const auto inBetweenPosition = chss::Position{.y = y, .x = x};
-				// 	auto newBoard = state.board;
-				// 	newBoard.At(inBetweenPosition) = newBoard.At(kingPosition);
-				// 	newBoard.At(kingPosition) = std::nullopt;
-				// 	isInBetweenSafe = isInBetweenSafe && !chss::move_generation::IsInCheck(newBoard, state.activeColor);
-				// }
+				bool isInBetweenSafe = !chss::move_generation::IsInCheck(state.board, state.activeColor, kingPosition);
+				for (int x = 3; x >= 2; --x) {
+					const auto inBetweenPosition = chss::Position{.y = y, .x = x};
+					auto newBoard = state.board;
+					newBoard.At(inBetweenPosition) = newBoard.At(kingPosition);
+					newBoard.At(kingPosition) = std::nullopt;
+					isInBetweenSafe = isInBetweenSafe &&
+						!chss::move_generation::IsInCheck(newBoard, state.activeColor, inBetweenPosition);
+				}
 				if (isInBetweenEmpty && isInBetweenSafe) {
 					return i;
 				}
@@ -79,15 +80,15 @@ constexpr std::size_t FindNextKingMoveOffsetIndex(
 					const auto to = chss::Position{.y = y, .x = x};
 					isInBetweenEmpty = isInBetweenEmpty && !state.board.At(to).has_value();
 				}
-				const bool isInBetweenSafe = true;
-				// bool isInBetweenSafe = !chss::move_generation::IsInCheck(state.board, state.activeColor);
-				// for (int x = 5; x <= 6; ++x) {
-				// 	const auto inBetweenPosition = chss::Position{.y = y, .x = x};
-				// 	auto newBoard = state.board;
-				// 	newBoard.At(inBetweenPosition) = newBoard.At(kingPosition);
-				// 	newBoard.At(kingPosition) = std::nullopt;
-				// 	isInBetweenSafe = isInBetweenSafe && !chss::move_generation::IsInCheck(newBoard, state.activeColor);
-				// }
+				bool isInBetweenSafe = !chss::move_generation::IsInCheck(state.board, state.activeColor, kingPosition);
+				for (int x = 5; x <= 6; ++x) {
+					const auto inBetweenPosition = chss::Position{.y = y, .x = x};
+					auto newBoard = state.board;
+					newBoard.At(inBetweenPosition) = newBoard.At(kingPosition);
+					newBoard.At(kingPosition) = std::nullopt;
+					isInBetweenSafe = isInBetweenSafe &&
+						!chss::move_generation::IsInCheck(newBoard, state.activeColor, inBetweenPosition);
+				}
 				if (isInBetweenEmpty && isInBetweenSafe) {
 					return i;
 				}

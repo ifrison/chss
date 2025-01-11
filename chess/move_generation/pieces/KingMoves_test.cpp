@@ -265,6 +265,95 @@ TEST_CASE("KingMoves", "NoCastlingInBetween_KingSide_Black") {
 }
 
 // No castling with unsafe squares in between
-// TODO: No castling (Queen Side) without safe squares in between (Black + White)
-// TODO: No castling (Queen Side) without safe squares in between but b1&b8 is ok (Black + White)
-// TODO: No castling (King Side) without safe squares in between (Black + White)
+TEST_CASE("KingMoves", "NoCastlingUnsafe_QueenSide_White") {
+	constexpr auto state = chss::fen::Parse("8/8/8/6b1/8/8/8/R3K3 w Q - 0 1");
+	constexpr auto generator = chss::move_generation::KingPseudoLegalMoves(state, chss::positions::E1);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 5>{
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::D1, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::F1, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::D2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::E2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::F2, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
+TEST_CASE("KingMoves", "NoCastlingUnsafe_QueenSide_Black") {
+	constexpr auto state = chss::fen::Parse("r3k3/8/8/8/8/2R5/8/8 b q - 0 1");
+	constexpr auto generator = chss::move_generation::KingPseudoLegalMoves(state, chss::positions::E8);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 5>{
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::D7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::E7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::F7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::D8, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::F8, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
+TEST_CASE("KingMoves", "NoCastlingUnsafe_KingSide_White") {
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/7n/8/4K2R w K - 0 1");
+	constexpr auto generator = chss::move_generation::KingPseudoLegalMoves(state, chss::positions::E1);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 5>{
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::D1, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::F1, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::D2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::E2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::F2, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
+TEST_CASE("KingMoves", "NoCastlingUnsafe_KingSide_Black") {
+	constexpr auto state = chss::fen::Parse("4k2r/8/8/5Q2/8/8/8/8 b k - 0 1");
+	constexpr auto generator = chss::move_generation::KingPseudoLegalMoves(state, chss::positions::E8);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 5>{
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::D7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::E7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::F7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::D8, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::F8, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
+// Castling Queen Side with B1 or B8 threatened
+TEST_CASE("KingMoves", "CastlingWithB1Threatened_QueenSide_White") {
+	constexpr auto state = chss::fen::Parse("8/8/8/8/4b3/8/8/R3K3 w Q - 0 1");
+	constexpr auto generator = chss::move_generation::KingPseudoLegalMoves(state, chss::positions::E1);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 6>{
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::D1, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::F1, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::D2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::E2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::F2, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E1, .to = chss::positions::C1, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
+TEST_CASE("KingMoves", "CastlingWithB8Threatened_QueenSide_Black") {
+	constexpr auto state = chss::fen::Parse("r3k3/P7/8/8/8/8/8/8 b q - 0 1");
+	constexpr auto generator = chss::move_generation::KingPseudoLegalMoves(state, chss::positions::E8);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 6>{
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::D7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::E7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::F7, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::D8, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::F8, .promotionType = std::nullopt},
+		chss::Move{.from = chss::positions::E8, .to = chss::positions::C8, .promotionType = std::nullopt},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
