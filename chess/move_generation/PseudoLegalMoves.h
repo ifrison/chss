@@ -210,7 +210,7 @@ struct MovePositionAndPieceState {
 		startMove.pieceState);
 }
 
-class MovesGenerator {
+class PseudoLegalMovesGenerator {
 public:
 	class Sentinel {};
 
@@ -246,7 +246,7 @@ public:
 		MovePositionAndPieceState mPositionAndPieceState;
 	};
 
-	constexpr explicit MovesGenerator(const chss::State& state)
+	constexpr explicit PseudoLegalMovesGenerator(const chss::State& state)
 		: mState(state) {}
 
 	[[nodiscard]] constexpr Iterator begin() const {
@@ -266,7 +266,7 @@ private:
 namespace chss::move_generation {
 
 [[nodiscard]] constexpr auto PseudoLegalMoves(const State& state) {
-	return detail::MovesGenerator(state);
+	return detail::PseudoLegalMovesGenerator(state);
 }
 
 } // namespace chss::move_generation
