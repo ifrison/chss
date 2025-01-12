@@ -6,7 +6,9 @@
 #include "chess/Movements.h"
 #include "chess/representation/Move.h"
 #include "chess/representation/State.h"
+#include "chess/move_generation/MakeMove.h"
 
+#include <chess/move_generation/pieces/KingMoves.h>
 #include <concurrency/TaskQueue.h>
 
 #include <fstream>
@@ -86,7 +88,7 @@ void UCI(std::istream& in, std::ostream& out) {
 	auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	auto taskQueue = concurrency::TaskQueue(1);
 	auto stop = std::atomic_flag(false);
-	auto searchResult = std::future<std::tuple<Move, Move, int>>();
+	auto searchResult = std::future<std::pair<Move, int>>();
 
 	auto command = std::string();
 	while (getline(in, command)) {
@@ -109,7 +111,7 @@ void UCI(std::istream& in, std::ostream& out) {
 					assert(tokens[2] == "moves");
 					for (size_t i = 3; i < tokens.size(); ++i) {
 						const auto move = ParseMove(tokens[i]);
-						state = chss::MoveGeneration::MakeMove(state, move);
+						state = chss::move_generation::MakeMove(state, move);
 					}
 				}
 			} else if (tokens[1] == "fen") {
@@ -121,7 +123,7 @@ void UCI(std::istream& in, std::ostream& out) {
 					assert(tokens[8] == "moves");
 					for (size_t i = 9; i < tokens.size(); ++i) {
 						const auto move = ParseMove(tokens[i]);
-						state = chss::MoveGeneration::MakeMove(state, move);
+						state = chss::move_generation::MakeMove(state, move);
 					}
 				}
 			} else {
@@ -139,26 +141,25 @@ void UCI(std::istream& in, std::ostream& out) {
 			} else if (tokens[1] == "movetime") {
 				const auto time = std::stoi(tokens[2]) - 1000;
 				stop.clear();
-				searchResult = taskQueue.PushBack(std::function<std::tuple<Move, Move, int>()>([&stop, state]() {
+				searchResult = taskQueue.PushBack(std::function<std::pair<Move, int>()>([&stop, state]() {
 					const auto neverStop = std::atomic_flag(false);
-					auto [bestMove, bestPonderMove] = search::Search(state, 2, neverStop);
+					auto [s1, bestMove] = search::SearchMove(state, 2, neverStop);
 					auto bestDepth = 2;
 					for (int depth = 3; depth < 100; ++depth) {
 						if (stop.test()) {
 							break;
 						}
-						const auto [move, ponderMove] = search::Search(state, depth, stop);
+						const auto [s2, move] = search::SearchMove(state, depth, stop);
 						if (!stop.test()) {
 							bestMove = move;
-							bestPonderMove = ponderMove;
 							bestDepth = depth;
 						}
 					}
-					return std::tuple<Move, Move, int>(bestMove, bestPonderMove, bestDepth);
+					return std::pair<Move, int>(bestMove, bestDepth);
 				}));
 				searchResult.wait_for(std::chrono::milliseconds(time));
 				stop.test_and_set();
-				const auto [move, ponderMove, depth] = searchResult.get();
+				const auto [move, depth] = searchResult.get();
 				const auto fromStr = std::string(debug::PositionToString(move.from));
 				const auto toStr = std::string(debug::PositionToString(move.to));
 				const auto promotionStr = PromotionToString(move.promotionType);
@@ -174,7 +175,7 @@ void UCI(std::istream& in, std::ostream& out) {
 		} else if (tokens[0] == "stop") {
 			stop.test_and_set();
 			searchResult.wait();
-			const auto [move, ponderMove, depth] = searchResult.get();
+			const auto [move, depth] = searchResult.get();
 			const auto fromStr = std::string(debug::PositionToString(move.from));
 			const auto toStr = std::string(debug::PositionToString(move.to));
 			const auto promotionStr = PromotionToString(move.promotionType);
