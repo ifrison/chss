@@ -5,10 +5,11 @@
 namespace chss::move_generation {
 
 [[nodiscard]] constexpr chss::Position FindKing(const chss::Board& board, const chss::Color color) {
-	for (const auto position : ForEach(board.GetSize())) {
-		const auto pieceOpt = board.At(position);
+	const auto& boardData = board.GetData();
+	for (std::size_t i = 0; i < boardData.size(); ++i) {
+		const auto pieceOpt = boardData[i];
 		if (pieceOpt.has_value() && pieceOpt.value() == Piece{.type = PieceType::King, .color = color}) {
-			return position;
+			return chss::Position{.y = static_cast<int>(i / 8), .x = static_cast<int>(i % 8)};
 		}
 	}
 	assert(false);

@@ -169,6 +169,14 @@ public:
 		return matrix::IsInside(S, position);
 	}
 
+	[[nodiscard]] constexpr const std::array<T, S.sizeY * S.sizeX>& GetData() const {
+		return mData;
+	}
+
+	[[nodiscard]] constexpr std::array<T, S.sizeY * S.sizeX>& GetData() {
+		return mData;
+	}
+
 	[[nodiscard]] constexpr bool operator==(const Matrix2D& other) const = default;
 
 private:
