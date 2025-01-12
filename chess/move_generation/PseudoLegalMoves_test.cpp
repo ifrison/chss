@@ -1,11 +1,8 @@
 #include "PseudoLegalMoves.h"
 
-#include "chess/DebugUtils.h"
 #include "chess/fen/Fen.h"
 
 #include <test_utils/TestUtils.h>
-
-#include <iostream>
 
 namespace {
 
