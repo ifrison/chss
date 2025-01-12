@@ -207,6 +207,50 @@ TEST_CASE("PawnMoves", "Capture_Black") {
 	STATIC_REQUIRE(array == expectedResult);
 }
 
+TEST_CASE("PawnMoves", "CaptureAndPromotion_White") {
+	constexpr auto state = chss::fen::Parse("2n1b3/3P4/8/8/8/8/8/8 w - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D7);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 12>{
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::D8, .promotionType = chss::PieceType::Queen},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::C8, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::C8, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::C8, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::C8, .promotionType = chss::PieceType::Queen},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::E8, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::E8, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::E8, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D7, .to = chss::positions::E8, .promotionType = chss::PieceType::Queen},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
+TEST_CASE("PawnMoves", "CaptureAndPromotion_Black") {
+	constexpr auto state = chss::fen::Parse("8/8/8/8/8/8/3p4/2N1B3 b - - 0 1");
+	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::D2);
+	constexpr auto size = GeneratorSize(generator);
+	constexpr auto array = GeneratorToArray<chss::Move, size>(generator);
+	constexpr auto expectedResult = std::array<chss::Move, 12>{
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::D1, .promotionType = chss::PieceType::Queen},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::E1, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::E1, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::E1, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::E1, .promotionType = chss::PieceType::Queen},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::C1, .promotionType = chss::PieceType::Knight},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::C1, .promotionType = chss::PieceType::Bishop},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::C1, .promotionType = chss::PieceType::Rook},
+		chss::Move{.from = chss::positions::D2, .to = chss::positions::C1, .promotionType = chss::PieceType::Queen},
+	};
+	STATIC_REQUIRE(array == expectedResult);
+}
+
 TEST_CASE("PawnMoves", "Capture_WhileOnLeftEdge_White") {
 	constexpr auto state = chss::fen::Parse("8/8/1q6/P7/8/8/8/8 w - - 0 1");
 	constexpr auto generator = chss::move_generation::PawnPseudoLegalMoves(state, chss::positions::A5);

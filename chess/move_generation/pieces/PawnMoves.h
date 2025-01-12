@@ -5,18 +5,9 @@
 
 namespace detail {
 
-constexpr auto kPawnMoveOffsets = std::array<std::pair<matrix::Direction2D, std::optional<chss::PieceType>>, 8>{
+constexpr auto kPawnMoveOffsets = std::array<std::pair<matrix::Direction2D, std::optional<chss::PieceType>>, 16>{
 	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
 		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
-		std::nullopt),
-	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
-		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
-		std::nullopt),
-	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
-		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
-		std::nullopt),
-	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
-		matrix::Direction2D{.deltaY = +2, .deltaX = 0},
 		std::nullopt),
 	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
 		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
@@ -30,6 +21,39 @@ constexpr auto kPawnMoveOffsets = std::array<std::pair<matrix::Direction2D, std:
 	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
 		matrix::Direction2D{.deltaY = +1, .deltaX = 0},
 		chss::PieceType::Queen),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		std::nullopt),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
+		std::nullopt),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		chss::PieceType::Knight),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		chss::PieceType::Bishop),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		chss::PieceType::Rook),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = -1},
+		chss::PieceType::Queen),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
+		chss::PieceType::Knight),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
+		chss::PieceType::Bishop),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
+		chss::PieceType::Rook),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +1, .deltaX = +1},
+		chss::PieceType::Queen),
+	std::pair<matrix::Direction2D, std::optional<chss::PieceType>>(
+		matrix::Direction2D{.deltaY = +2, .deltaX = 0},
+		std::nullopt),
 };
 
 constexpr std::size_t FindNextPawnMoveOffsetIndex(
@@ -49,8 +73,18 @@ constexpr std::size_t FindNextPawnMoveOffsetIndex(
 			break;
 		}
 		case 1:
-		case 2: { // Capture
-			if (state.board.IsInside(position) &&
+		case 2:
+		case 3:
+		case 4: { // Advance + Promotion
+			 if ((position.y == 0 || position.y == 7) && !state.board.At(position).has_value()) {
+				assert(state.board.IsInside(position));
+				return i;
+			}
+			break;
+		}
+		case 5:
+		case 6: { // Capture left and right
+			if (state.board.IsInside(position) && (position.y > 0 && position.y < 7) &&
 				((state.board.At(position).has_value() &&
 				  state.board.At(position).value().color != state.activeColor) ||
 				 state.enPassantTargetSquare == position)) {
@@ -58,23 +92,29 @@ constexpr std::size_t FindNextPawnMoveOffsetIndex(
 			}
 			break;
 		}
-		case 3: { // Double Advance
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14: { // Capture + Promotion
+			if (state.board.IsInside(position) && (position.y == 0 || position.y == 7) &&
+				((state.board.At(position).has_value() &&
+				  state.board.At(position).value().color != state.activeColor) ||
+				 state.enPassantTargetSquare == position)) {
+				return i;
+			}
+			break;
+		}
+		case 15: { // Double Advance
 			if ((pawnPosition.y == 1 && state.activeColor == chss::Color::White &&
 				 !state.board.At(chss::Position{.y = 2, .x = pawnPosition.x}).has_value() &&
 				 !state.board.At(chss::Position{.y = 3, .x = pawnPosition.x}).has_value()) ||
 				(pawnPosition.y == 6 && state.activeColor == chss::Color::Black &&
 				 !state.board.At(chss::Position{.y = 5, .x = pawnPosition.x}).has_value() &&
 				 !state.board.At(chss::Position{.y = 4, .x = pawnPosition.x}).has_value())) {
-				return i;
-			}
-			break;
-		}
-		case 4:
-		case 5:
-		case 6:
-		case 7: { // Promotion
-			if ((position.y == 0 || position.y == 7) && !state.board.At(position).has_value()) {
-				assert(state.board.IsInside(position));
 				return i;
 			}
 			break;
