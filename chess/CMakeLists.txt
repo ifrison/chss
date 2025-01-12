@@ -1,6 +1,5 @@
 add_executable(chess)
 target_sources(chess PRIVATE
-        Movements.cpp
         chess.cpp)
 target_link_libraries(chess
         matrix
@@ -10,7 +9,6 @@ target_link_libraries(chess
 add_executable(chess_tests)
 target_sources(chess_tests PRIVATE
         DebugUtils_test.cpp
-        Movements.cpp
         Perft_test.cpp
         MinMax_test.cpp)
 target_link_libraries(chess_tests

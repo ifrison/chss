@@ -3,7 +3,6 @@
 #include "chess/DebugUtils.h"
 #include "chess/fen/Fen.h"
 #include "chess/MinMax.h"
-#include "chess/Movements.h"
 #include "chess/representation/Move.h"
 #include "chess/representation/State.h"
 #include "chess/move_generation/MakeMove.h"
