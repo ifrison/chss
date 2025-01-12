@@ -1,6 +1,5 @@
 add_executable(chess)
 target_sources(chess PRIVATE
-        PieceMovements.cpp
         Movements.cpp
         Perft.cpp
         MinMax.cpp
@@ -13,10 +12,7 @@ target_link_libraries(chess
 add_executable(chess_tests)
 target_sources(chess_tests PRIVATE
         DebugUtils_test.cpp
-        PieceMovements.cpp
-        PieceMovements_test.cpp
         Movements.cpp
-        Movements_test.cpp
         Perft.cpp
         Perft_test.cpp
         MinMax.cpp
