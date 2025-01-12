@@ -95,48 +95,86 @@ struct MovePositionAndPieceState {
 };
 
 [[nodiscard]] constexpr MovePositionAndPieceState FindFirstMove(const chss::State& state) {
-	for (chss::Position position : matrix::ForEach(state.board.GetSize())) {
-		const auto& pieceOpt = state.board.At(position);
-		if (pieceOpt.has_value() && pieceOpt.value().color == state.activeColor) {
-			switch (pieceOpt.value().type) {
-			case chss::PieceType::Pawn:
-				return MovePositionAndPieceState{
-					.position = position,
-					.pieceState = PawnState{
-						.it = chss::move_generation::PawnPseudoLegalMoves(state, position).begin(),
-						.end = chss::move_generation::PawnPseudoLegalMoves(state, position).end()}};
-			case chss::PieceType::Knight:
-				return MovePositionAndPieceState{
-					.position = position,
-					.pieceState = KnightState{
-						.it = chss::move_generation::KnightPseudoLegalMoves(state, position).begin(),
-						.end = chss::move_generation::KnightPseudoLegalMoves(state, position).end()}};
-			case chss::PieceType::Bishop:
-				return MovePositionAndPieceState{
-					.position = position,
-					.pieceState = BishopState{
-						.it = chss::move_generation::BishopPseudoLegalMoves(state, position).begin(),
-						.end = chss::move_generation::BishopPseudoLegalMoves(state, position).end()}};
-			case chss::PieceType::Rook:
-				return MovePositionAndPieceState{
-					.position = position,
-					.pieceState = RookState{
-						.it = chss::move_generation::RookPseudoLegalMoves(state, position).begin(),
-						.end = chss::move_generation::RookPseudoLegalMoves(state, position).end()}};
-			case chss::PieceType::Queen:
-				return MovePositionAndPieceState{
-					.position = position,
-					.pieceState = QueenState{
-						.it = chss::move_generation::QueenPseudoLegalMoves(state, position).begin(),
-						.end = chss::move_generation::QueenPseudoLegalMoves(state, position).end()}};
-			case chss::PieceType::King:
-				return MovePositionAndPieceState{
-					.position = position,
-					.pieceState = KingState{
-						.it = chss::move_generation::KingPseudoLegalMoves(state, position).begin(),
-						.end = chss::move_generation::KingPseudoLegalMoves(state, position).end()}};
+	int y = 0;
+	int x = 0;
+	while (y < state.board.GetSize().sizeY) {
+		while (x < state.board.GetSize().sizeX) {
+			const auto position = chss::Position{.y = y, .x = x};
+			const auto& pieceOpt = state.board.At(position);
+			if (pieceOpt.has_value() && pieceOpt.value().color == state.activeColor) {
+				switch (pieceOpt.value().type) {
+				case chss::PieceType::Pawn: {
+					const auto pawnGenerator = chss::move_generation::PawnPseudoLegalMoves(state, position);
+					auto it = pawnGenerator.begin();
+					auto end = pawnGenerator.end();
+					if (it != end) {
+						return MovePositionAndPieceState{
+							.position = position,
+							.pieceState = PawnState{.it = std::move(it), .end = std::move(end)}};
+					}
+					break;
+				}
+				case chss::PieceType::Knight: {
+					const auto knightGenerator = chss::move_generation::KnightPseudoLegalMoves(state, position);
+					auto it = knightGenerator.begin();
+					auto end = knightGenerator.end();
+					if (it != end) {
+						return MovePositionAndPieceState{
+							.position = position,
+							.pieceState = KnightState{.it = std::move(it), .end = std::move(end)}};
+					}
+					break;
+				}
+				case chss::PieceType::Bishop: {
+					const auto bishopGenerator = chss::move_generation::BishopPseudoLegalMoves(state, position);
+					auto it = bishopGenerator.begin();
+					auto end = bishopGenerator.end();
+					if (it != end) {
+						return MovePositionAndPieceState{
+							.position = position,
+							.pieceState = BishopState{.it = std::move(it), .end = std::move(end)}};
+					}
+					break;
+				}
+				case chss::PieceType::Rook: {
+					const auto rookGenerator = chss::move_generation::RookPseudoLegalMoves(state, position);
+					auto it = rookGenerator.begin();
+					auto end = rookGenerator.end();
+					if (it != end) {
+						return MovePositionAndPieceState{
+							.position = position,
+							.pieceState = RookState{.it = std::move(it), .end = std::move(end)}};
+					}
+					break;
+				}
+				case chss::PieceType::Queen: {
+					const auto queenGenerator = chss::move_generation::QueenPseudoLegalMoves(state, position);
+					auto it = queenGenerator.begin();
+					auto end = queenGenerator.end();
+					if (it != end) {
+						return MovePositionAndPieceState{
+							.position = position,
+							.pieceState = QueenState{.it = std::move(it), .end = std::move(end)}};
+					}
+					break;
+				}
+				case chss::PieceType::King: {
+					const auto kingGenerator = chss::move_generation::KingPseudoLegalMoves(state, position);
+					auto it = kingGenerator.begin();
+					auto end = kingGenerator.end();
+					if (it != end) {
+						return MovePositionAndPieceState{
+							.position = position,
+							.pieceState = KingState{.it = std::move(it), .end = std::move(end)}};
+					}
+					break;
+				}
+				}
 			}
+			++x;
 		}
+		x = 0;
+		++y;
 	}
 	assert(false);
 	return MovePositionAndPieceState{
@@ -155,51 +193,86 @@ struct MovePositionAndPieceState {
 			if (pieceState.it != pieceState.end) {
 				return MovePositionAndPieceState{.position = position, .pieceState = pieceState};
 			}
-			for (int y = position.y; y < state.board.GetSize().sizeY; ++y) {
-				for (int x = position.x + 1; x < state.board.GetSize().sizeX; ++x) {
+			int y = position.y;
+			int x = position.x + 1;
+			while (y < state.board.GetSize().sizeY) {
+				while (x < state.board.GetSize().sizeX) {
 					const auto newPosition = chss::Position{.y = y, .x = x};
 					const auto& pieceOpt = state.board.At(newPosition);
 					if (pieceOpt.has_value() && pieceOpt.value().color == state.activeColor) {
 						switch (pieceOpt.value().type) {
-						case chss::PieceType::Pawn:
-							return MovePositionAndPieceState{
-								.position = newPosition,
-								.pieceState = PawnState{
-									.it = chss::move_generation::PawnPseudoLegalMoves(state, newPosition).begin(),
-									.end = chss::move_generation::PawnPseudoLegalMoves(state, newPosition).end()}};
-						case chss::PieceType::Knight:
-							return MovePositionAndPieceState{
-								.position = newPosition,
-								.pieceState = KnightState{
-									.it = chss::move_generation::KnightPseudoLegalMoves(state, newPosition).begin(),
-									.end = chss::move_generation::KnightPseudoLegalMoves(state, newPosition).end()}};
-						case chss::PieceType::Bishop:
-							return MovePositionAndPieceState{
-								.position = newPosition,
-								.pieceState = BishopState{
-									.it = chss::move_generation::BishopPseudoLegalMoves(state, newPosition).begin(),
-									.end = chss::move_generation::BishopPseudoLegalMoves(state, newPosition).end()}};
-						case chss::PieceType::Rook:
-							return MovePositionAndPieceState{
-								.position = newPosition,
-								.pieceState = RookState{
-									.it = chss::move_generation::RookPseudoLegalMoves(state, newPosition).begin(),
-									.end = chss::move_generation::RookPseudoLegalMoves(state, newPosition).end()}};
-						case chss::PieceType::Queen:
-							return MovePositionAndPieceState{
-								.position = newPosition,
-								.pieceState = QueenState{
-									.it = chss::move_generation::QueenPseudoLegalMoves(state, newPosition).begin(),
-									.end = chss::move_generation::QueenPseudoLegalMoves(state, newPosition).end()}};
-						case chss::PieceType::King:
-							return MovePositionAndPieceState{
-								.position = newPosition,
-								.pieceState = KingState{
-									.it = chss::move_generation::KingPseudoLegalMoves(state, newPosition).begin(),
-									.end = chss::move_generation::KingPseudoLegalMoves(state, newPosition).end()}};
+						case chss::PieceType::Pawn: {
+							const auto pawnGenerator = chss::move_generation::PawnPseudoLegalMoves(state, newPosition);
+							auto it = pawnGenerator.begin();
+							auto end = pawnGenerator.end();
+							if (it != end) {
+								return MovePositionAndPieceState{
+									.position = newPosition,
+									.pieceState = PawnState{.it = std::move(it), .end = std::move(end)}};
+							}
+							break;
+						}
+						case chss::PieceType::Knight: {
+							const auto knightGenerator = chss::move_generation::KnightPseudoLegalMoves(state, newPosition);
+							auto it = knightGenerator.begin();
+							auto end = knightGenerator.end();
+							if (it != end) {
+								return MovePositionAndPieceState{
+									.position = newPosition,
+									.pieceState = KnightState{.it = std::move(it), .end = std::move(end)}};
+							}
+							break;
+						}
+						case chss::PieceType::Bishop: {
+							const auto bishopGenerator = chss::move_generation::BishopPseudoLegalMoves(state, newPosition);
+							auto it = bishopGenerator.begin();
+							auto end = bishopGenerator.end();
+							if (it != end) {
+								return MovePositionAndPieceState{
+									.position = newPosition,
+									.pieceState = BishopState{.it = std::move(it), .end = std::move(end)}};
+							}
+							break;
+						}
+						case chss::PieceType::Rook: {
+							const auto rookGenerator = chss::move_generation::RookPseudoLegalMoves(state, newPosition);
+							auto it = rookGenerator.begin();
+							auto end = rookGenerator.end();
+							if (it != end) {
+								return MovePositionAndPieceState{
+									.position = newPosition,
+									.pieceState = RookState{.it = std::move(it), .end = std::move(end)}};
+							}
+							break;
+						}
+						case chss::PieceType::Queen: {
+							const auto queenGenerator = chss::move_generation::QueenPseudoLegalMoves(state, newPosition);
+							auto it = queenGenerator.begin();
+							auto end = queenGenerator.end();
+							if (it != end) {
+								return MovePositionAndPieceState{
+									.position = newPosition,
+									.pieceState = QueenState{.it = std::move(it), .end = std::move(end)}};
+							}
+							break;
+						}
+						case chss::PieceType::King: {
+							const auto kingGenerator = chss::move_generation::KingPseudoLegalMoves(state, newPosition);
+							auto it = kingGenerator.begin();
+							auto end = kingGenerator.end();
+							if (it != end) {
+								return MovePositionAndPieceState{
+									.position = newPosition,
+									.pieceState = KingState{.it = std::move(it), .end = std::move(end)}};
+							}
+							break;
+						}
 						}
 					}
+					++x;
 				}
+				x = 0;
+				++y;
 			}
 			return MovePositionAndPieceState{
 				.position = chss::Position{.y = state.board.GetSize().sizeY, .x = state.board.GetSize().sizeX},
@@ -222,6 +295,10 @@ public:
 
 		[[nodiscard]] constexpr chss::Move operator*() const {
 			assert(mPositionAndPieceState.position.y < mState.board.GetSize().sizeY);
+			assert(
+				std::visit(
+					[](const auto& pieceState) { return pieceState.it != pieceState.end; },
+					mPositionAndPieceState.pieceState));
 			return std::visit(
 				[](const auto& state) -> chss::Move { return *state.it; },
 				mPositionAndPieceState.pieceState);
@@ -229,6 +306,10 @@ public:
 
 		constexpr Iterator& operator++() {
 			assert(mPositionAndPieceState.position.y < mState.board.GetSize().sizeY);
+			assert(
+				std::visit(
+					[](const auto& pieceState) { return pieceState.it != pieceState.end; },
+					mPositionAndPieceState.pieceState));
 			mPositionAndPieceState = FindNextMove(mState, mPositionAndPieceState);
 			return *this;
 		}
