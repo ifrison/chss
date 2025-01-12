@@ -1,15 +1,22 @@
 #pragma once
 
-#include "representation/Board.h"
+#include "move_generation/LegalMoves.h"
+#include "representation/Move.h"
+#include "representation/State.h"
 
-namespace chss {
+namespace chss::move_generation {
 
-struct State;
+constexpr std::int64_t Perft(const State& state, int depth) {
+	if (depth == 0) {
+		return 1;
+	}
+	std::int64_t nodesVisited = 0;
+	for (const auto move : LegalMoves(state)) {
+		const auto newState = MakeMove(state, move);
+		const std::int64_t newNodesVisited = Perft(newState, depth - 1);
+		nodesVisited += newNodesVisited;
+	}
+	return nodesVisited;
+}
 
-namespace MoveGeneration {
-
-[[nodiscard]] std::int64_t Perft(const State& state, int depth);
-
-} // namespace MoveGeneration
-
-} // namespace chss
+} // namespace chss::move_generation

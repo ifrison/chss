@@ -1,7 +1,6 @@
 #include "Perft.h"
 
 #include "fen/Fen.h"
-#include "representation/State.h"
 
 #include <gtest/gtest.h>
 
@@ -9,7 +8,7 @@ TEST(Perft, A) {
 	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	constexpr auto nodesVisited = std::array<std::int64_t, 7>{20, 400, 8902, 197281, 4865609, 119060324, 3195901860};
 	for (int depth = 0; depth < 4; ++depth) {
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth + 1), nodesVisited[depth]);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth + 1), nodesVisited[depth]);
 	}
 }
 
@@ -17,7 +16,7 @@ TEST(Perft, B) {
 	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 	constexpr auto nodesVisited = std::array<std::int64_t, 6>{48, 2039, 97862, 4085603, 193690690, 8031647685};
 	for (int depth = 0; depth < 3; ++depth) {
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth + 1), nodesVisited[depth]);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth + 1), nodesVisited[depth]);
 	}
 }
 
@@ -25,42 +24,44 @@ TEST(Perft, C) {
 	constexpr auto state = chss::fen::Parse("n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1");
 	constexpr auto nodesVisited = std::array<std::int64_t, 6>{24, 496, 9483, 182838, 3605103, 71179139};
 	for (int depth = 0; depth < 4; ++depth) {
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth + 1), nodesVisited[depth]);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth + 1), nodesVisited[depth]);
 	}
 }
 
 TEST(Perft, DISABLED_X) {
 	constexpr auto state = chss::fen::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-	EXPECT_EQ(chss::MoveGeneration::Perft(state, 6), 119060324);
+	EXPECT_EQ(chss::move_generation::Perft(state, 6), 119060324);
 }
 
 TEST(Perft, DISABLED_Y) {
 	constexpr auto state = chss::fen::Parse("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
-	EXPECT_EQ(chss::MoveGeneration::Perft(state, 5), 193690690);
+	EXPECT_EQ(chss::move_generation::Perft(state, 5), 193690690);
 }
 
 TEST(Perft, DISABLED_Z) {
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"), 7), 178633661);
 	EXPECT_EQ(
-		chss::MoveGeneration::Perft(
+		chss::move_generation::Perft(chss::fen::Parse("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"), 7),
+		178633661);
+	EXPECT_EQ(
+		chss::move_generation::Perft(
 			chss::fen::Parse("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"),
 			6),
 		706045033);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("1k6/1b6/8/8/7R/8/8/4K2R b K - 0 1"), 5), 1063513);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1"), 6), 1134888);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/8/4k3/8/2p5/8/B2P2K1/8 w - - 0 1"), 6), 1015133);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/8/1k6/2b5/2pP4/8/5K2/8 b - d3 0 1"), 6), 1440467);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("5k2/8/8/8/8/8/8/4K2R w K - 0 1"), 6), 661072);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("3k4/8/8/8/8/8/8/R3K3 w Q - 0 1"), 6), 803711);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1"), 4), 1274206);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("r3k2r/8/3Q4/8/8/5q2/8/R3K2R b KQkq - 0 1"), 4), 1720476);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("2K2r2/4P3/8/8/8/8/8/3k4 w - - 0 1"), 6), 3821001);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/8/1P2K3/8/2n5/1q6/8/5k2 b - - 0 1"), 5), 1004658);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("4k3/1P6/8/8/8/8/K7/8 w - - 0 1"), 6), 217342);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/P1k5/K7/8/8/8/8/8 w - - 0 1"), 6), 92683);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("K1k5/8/P7/8/8/8/8/8 w - - 0 1"), 6), 2217);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/k1P5/8/1K6/8/8/8/8 w - - 0 1"), 7), 567584);
-	EXPECT_EQ(chss::MoveGeneration::Perft(chss::fen::Parse("8/8/2k5/5q2/5n2/8/5K2/8 b - - 0 1"), 4), 23527);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("1k6/1b6/8/8/7R/8/8/4K2R b K - 0 1"), 5), 1063513);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1"), 6), 1134888);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("8/8/4k3/8/2p5/8/B2P2K1/8 w - - 0 1"), 6), 1015133);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("8/8/1k6/2b5/2pP4/8/5K2/8 b - d3 0 1"), 6), 1440467);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("5k2/8/8/8/8/8/8/4K2R w K - 0 1"), 6), 661072);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("3k4/8/8/8/8/8/8/R3K3 w Q - 0 1"), 6), 803711);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1"), 4), 1274206);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("r3k2r/8/3Q4/8/8/5q2/8/R3K2R b KQkq - 0 1"), 4), 1720476);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("2K2r2/4P3/8/8/8/8/8/3k4 w - - 0 1"), 6), 3821001);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("8/8/1P2K3/8/2n5/1q6/8/5k2 b - - 0 1"), 5), 1004658);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("4k3/1P6/8/8/8/8/K7/8 w - - 0 1"), 6), 217342);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("8/P1k5/K7/8/8/8/8/8 w - - 0 1"), 6), 92683);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("K1k5/8/P7/8/8/8/8/8 w - - 0 1"), 6), 2217);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("8/k1P5/8/1K6/8/8/8/8 w - - 0 1"), 7), 567584);
+	EXPECT_EQ(chss::move_generation::Perft(chss::fen::Parse("8/8/2k5/5q2/5n2/8/5K2/8 b - - 0 1"), 4), 23527);
 }
 
 TEST(Perft, Test001) {
@@ -75,7 +76,7 @@ TEST(Perft, Test001) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -90,7 +91,7 @@ TEST(Perft, Test002) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -106,7 +107,7 @@ TEST(Perft, Test003) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -122,7 +123,7 @@ TEST(Perft, Test004) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -138,7 +139,7 @@ TEST(Perft, Test005) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -154,7 +155,7 @@ TEST(Perft, Test006) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -170,7 +171,7 @@ TEST(Perft, Test007) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -186,7 +187,7 @@ TEST(Perft, Test008) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -202,7 +203,7 @@ TEST(Perft, Test009) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -218,7 +219,7 @@ TEST(Perft, Test010) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -234,7 +235,7 @@ TEST(Perft, Test011) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -250,7 +251,7 @@ TEST(Perft, Test012) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -266,7 +267,7 @@ TEST(Perft, Test013) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -282,7 +283,7 @@ TEST(Perft, Test014) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -298,7 +299,7 @@ TEST(Perft, Test015) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -314,7 +315,7 @@ TEST(Perft, Test016) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -330,7 +331,7 @@ TEST(Perft, Test017) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -346,7 +347,7 @@ TEST(Perft, Test018) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -362,7 +363,7 @@ TEST(Perft, Test019) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -378,7 +379,7 @@ TEST(Perft, Test020) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -394,7 +395,7 @@ TEST(Perft, Test021) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -410,7 +411,7 @@ TEST(Perft, Test022) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -426,7 +427,7 @@ TEST(Perft, Test023) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -442,7 +443,7 @@ TEST(Perft, Test024) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -458,7 +459,7 @@ TEST(Perft, Test025) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -474,7 +475,7 @@ TEST(Perft, Test026) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -490,7 +491,7 @@ TEST(Perft, Test027) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -506,7 +507,7 @@ TEST(Perft, Test028) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -522,7 +523,7 @@ TEST(Perft, Test029) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -538,7 +539,7 @@ TEST(Perft, Test030) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -554,7 +555,7 @@ TEST(Perft, Test031) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -570,7 +571,7 @@ TEST(Perft, Test032) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -586,7 +587,7 @@ TEST(Perft, Test033) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -602,7 +603,7 @@ TEST(Perft, Test034) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -618,7 +619,7 @@ TEST(Perft, Test035) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -634,7 +635,7 @@ TEST(Perft, Test036) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -650,7 +651,7 @@ TEST(Perft, Test037) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -666,7 +667,7 @@ TEST(Perft, Test038) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -682,7 +683,7 @@ TEST(Perft, Test039) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -698,7 +699,7 @@ TEST(Perft, Test040) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -714,7 +715,7 @@ TEST(Perft, Test041) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -730,7 +731,7 @@ TEST(Perft, Test042) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -746,7 +747,7 @@ TEST(Perft, Test043) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -762,7 +763,7 @@ TEST(Perft, Test044) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -778,7 +779,7 @@ TEST(Perft, Test045) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -794,7 +795,7 @@ TEST(Perft, Test046) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -810,7 +811,7 @@ TEST(Perft, Test047) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -826,7 +827,7 @@ TEST(Perft, Test048) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -842,7 +843,7 @@ TEST(Perft, Test049) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -858,7 +859,7 @@ TEST(Perft, Test050) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -874,7 +875,7 @@ TEST(Perft, Test051) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -890,7 +891,7 @@ TEST(Perft, Test052) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -906,7 +907,7 @@ TEST(Perft, Test053) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -922,7 +923,7 @@ TEST(Perft, Test054) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -938,7 +939,7 @@ TEST(Perft, Test055) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -954,7 +955,7 @@ TEST(Perft, Test056) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -970,7 +971,7 @@ TEST(Perft, Test057) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -986,7 +987,7 @@ TEST(Perft, Test058) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1002,7 +1003,7 @@ TEST(Perft, Test059) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1018,7 +1019,7 @@ TEST(Perft, Test060) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1034,7 +1035,7 @@ TEST(Perft, Test061) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1050,7 +1051,7 @@ TEST(Perft, Test062) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1066,7 +1067,7 @@ TEST(Perft, Test063) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1082,7 +1083,7 @@ TEST(Perft, Test064) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1098,7 +1099,7 @@ TEST(Perft, Test065) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1114,7 +1115,7 @@ TEST(Perft, Test066) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1130,7 +1131,7 @@ TEST(Perft, Test067) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1146,7 +1147,7 @@ TEST(Perft, Test068) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1162,7 +1163,7 @@ TEST(Perft, Test069) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1178,7 +1179,7 @@ TEST(Perft, Test070) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1194,7 +1195,7 @@ TEST(Perft, Test071) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1210,7 +1211,7 @@ TEST(Perft, Test072) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1226,7 +1227,7 @@ TEST(Perft, Test073) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1242,7 +1243,7 @@ TEST(Perft, Test074) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1258,7 +1259,7 @@ TEST(Perft, Test075) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1274,7 +1275,7 @@ TEST(Perft, Test076) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1290,7 +1291,7 @@ TEST(Perft, Test077) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1306,7 +1307,7 @@ TEST(Perft, Test078) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1322,7 +1323,7 @@ TEST(Perft, Test079) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1338,7 +1339,7 @@ TEST(Perft, Test080) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1354,7 +1355,7 @@ TEST(Perft, Test081) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1370,7 +1371,7 @@ TEST(Perft, Test082) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1386,7 +1387,7 @@ TEST(Perft, Test083) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1402,7 +1403,7 @@ TEST(Perft, Test084) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1418,7 +1419,7 @@ TEST(Perft, Test085) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1434,7 +1435,7 @@ TEST(Perft, Test086) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1450,7 +1451,7 @@ TEST(Perft, Test087) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1466,7 +1467,7 @@ TEST(Perft, Test088) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1482,7 +1483,7 @@ TEST(Perft, Test089) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1498,7 +1499,7 @@ TEST(Perft, Test090) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1514,7 +1515,7 @@ TEST(Perft, Test091) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1530,7 +1531,7 @@ TEST(Perft, Test092) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1546,7 +1547,7 @@ TEST(Perft, Test093) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1562,7 +1563,7 @@ TEST(Perft, Test094) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1578,7 +1579,7 @@ TEST(Perft, Test095) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1594,7 +1595,7 @@ TEST(Perft, Test096) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1610,7 +1611,7 @@ TEST(Perft, Test097) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1626,7 +1627,7 @@ TEST(Perft, Test098) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1642,7 +1643,7 @@ TEST(Perft, Test099) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1658,7 +1659,7 @@ TEST(Perft, Test100) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1674,7 +1675,7 @@ TEST(Perft, Test101) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1690,7 +1691,7 @@ TEST(Perft, Test102) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1706,7 +1707,7 @@ TEST(Perft, Test103) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1722,7 +1723,7 @@ TEST(Perft, Test104) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1738,7 +1739,7 @@ TEST(Perft, Test105) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1754,7 +1755,7 @@ TEST(Perft, Test106) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1770,7 +1771,7 @@ TEST(Perft, Test107) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1786,7 +1787,7 @@ TEST(Perft, Test108) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1802,7 +1803,7 @@ TEST(Perft, Test109) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1818,7 +1819,7 @@ TEST(Perft, Test110) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1834,7 +1835,7 @@ TEST(Perft, Test111) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1850,7 +1851,7 @@ TEST(Perft, Test112) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1866,7 +1867,7 @@ TEST(Perft, Test113) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1882,7 +1883,7 @@ TEST(Perft, Test114) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1898,7 +1899,7 @@ TEST(Perft, Test115) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1914,7 +1915,7 @@ TEST(Perft, Test116) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1930,7 +1931,7 @@ TEST(Perft, Test117) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1946,7 +1947,7 @@ TEST(Perft, Test118) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1962,7 +1963,7 @@ TEST(Perft, Test119) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1978,7 +1979,7 @@ TEST(Perft, Test120) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -1994,7 +1995,7 @@ TEST(Perft, Test121) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2010,7 +2011,7 @@ TEST(Perft, Test122) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2026,7 +2027,7 @@ TEST(Perft, Test123) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2042,7 +2043,7 @@ TEST(Perft, Test124) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2058,7 +2059,7 @@ TEST(Perft, Test125) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2074,7 +2075,7 @@ TEST(Perft, Test126) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2090,7 +2091,7 @@ TEST(Perft, Test127) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
 
@@ -2100,6 +2101,6 @@ TEST(Perft, Test128) {
 	for (const auto& [depth, nodesVisited] : depthAndNodesVisited) {
 		if (depth > 4)
 			continue;
-		EXPECT_EQ(chss::MoveGeneration::Perft(state, depth), nodesVisited);
+		EXPECT_EQ(chss::move_generation::Perft(state, depth), nodesVisited);
 	}
 }
