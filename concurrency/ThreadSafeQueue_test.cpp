@@ -21,7 +21,7 @@ TEST_CASE("ThreadSafeQueue", "TODO") {
 }
 
 TEST_CASE("ThreadSafeQueue", "TODO2") {
-	auto threadSafeQueue = concurrency::ThreadSafeQueue<std::string>();
+	auto threadSafeQueue = concurrency::ThreadSafeQueue<int>();
 	auto future1 = std::async([&threadSafeQueue]() {
 		int result = threadSafeQueue.Pop();
 		REQUIRE(result == 123);
@@ -29,8 +29,8 @@ TEST_CASE("ThreadSafeQueue", "TODO2") {
 	auto future2 = std::async([&threadSafeQueue]() {
 		threadSafeQueue.Push(123);
 	});
-	future1.get();
 	future2.get();
+	future1.get();
 	REQUIRE(threadSafeQueue.IsEmpty());
 }
 
