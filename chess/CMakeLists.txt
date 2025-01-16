@@ -4,7 +4,6 @@ target_sources(chess PRIVATE
 target_link_libraries(chess
         cpp_utils
         matrix
-        stdgenerator
         concurrency)
 
 add_executable(chess_tests)
@@ -16,7 +15,6 @@ target_link_libraries(chess_tests
         testutils
         cpp_utils
         matrix
-        stdgenerator
         GTest::gtest_main
         GTest::gmock
         concurrency)
