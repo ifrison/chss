@@ -10,6 +10,7 @@ add_executable(concurrency_tests)
 target_sources(concurrency_tests PRIVATE
         TaskQueue.cpp
         TaskQueue_test.cpp
+        ThreadSafeQueue_test.cpp
         tests_main.cpp)
 target_link_libraries(concurrency_tests
         testutils)
