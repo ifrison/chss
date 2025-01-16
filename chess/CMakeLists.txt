@@ -2,6 +2,7 @@ add_executable(chess)
 target_sources(chess PRIVATE
         chess.cpp)
 target_link_libraries(chess
+        cpp_utils
         matrix
         stdgenerator
         concurrency)
@@ -13,6 +14,7 @@ target_sources(chess_tests PRIVATE
         MinMax_test.cpp)
 target_link_libraries(chess_tests
         testutils
+        cpp_utils
         matrix
         stdgenerator
         GTest::gtest_main
