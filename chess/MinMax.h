@@ -70,21 +70,19 @@ namespace chss::search {
 	int depth,
 	const std::atomic_flag& stop) {
 	assert(depth > 0);
-	if (depth <= 5) {
+	if (depth <= 4) {
 		return SearchMove(state, depth, stop);
 	}
 
 	auto taskQueue = concurrency::TaskQueue(static_cast<int>(std::thread::hardware_concurrency()));
-	auto futures = std::vector<std::future<std::pair<chss::Move, int>>>();
+	auto futures = std::vector<std::future<std::pair<int, chss::Move>>>();
 	for (const auto move : chss::move_generation::LegalMoves(state)) {
-		if !consteval {
-			if (stop.test()) {
-				break;
-			}
+		if (stop.test()) {
+			break;
 		}
 		const auto newState = chss::move_generation::MakeMove(state, move);
-		auto future = taskQueue.PushBack(std::function<std::pair<chss::Move, int>()>([move, state, depth, &stop]() {
-			return std::pair<chss::Move, int>(move, Search(state, depth-1, stop));
+		auto future = taskQueue.PushBack(std::function<std::pair<int, chss::Move>()>([newState, depth, &stop, move]() {
+			return std::pair<int, chss::Move>(Search(newState, depth-1, stop), move);
 		}));
 		futures.push_back(std::move(future));
 	}
@@ -92,7 +90,7 @@ namespace chss::search {
 	state.activeColor == chss::Color::White ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();
 	auto resultMove = chss::Move{.from = chss::Position{.y = -1, .x = -1}, .to = chss::Position{.y = -1, .x = -1}};
 	for (auto& future : futures) {
-		const auto [move, score] = future.get();
+		const auto [score, move] = future.get();
 		if (state.activeColor == chss::Color::White) {
 			if (score > resultScore) {
 				resultScore = score;

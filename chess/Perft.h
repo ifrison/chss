@@ -20,7 +20,7 @@ inline void CreatePerfTasks(
 	std::atomic_flag& stop,
 	concurrency::TaskQueue& taskQueue,
 	std::vector<std::future<std::int64_t>>& futures) {
-	if (depth <= 5) {
+	if (depth <= 4) {
 		auto future = taskQueue.PushBack(std::function<std::int64_t()>([state, depth, &stop]() {
 			return chss::move_generation::Perft(state, depth, stop);
 		}));
