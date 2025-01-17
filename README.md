@@ -9,14 +9,18 @@ It is written in C++20, and implements the UCI protocol to communicate with GUIs
 ## Principles
 
 * Simplicity and clarity: Simple code and a clear split in functions, files, and namespaces.
+* High test coverage.
 * Modern and safe C++ usage, enforced by making as much code `constexpr` as possible.
 * No allocations during the search tree exploration. Moves are generated in a lazy manner.
 * Minimal dependencies (only Google Test for unit tests).
 
+## Code organization
+
+![project_diagram.png](documentation/project_diagram.png)
+
 ## TODO
 
 The program is in a very early stage. Tasks that I would like to do soon, in no particular order:
-- [ ] Draw a diagram of the project and the modules interacting.
 - [ ] Unit tests for ThreadSafeQueue.
 - [ ] More unit tests for Search (MinMax).
 - [ ] Unit tests for UCI.
@@ -37,6 +41,8 @@ The program is in a very early stage. Tasks that I would like to do soon, in no 
 - [ ] Optimize finding the king (to make the IsInCheck function faster).
 - [ ] Make sure it works in different GUIs (there are problems in En-Croissant).
 - [ ] Create a Peft acceptance-test that runs the program against a list of positions (`go perft D`).
+- [ ] Explore replacing the evaluate function with some kind of neural network (NNUE) from another engine.
+- [ ] Explore different kinds of neural network architectures to evaluate positions and train them.
 - [ ] etc.
 
 ## Using it
