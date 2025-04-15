@@ -1,2 +1,2 @@
 target_sources(chess PRIVATE
-        Uci.cpp)
+        UCI.cpp)
